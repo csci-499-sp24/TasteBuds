@@ -1,11 +1,31 @@
 const express = require("express");
-const cors = require('cors')
-const app = express();
+const cors = require('cors');
+const { Pool } = require('pg');
+require('dotenv').config();
 
+const app = express();
 app.use(cors());
 
+// Database connection info
+const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASS,
+    port: process.env.DB_PORT,
+    ssl: {
+        rejectUnauthorized: false // just for development only; 
+    }
+});
+
 app.get("/api/home", (req, res) => {
-    res.json({message: "Hello World!"});
+    pool.query('SELECT NOW()', (err, dbRes) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({error: 'Database error', details: err.message});
+        }
+        res.json({message: "Hello World!", timestamp: dbRes.rows[0].now});
+    });
 });
 
 const port = process.env.PORT || 8080;
