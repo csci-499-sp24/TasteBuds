@@ -1,8 +1,14 @@
+// https://medium.com/@ibrahimhz/creating-your-first-backend-with-node-js-step-by-step-guide-892769af4cb0
+
 const express = require("express");
 const cors = require('cors')
 const app = express();
 
 app.use(cors());
+
+const testingRoute = require('./routes/test_routes');
+
+app.use('/api/home/testing', testingRoute)
 
 app.get("/api/home", (req, res) => {
     res.json({message: "Hello World!"});
