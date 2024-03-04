@@ -18,6 +18,16 @@ const pool = new Pool({
     }
 });
 
+pool.connect();
+
+// pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, res)=>{
+//     if(!err){
+//         console.log(res.rows);
+//     } else{
+//         console.log(err.message);
+//     }
+// })
+
 app.get("/api/home", (req, res) => {
     pool.query('SELECT NOW()', (err, dbRes) => {
         if (err) {
@@ -29,7 +39,12 @@ app.get("/api/home", (req, res) => {
 });
 
 app.get("/", (req, res) => {
-    res.send("Recipe API");
+    pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        res.json({message: dbRes.rows});
+    })
 });
 
 const port = process.env.PORT || 8080;
