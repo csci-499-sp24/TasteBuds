@@ -8,14 +8,6 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 
-<<<<<<< HEAD
-const testingRoute = require('./routes/test_routes');
-const fetchingRoute = require("./routes/fetch_routes")
-
-app.use('/api/home/testing', testingRoute)
-
-app.use('/api/home/fetching', fetchingRoute)
-=======
 // Database connection info
 const pool = new Pool({
     user: process.env.DB_USER,
@@ -37,7 +29,6 @@ pool.connect();
 //         console.log(err.message);
 //     }
 // })
->>>>>>> 249f3fb72f45d53511b0d61ac71ddb65c5687cc6
 
 app.get("/api/home", (req, res) => {
     pool.query('SELECT NOW()', (err, dbRes) => {
