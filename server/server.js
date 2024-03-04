@@ -65,19 +65,6 @@ app.get("/mediterranean", (req, res) => {
     })
 });
 
-app.get("/first", (req, res) => {
-    pool.query("SELECT * FROM public.sample_data\n WHERE \"(PK) id\" = 1\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-        if(err){
-            console.log(err.message);
-        }
-        try {
-            res.json({message: dbRes.rows});
-        } catch {
-            console.log("see the error")
-        }
-    })
-});
-
 app.get("/cuisines_types", (req, res) => {
     pool.query("SELECT DISTINCT cuisines FROM public.sample_data\n ORDER BY \"cuisines\" ASC ", (err, dbRes)=>{
         if(err){
