@@ -49,6 +49,48 @@ app.get("/", (req, res) => {
     })
 });
 
+// Queries for recipes of a specific cuisine type.
+// Added by Ze Hong Wu at the request of Philip.
+// Self reminder: use single quotations for values and double quotations for colnames
+app.get("/mediterranean", (req, res) => {
+    pool.query("SELECT * FROM public.sample_data\n WHERE cuisines LIKE \'%Mediterranean%\'\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        try {
+            res.json({message: dbRes.rows});
+        } catch {
+            console.log("see the error")
+        }
+    })
+});
+
+app.get("/first", (req, res) => {
+    pool.query("SELECT * FROM public.sample_data\n WHERE \"(PK) id\" = 1\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        try {
+            res.json({message: dbRes.rows});
+        } catch {
+            console.log("see the error")
+        }
+    })
+});
+
+app.get("/cuisines_types", (req, res) => {
+    pool.query("SELECT DISTINCT cuisines FROM public.sample_data\n ORDER BY \"cuisines\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        try {
+            res.json({message: dbRes.rows});
+        } catch {
+            console.log("dbRes.rows doesn't exist or something")
+        }
+    })
+});
+
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
