@@ -7,8 +7,11 @@ const app = express();
 app.use(cors());
 
 const testingRoute = require('./routes/test_routes');
+const fetchingRoute = require("./routes/fetch_routes")
 
 app.use('/api/home/testing', testingRoute)
+
+app.use('/api/home/fetching', fetchingRoute)
 
 app.get("/api/home", (req, res) => {
     res.json({message: "Hello World!"});
