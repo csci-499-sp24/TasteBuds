@@ -1,3 +1,5 @@
+// https://medium.com/@ibrahimhz/creating-your-first-backend-with-node-js-step-by-step-guide-892769af4cb0
+
 const express = require("express");
 const cors = require('cors');
 const { Pool } = require('pg');
@@ -44,6 +46,35 @@ app.get("/", (req, res) => {
             console.log(err.message);
         }
         res.json({message: dbRes.rows});
+    })
+});
+
+// Queries for recipes of a specific cuisine type.
+// Added by Ze Hong Wu at the request of Philip.
+// Self reminder: use single quotations for values and double quotations for colnames
+app.get("/mediterranean", (req, res) => {
+    pool.query("SELECT * FROM public.sample_data\n WHERE cuisines LIKE \'%Mediterranean%\'\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        try {
+            res.json({message: dbRes.rows});
+        } catch {
+            console.log("see the error")
+        }
+    })
+});
+
+app.get("/cuisines_types", (req, res) => {
+    pool.query("SELECT DISTINCT cuisines FROM public.sample_data\n ORDER BY \"cuisines\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        try {
+            res.json({message: dbRes.rows});
+        } catch {
+            console.log("dbRes.rows doesn't exist or something")
+        }
     })
 });
 
