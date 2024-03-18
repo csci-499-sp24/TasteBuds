@@ -27,13 +27,13 @@ const Recipe = sequelize.define('Recipe', {
     course: {
         type: DataTypes.STRING,
     },
-    // Include other fields as necessary
+    
 }, {
-    tableName: 'Recipes',  // Ensure this matches the actual table name
-    timestamps: false,  // Assuming table doesn't have automatic timestamps
+    tableName: 'Recipes',  
+    timestamps: false,  
 });
 
-// Function to load the transformed data into your database
+// Function to load the transformed data into database
 async function loadRecipesIntoDatabase(transformedData) {
     try {
         // Authenticate the sequelize connection

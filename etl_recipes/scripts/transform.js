@@ -1,16 +1,13 @@
-// Transform the recipe data to fit your schema
-function transformRecipeData(rawData) {
-    // This function will depend on the structure of the data you receive
-    // Perform operations such as mapping fields, converting units, etc.
-    return rawData.map(recipe => {
-        return {
-            name: recipe.title,
-            description: recipe.summary,
-            cuisine: recipe.cuisine,
-            course: recipe.dishType,
-            // ... other fields
-        };
+// Transform the recipe data to fit schema
+function transformData(data) {
+    
+    return data.map(recipe => {
+        if (!recipe.instructions) {
+            recipe.instructions = `No instructions provided. Refer to the source: ${recipe.sourceUrl}`;
+        }
+        
+        return recipe;
     });
 }
 
-module.exports = { transformRecipeData };
+module.exports = { transformData };
