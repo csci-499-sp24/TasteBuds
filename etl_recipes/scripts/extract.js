@@ -18,7 +18,17 @@ async function updateFetchedRecipes(recipeIds) {
     await Promise.all(recipeIds.map(id => db.query(query, [id])));
 }
 */ 
+
+let pointsUsed = 0;
+const maxDailyPoints = 150;
+const pointsPerCall = 1.5;
+
 async function extractData() {
+
+    if (pointsUsed + pointsPerCall > maxDailyPoints) {
+        throw new Error("API call limit reached for the day");
+    }
+
     const apiKey = process.env.SPOON_RECIPES_API_KEY;
     const recipeIds = [12345, 67890, 13579];
     //recipeIds = await getNonFetchedRecipeIds(recipeIds);
@@ -33,6 +43,7 @@ async function extractData() {
         const response = await axios.get(url);
         // /await updateFetchedRecipes(recipeIds);
         return response.data; // Returns the detailed recipes with ingredients
+        pointsUsed += pointsPerCall;
     } catch (error) {
         console.error('Error fetching recipes:', error);
         throw error; // Rethrow to handle it in the main orchestrator
