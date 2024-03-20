@@ -8,7 +8,8 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors());
-
+//test
+app.use(express.static('public'));
 //const sequelize = new Sequelize(process.env.DB_HOST + "/" + process.env.DB_NAME)
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
