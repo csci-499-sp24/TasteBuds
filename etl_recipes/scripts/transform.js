@@ -1,3 +1,12 @@
+// Transform the recipe data to fit schema
+function transformData(data) {
+    
+    return data.map(recipe => {
+        if (!recipe.instructions) {
+            recipe.instructions = `No instructions provided. Refer to the source: ${recipe.sourceUrl}`;
+        }
+        
+        return recipe;
 /**
  * Transforms the recipe data obtained from the API response into a structured format.
  * @param {Array} dummyApiResponse - The array containing recipe data from the API response.
@@ -282,4 +291,4 @@ function transformRecipeData(dummyApiResponse) {
     });
 }
 
-module.exports = { transformRecipeData };
+module.exports = { transformData };
