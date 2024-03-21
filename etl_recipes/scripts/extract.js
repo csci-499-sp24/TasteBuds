@@ -6,6 +6,15 @@ const axios = require('axios');
 require('dotenv').config({ path: '/Users/vanessa/Desktop/TasteBuds/etl_recipes/.env' }); 
 
 /*
+
+async function getLatestRecipeIds() {
+    // Fetch the latest or random recipe IDs from Spoonacular
+    const apiKey = process.env.SPOON_RECIPES_API_KEY;
+    const url = `https://api.spoonacular.com/recipes/random?number=10&apiKey=${apiKey}`; // Adjust number as needed
+    const response = await axios.get(url);
+    return response.data.recipes.map(recipe => recipe.id);
+}
+
 async function getNonFetchedRecipeIds(recipeIds) {
     const query = `SELECT recipe_id FROM fetched_recipes WHERE recipe_id = ANY($1)`;
     const { rows } = await db.query(query, [recipeIds]);
@@ -31,14 +40,20 @@ async function extractData() {
 
     const apiKey = process.env.SPOON_RECIPES_API_KEY;
     const recipeIds = [12345, 67890, 13579];
-    //recipeIds = await getNonFetchedRecipeIds(recipeIds);
-    const url = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipeIds.join(',')}&ingredientsRequired=true&instructionsRequired=true&addRecipeInformation=true&includeNutrition=true&apiKey=${apiKey}`;
     /*
+    Will replace above recipeIds line w/ so that we can automate this pipeline
+    let recipeIds = await getLatestRecipeIds();
+    recipeIds = await getNonFetchedRecipeIds(recipeIds);
+
+  
     if (recipeIds.length === 0) {
         console.log("No new recipes to fetch.");
         return [];
     }
      */
+
+    const url = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipeIds.join(',')}&ingredientsRequired=true&instructionsRequired=true&addRecipeInformation=true&includeNutrition=true&apiKey=${apiKey}`;
+    
     try {
         const response = await axios.get(url);
         // /await updateFetchedRecipes(recipeIds);
