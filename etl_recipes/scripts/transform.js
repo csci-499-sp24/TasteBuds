@@ -36,8 +36,8 @@ function transformRecipeData(dummyApiResponse) {
         /* DIET */
         const transformedDiet = [];
         // Extract diet names
-        if (recipe.diet && recipe.diet.length > 0) {
-            transformedDiet.push(...recipe.diet);
+        if (recipe.diets && recipe.diets.length > 0) {
+            transformedDiet.push(...recipe.diets);
         }
         // Add lowFodmap to transformedDiet if true
         if (recipe.lowFodmap) {
@@ -73,12 +73,12 @@ function transformRecipeData(dummyApiResponse) {
                  // Object transformation for recipe ingredients
                 const transformedRecipeIngredient = {
                     ingredient_id: ingredient.id,
-                    amount: ingredient.amount,
                     specialized_name: ingredient.originalName,
+                    us_unit: ingredient.measures.us.unitShort,
+                    us_amount: ingredient.measures.us.amount,
                     metric_unit: ingredient.measures.metric.unitShort,
                     metric_amount: ingredient.measures.metric.amount,
-                    us_unit: ingredient.measures.us.unitShort,
-                    us_amount: ingredient.measures.us.amount  
+ 
                 };
                 transformedRecipeIngredients.push(transformedRecipeIngredient);
                     // Object transformation for ingredients
@@ -99,57 +99,77 @@ function transformRecipeData(dummyApiResponse) {
         const transformedEquipment = [];
         const transformedInstructionsLength = [];
         if (recipe.analyzedInstructions && recipe.analyzedInstructions.length > 0) {
-            recipe.analyzedInstructions.forEach(instruction => {
+            recipe.analyzedInstructions.forEach(instruction => { 
+                 // API can have differnt type of instruction
+                const innerInstructions = [];
+                const innerInstructionsIngredients = [];
+                const innerEquipment = [];
+                const innerInstructionsLength = [];
                 instruction.steps.forEach(step => {
+            
                     // Object transformation for instructions
                     const instructionData = {
+                        name: instruction.name,
                         number: step.number,
                         step: step.step,
-                        recipe_id: recipe.id
+                        //recipe_id: recipe.id
                     };
-                    transformedInstructions.push(instructionData);
+                    innerInstructions.push(instructionData);
 
                     // Object transformation for ingredients within instructions
+                    const recipeIndIngredent = [];
                     if (step.ingredients && step.ingredients.length > 0) {
                         step.ingredients.forEach(ingredient => {
                             const ingredientData = {
-                                ingredient_id: ingredient.id,
+                                id: ingredient.id,
                                 name: ingredient.name,
                                 image: ingredient.image
                             };
-                            transformedInstructionsIngredients.push(ingredientData);
+                            recipeIndIngredent.push(ingredientData);
                         });
-                    }
+                    } 
+                    innerInstructionsIngredients.push(recipeIndIngredent);
+                    
+
                     // object transformation for equipment
+                    const recipeIndEquipment = [];
                     if (step.equipment && step.equipment.length > 0) {
                         step.equipment.forEach(item => {
                             const equipmentData = {
-                                equipment_id: item.id,
-                                number: step.number,
+                                id: item.id,
+                                // number: step.number,
                                 name: item.name,
                                 image: item.image
                             };
-                            transformedEquipment.push(equipmentData);
+                            recipeIndEquipment.push(equipmentData);
+                            
                         });
                     }
+                    innerEquipment.push(recipeIndEquipment);
+
                     // object transformation for instrution length
-                    if (step.length && step.length.length > 0) {
-                        step.length.forEach(time => {
+                    const recipeIndLength = [];
+                    if (step.length && Object.keys(step.length).length !== 0) {
                             const lengthData = {
-                                length_id: time.id,
-                                number: time.number,
-                                unit: time.unit,
-                                stepNumber: step.number,
+                                //length_id: step.length.id,
+                                number: step.length.number,
+                                unit: step.length.unit,
+                                // stepNumber: step.number,
                             };
-                            transformedInstructionsLength.push(lengthData);
-                        });
+                            recipeIndLength.push(lengthData);
                     }
+                     innerInstructionsLength.push(recipeIndLength);
                 });
+                // Push the transformed data for this instruction set into the arrays
+                transformedInstructions.push(innerInstructions);
+                transformedInstructionsIngredients.push(innerInstructionsIngredients);
+                transformedEquipment.push(innerEquipment);
+                transformedInstructionsLength.push(innerInstructionsLength);
             });
         }
     
 
-        /* RECIPE TIPS */
+        /* TIPS */
         const transformedRecipeTips = [];
         for (const type in recipe.tips) { // Iterate over each type of tip (health, cooking, price, green) in the recipe object
             if (recipe.tips.hasOwnProperty(type)) { // Check if the current property is a direct property of the object itself (not inherited from its prototype chain)
@@ -183,14 +203,13 @@ function transformRecipeData(dummyApiResponse) {
                 // object transformtation for the nutrients
                 const nutrientRecipeData = {
                     name: nutrient.name,
-                    unit: nutrient.unit,
                     amount: nutrient.amount,
+                    unit: nutrient.unit,
                     percentOfDailyNeeds: nutrient.percentOfDailyNeeds,
                 };
                 transformedRecipeNutrients.push(nutrientRecipeData);
             });
-        
-            
+              
             recipe.nutrition.flavonoids.forEach(flavonoid => {
                 // object transformtation for the flavonoids
                 const flavonoidsRecipeData = {
@@ -205,8 +224,8 @@ function transformRecipeData(dummyApiResponse) {
                 // object transformtation for the properties
                 const propertiesRecipeData = {
                     name: property.name,
-                    unit: property.unit,
                     amount: property.amount,
+                    unit: property.unit,
                 };
                 transformedNutritionProperties.push(propertiesRecipeData);
             });
@@ -238,7 +257,7 @@ function transformRecipeData(dummyApiResponse) {
                 });
             }
 
-            if (recipe.nutrition.caloricBreakdown) {
+            if (recipe.nutrition.caloricBreakdown && Object.keys(recipe.nutrition.caloricBreakdown).length !== 0) {
                 // object transformation for the caloric breakdown
                 const caloricBreakdownData = {
                     percentProtein: recipe.nutrition.caloricBreakdown.percentProtein,
@@ -248,7 +267,7 @@ function transformRecipeData(dummyApiResponse) {
                 transformedRecipeCaloricBreakdown.push(caloricBreakdownData);  
             }
         
-            if (recipe.nutrition.weightPerServing) {
+            if (recipe.nutrition.weightPerServing && Object.keys(recipe.nutrition.weightPerServing).length !== 0) {
                 // object transformation for the Recipe Weight Per Serving
                 const weightPerServingData = {
                     amount: recipe.nutrition.weightPerServing.amount,
