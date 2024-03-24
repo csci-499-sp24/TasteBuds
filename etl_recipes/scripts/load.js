@@ -1,5 +1,6 @@
-require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
+require('dotenv').config();
+
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
@@ -15,6 +16,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
         }
     },
 });
+
 
 /* --- MODELS and RELATIONSHP ---- */
 
@@ -86,7 +88,6 @@ const Cuisines = sequelize.define('Cuisines', {
     },
     cuisine_name: {
         type: DataTypes.STRING,
-        allowNull: false,
     }
 }, {
     tableName: 'cuisines',
@@ -124,7 +125,6 @@ const Diet = sequelize.define('Diet', {
     },
     diet_name: {
         type: DataTypes.STRING,
-        allowNull: false,
     }
 }, {
     tableName: 'diet',
@@ -682,19 +682,21 @@ async function loadRecipesIntoDatabase(transformedData) {
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
         await sequelize.sync();
-        console.log('Database tables synced successfully.');
-
 
         // Iterate over each recipe response object in transformedData
+        let createdRecipe; // Declare createdRecipe outside of the try block
         for (const recipeResponse of transformedData) {
             // Extract data for the Recipe table
             const recipeData = recipeResponse.recipe;
-            const createdRecipe = await Recipe.create(recipeData, { validate: true });
+            console.log(`Recipe with ID ${recipeData.recipe_id} loading...`);
+            // Attempt to create the recipe in the database
+            createdRecipe = await Recipe.create(recipeData);
             console.log(`Recipe with ID ${createdRecipe.recipe_id} loaded successfully.`);
-
+        
             // Iterate over each cuisine 
             for (const cuisineData of recipeResponse.cuisine) {
                 // returns either an object representing the found record or null 
+                // await Cuisines.sync();
                 let cuisine = await Cuisines.findOne({ where: { cuisine_name: cuisineData } });
 
                 // If cuisine doesn't exist, create it
@@ -703,12 +705,17 @@ async function loadRecipesIntoDatabase(transformedData) {
                     console.log(`Cuisine with ID ${cuisine.cuisine_id} created successfully.`);
                 }
                 // Create entry in the RecipeCuisine join table
-                await RecipeCuisine.create({
+                await RecipeCuisines.create({
                     recipe_id: createdRecipe.recipe_id,
                     cuisine_id: cuisine.cuisine_id
                 });
                 console.log(`RecipeCuisine entry created successfully for recipe ${createdRecipe.recipe_id} and cuisine ${cuisine.cuisine_id}.`);
+            
+            
             }
+
+
+
             // Iterate over each diet
             for (const dietData of recipeResponse.diet) {
                 let diet = await Diet.findOne({ where: { diet_name: dietData} });
@@ -717,13 +724,27 @@ async function loadRecipesIntoDatabase(transformedData) {
                     diet = await Diet.create(dietData);
                     console.log(`Diet with ID ${diet.diet_id} created successfully.`);
                 }
-
-                await RecipeDiet.create({
-                    recipe_id: createdRecipe.recipe_id,
-                    diet_id: diet.diet_id
+                // Check if a record with the same recipe_id and diet_id exists
+                const existingRecipeDiet = await RecipeDiet.findOne({
+                    where: {
+                        recipe_id: createdRecipe.recipe_id,
+                        diet_id: diet.diet_id
+                    }
                 });
-                console.log(`RecipeDiet entry created successfully for recipe ${createdRecipe.recipe_id} and Diet ${diet.diet_id}.`);
+
+                if (!existingRecipeDiet) {
+                    // If no existing record found, create a new one
+                    await RecipeDiet.create({
+                        recipe_id: createdRecipe.recipe_id,
+                        diet_id: diet.diet_id
+                    });
+                    console.log(`RecipeDiet entry created successfully for recipe ${createdRecipe.recipe_id} and Diet ${diet.diet_id}.`);
+                } else {
+                    // Handle the case where the record already exists
+                    console.log(`RecipeDiet entry for recipe ${createdRecipe.recipe_id} and Diet ${diet.diet_id} already exists.`);
+                }
             }
+
             // Iterate over each Dish Type
             for (const dishTypeData of recipeResponse.dishType) {
                 let dishType = await Dish_Type.findOne({ where: { dish_type_name: dishTypeData} });

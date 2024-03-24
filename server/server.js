@@ -9,7 +9,6 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 
-//const sequelize = new Sequelize(process.env.DB_HOST + "/" + process.env.DB_NAME)
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
@@ -28,7 +27,6 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     },
 });
 
-// const postgres_db = new Sequelize(process.env.DB_HOST);
 async function syncDB() {
     try {
         await sequelize.authenticate();
@@ -101,22 +99,6 @@ async function sync_table() {
 };
 sync_table();
 
-// async function get_first_ten() {
-//     try {
-//         const first_ten = await database.findAll({
-//             subQuery: false,
-//             limit: 10,
-//             raw: true,
-//         });
-//         console.log("attempting to find the first entries in db");
-//         console.log(first_ten[0]);
-//     }
-//     catch(error){
-//         console.log("encountered error: ", error)
-//     }
-// }
-//get_first_ten();
-
 app.get("/", async (req,res)=>{
     try {
         const first_ten = await database.findAll({
@@ -130,76 +112,6 @@ app.get("/", async (req,res)=>{
         console.log("encountered error: ", error)
     }
 })
-
-// Database connection info
-// const pool = new Pool({
-//     user: process.env.DB_USER,
-//     host: process.env.DB_HOST,
-//     database: process.env.DB_NAME,
-//     password: process.env.DB_PASS,
-//     port: process.env.DB_PORT,
-//     ssl: {
-//         rejectUnauthorized: false // just for development only; 
-//     }
-// });
-
-// pool.connect();
-
-// pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, res)=>{
-//     if(!err){
-//         console.log(res.rows);
-//     } else{
-//         console.log(err.message);
-//     }
-// })
-
-// app.get("/api/home", (req, res) => {
-//     pool.query('SELECT NOW()', (err, dbRes) => {
-//         if (err) {
-//             console.error(err);
-//             return res.status(500).json({error: 'Database error', details: err.message});
-//         }
-//         res.json({message: "Hello World!", timestamp: dbRes.rows[0].now});
-//     });
-// });
-
-// app.get("/", (req, res) => {
-//     pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         res.json({message: dbRes.rows});
-//     })
-// });
-
-// Queries for recipes of a specific cuisine type.
-// Added by Ze Hong Wu at the request of Philip.
-// Self reminder: use single quotations for values and double quotations for colnames
-// app.get("/mediterranean", (req, res) => {
-//     pool.query("SELECT * FROM public.sample_data\n WHERE cuisines LIKE \'%Mediterranean%\'\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         try {
-//             res.json({message: dbRes.rows});
-//         } catch {
-//             console.log("see the error")
-//         }
-//     })
-// });
-
-// app.get("/cuisines_types", (req, res) => {
-//     pool.query("SELECT DISTINCT cuisines FROM public.sample_data\n ORDER BY \"cuisines\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         try {
-//             res.json({message: dbRes.rows});
-//         } catch {
-//             console.log("dbRes.rows doesn't exist or something")
-//         }
-//     })
-// });
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

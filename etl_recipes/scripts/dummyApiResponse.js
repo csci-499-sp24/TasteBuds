@@ -10,7 +10,7 @@ const dummyApiResponse = [
         "sustainable": false,
         "lowFodmap": false,
         "weightWatcherSmartPoints": 28,
-        "gaps": "no-4",
+        "gaps": "no",
         "preparationMinutes": -1,
         "cookingMinutes": -1,
         "aggregateLikes": 0,
