@@ -1,6 +1,6 @@
 // https://dstackoverflow.com/questions/62556633/sequelize-6-import-models-from-file
 module.exports = function (sequelize, DataTypes) {
-    const recipes = sequelize.define("Recipes", {
+    const Recipes = sequelize.define("Recipes", {
         recipe_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -13,22 +13,19 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,
         },
         preparation_time: {
-            type: DataTypes.INT,
+            type: DataTypes.INTEGER,
         },
         cooking_time: {
-            type: DataTypes.INT,
+            type: DataTypes.INTEGER,
         },
         ready_in_minutes: {
-            type: DataTypes.INT,
+            type: DataTypes.INTEGER,
         },
         preferences_id: {
-            type: DataTypes.INT,
-        },
-        preparation_time: {
-            type: DataTypes.INT,
+            type: DataTypes.INTEGER,
         },
         servings: {
-            type: DataTypes.INT,
+            type: DataTypes.INTEGER,
         },
         price_per_serving: {
             type: DataTypes.DOUBLE,
@@ -43,7 +40,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BOOLEAN,
         },
         weight_watcher_smart: {
-            type: DataTypes.INT,
+            type: DataTypes.INTEGER,
         },
         sustainable: {
             type: DataTypes.BOOLEAN,
@@ -111,11 +108,30 @@ module.exports = function (sequelize, DataTypes) {
         timestamps: false,
     },
     );
+    const RecipeFlavonoids = sequelize.define("RecipeFlavonoids", {
+        flavonoid_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+        },
+        recipe_id: {
+            type: DataTypes.INTEGER,
+        },
+        amount: {
+            type: DataTypes.DOUBLE,
+        },
+    },
+    {
+        tableName: "RecipeFlavonoids",
+        timestamps: false,
+    },
+    );
     return {
-        recipes_table: recipes,
+        recipes_table: Recipes,
         nutrients_table: RecipeWeightPerServing,
         calories_table: RecipeCalorieBreakdown,
         secondary_recipes_table: SecondaryRecipes,
+        recipe_flavors: RecipeFlavonoids,
     }
     //return recipes;
 }
