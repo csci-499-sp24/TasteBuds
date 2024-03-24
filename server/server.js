@@ -74,8 +74,38 @@ sync_table();
 // Calling up all the table objects,
 // They don't work right now, Sequelize insists that the db relations don't exist
 // I will add them here and figure that out later.
-const {recipes_table,nutrients_table,calories_table,secondary_recipes_table
-        } = require("./tables/recipes.js")(sequelize, DataTypes);
+const {
+    recipes_table,
+    nutrients_table,
+    calories_table,
+    secondary_recipes_table,
+    recipes_flavors
+} = require("./tables/recipes.js")(sequelize, DataTypes);
+const {
+    RecipeEquipment,
+    InstructionsIngredients,
+    InstructionsEquipment,
+    RecipeCuisines,
+    RecipeDiet,
+    RecipeOccasions,
+    RecipeProperties,
+} = require("./tables/table_connectors.js")(sequelize, DataTypes)
+const {
+    Tips,
+    Equipment,
+    Instructions,
+    InstructionLength,
+    Ingredients,
+    RecipeIngredients,
+    RecipeNutrients,
+    RecipeIngredientsNutrients,
+    Cuisine,
+    Diet,
+    Flavonoids,
+    Nutrients,
+    Properties,
+    Occasions,
+} = require("./tables/other_tables.js")(sequelize, DataTypes)
 
 // async function get_first_ten() {
 //     try {
