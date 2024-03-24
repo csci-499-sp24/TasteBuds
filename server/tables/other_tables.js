@@ -75,16 +75,6 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false,
             primaryKey: true,
         },
-        recipe_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
-        step_number: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
         length_number: {
             type: DataTypes.INTEGER,
         },
@@ -139,7 +129,7 @@ module.exports = function (sequelize, DataTypes) {
         timestamps: false,
     },
     );
-    const RecipeNutrients = sequelize.define("RecipeNutrients", {
+    const recipe_nutrients = sequelize.define("recipe_nutrients", {
         nutrient_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -156,11 +146,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "RecipeNutrients",
+        tableName: "recipe_nutrients",
         timestamps: false,
     },
     );
-    const RecipeIngredientsNutrients = sequelize.define("RecipeIngredientsNutrients", {
+    const recipe_ingredients_nutrients = sequelize.define("recipe_ingredients_nutrients", {
         recipe_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -187,11 +177,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "RecipeIngredientsNutrients",
+        tableName: "recipe_ingredients_nutrients",
         timestamps: false,
     },
     );
-    const Cuisine = sequelize.define("Cuisine", {
+    const cuisine = sequelize.define("cuisine", {
         cuisine_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -202,11 +192,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "Cuisine",
+        tableName: "cuisine",
         timestamps: false,
     },
     );
-    const Diet = sequelize.define("Diet", {
+    const diet = sequelize.define("diet", {
         diet_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -217,11 +207,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "Diet",
+        tableName: "diet",
         timestamps: false,
     },
     );
-    const Flavonoids = sequelize.define("Flavonoids", {
+    const flavonoids = sequelize.define("flavonoids", {
         flavonoid_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -235,11 +225,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "Flavonoids",
+        tableName: "flavonoids",
         timestamps: false,
     },
     );
-    const Nutrients = sequelize.define("Nutrients", {
+    const nutrients = sequelize.define("nutrients", {
         nutrient_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -253,11 +243,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "Nutrients",
+        tableName: "nutrients",
         timestamps: false,
     },
     );
-    const Properties = sequelize.define("Properties", {
+    const properties = sequelize.define("properties", {
         property_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -271,11 +261,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "Properties",
+        tableName: "properties",
         timestamps: false,
     },
     );
-    const Occasions = sequelize.define("Occasions", {
+    const occasions = sequelize.define("occasions", {
         occasion_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -286,7 +276,22 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "Occasions",
+        tableName: "occasions",
+        timestamps: false,
+    },
+    );
+    const dish_type = sequelize.define("dish_type", {
+        occasion_id: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
+        },
+        occasion: {
+            type: DataTypes.STRING,
+        },
+    },
+    {
+        tableName: "dish_type",
         timestamps: false,
     },
     );
@@ -297,13 +302,14 @@ module.exports = function (sequelize, DataTypes) {
         instr_length: InstructionLength,
         ingredients_table: Ingredients,
         recipe_ingredients: RecipeIngredients,
-        recipe_nutrients: RecipeNutrients,
-        recipe_ingredient_nutrient: RecipeIngredientsNutrients,
-        cuisine_table: Cuisine,
-        diet_table: Diet,
-        flavonoid_table: Flavonoids,
-        nutrients_table: Nutrients,
-        properties_table: Properties,
-        occasions_table: Occasions,
+        recipe_nutrients: recipe_nutrients,
+        recipe_ingredient_nutrient: recipe_ingredients_nutrients,
+        cuisine_table: cuisine,
+        diet_table: diet,
+        flavonoid_table: flavonoids,
+        nutrients_table: nutrients,
+        properties_table: properties,
+        occasions_table: occasions,
+        dish_type: dish_type,
     }
 }

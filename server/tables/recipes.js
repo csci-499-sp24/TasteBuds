@@ -1,6 +1,6 @@
 // https://dstackoverflow.com/questions/62556633/sequelize-6-import-models-from-file
 module.exports = function (sequelize, DataTypes) {
-    const Recipes = sequelize.define("Recipes", {
+    const recipe = sequelize.define("recipe", {
         recipe_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -21,9 +21,6 @@ module.exports = function (sequelize, DataTypes) {
         ready_in_minutes: {
             type: DataTypes.INTEGER,
         },
-        preferences_id: {
-            type: DataTypes.INTEGER,
-        },
         servings: {
             type: DataTypes.INTEGER,
         },
@@ -33,26 +30,35 @@ module.exports = function (sequelize, DataTypes) {
         image: {
             type: DataTypes.STRING,
         },
+        image_type: {
+            type: DataTypes.STRING,
+        },
         very_healthy: {
             type: DataTypes.BOOLEAN,
         },
         cheap: {
             type: DataTypes.BOOLEAN,
         },
-        weight_watcher_smart: {
+        weight_watcher_smart_points: {
             type: DataTypes.INTEGER,
         },
         sustainable: {
             type: DataTypes.BOOLEAN,
         },
+        source_name: {
+            type: DataTypes.STRING,
+        },
+        source_url: {
+            type: DataTypes.STRING,
+        },
     },
     {
-        tableName: "Recipes",
+        tableName: "recipe",
         timestamps: false,
     },
     );
     //
-    const RecipeWeightPerServing = sequelize.define("RecipeWeightPerServing", {
+    const WeightPerServing = sequelize.define("WeightPerServing", {
         recipe_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -69,12 +75,12 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "RecipeWeightPerServing",
+        tableName: "WeightPerServing",
         timestamps: false,
     },
     );
     //
-    const RecipeCalorieBreakdown = sequelize.define("RecipeWeightPerServing", {
+    const CaloricBreakdown = sequelize.define("CaloricBreakdown", {
         recipe_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -88,11 +94,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "RecipeWeightPerServing",
+        tableName: "CaloricBreakdown",
         timestamps: false,
     },
     );
-    const SecondaryRecipes = sequelize.define("RecipeWeightPerServing", {
+    const SecondaryRecipes = sequelize.define("Secondary Recipes", {
         recipe_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -104,11 +110,11 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "RecipeWeightPerServing",
+        tableName: "Secondary Recipes",
         timestamps: false,
     },
     );
-    const RecipeFlavonoids = sequelize.define("RecipeFlavonoids", {
+    const recipe_flavonoids = sequelize.define("recipe_flavonoids", {
         flavonoid_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -122,16 +128,16 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "RecipeFlavonoids",
+        tableName: "recipe_flavonoids",
         timestamps: false,
     },
     );
     return {
-        recipes_table: Recipes,
-        nutrients_table: RecipeWeightPerServing,
-        calories_table: RecipeCalorieBreakdown,
+        recipes_table: recipe,
+        weight_per_serving: WeightPerServing,
+        calories_table: CaloricBreakdown,
         secondary_recipes_table: SecondaryRecipes,
-        recipe_flavors: RecipeFlavonoids,
+        recipe_flavors: recipe_flavonoids,
     }
     //return recipes;
 }
