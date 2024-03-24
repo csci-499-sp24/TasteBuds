@@ -12,10 +12,10 @@ module.exports = function (sequelize, DataTypes) {
         summary: {
             type: DataTypes.STRING,
         },
-        preparation_time: {
+        preparation_minutes: {
             type: DataTypes.INTEGER,
         },
-        cooking_time: {
+        cooking_minutes: {
             type: DataTypes.INTEGER,
         },
         ready_in_minutes: {
