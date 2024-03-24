@@ -12,8 +12,8 @@ function transformRecipeData(dummyApiResponse) {
             recipe_id: recipe.id,
             title: recipe.title,
             summary: recipe.summary,
-            preparation_time: recipe.preparationMinutes,
-            cooking_time: recipe.cookingMinutes,
+            preparation_minutes: recipe.preparationMinutes,
+            cooking_minutes: recipe.cookingMinutes,
             ready_in_minutes: recipe.readyInMinutes,
             servings: recipe.servings,
             price_per_serving: recipe.pricePerServing,
@@ -21,8 +21,10 @@ function transformRecipeData(dummyApiResponse) {
             image_type: recipe.imageType,
             very_healthy: recipe.veryHealthy,
             cheap: recipe.cheap,
-            weight_watcher_smart: recipe.weightWatcherSmartPoints,
+            weight_watcher_smart_points: recipe.weightWatcherSmartPoints,
             sustainable: recipe.sustainable,
+            source_url: recipe.sourceUrl,
+            source_name: recipe.sourceName,
         };
 
         /* CUISINE */

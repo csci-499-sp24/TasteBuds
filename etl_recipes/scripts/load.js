@@ -2,13 +2,16 @@ require('dotenv').config();
 const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
+    database: process.env.DB_NAME,
+    username: process.env.DB_USER,
+    password: process.env.DB_PASS,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres',
     dialectOptions: {
         ssl: {
-            require: true,  
-            rejectUnauthorized: false  // Note: This is for development only
+            require: true,
+            rejectUnauthorized: false, // Note: This is for development only
         }
     },
 });
@@ -29,10 +32,10 @@ const Recipe = sequelize.define('Recipe', {
     summary: {
         type: DataTypes.TEXT,
     },
-    preparation_time: {
+    preparation_minutes: {
         type: DataTypes.INTEGER,
     },
-    cooking_time: {
+    cooking_minutes: {
         type: DataTypes.INTEGER,
     },
     ready_in_minutes: {
@@ -678,7 +681,10 @@ async function loadRecipesIntoDatabase(transformedData) {
         // Authenticate the sequelize connection
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
-        
+        await sequelize.sync();
+        console.log('Database tables synced successfully.');
+
+
         // Iterate over each recipe response object in transformedData
         for (const recipeResponse of transformedData) {
             // Extract data for the Recipe table
@@ -969,7 +975,6 @@ async function loadRecipesIntoDatabase(transformedData) {
                 }
 
             }
-
             console.log('Recipe ingredients loaded successfully.');
         }        
         console.log('Data loaded successfully.');
