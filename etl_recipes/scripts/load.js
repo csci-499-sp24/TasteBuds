@@ -442,7 +442,6 @@ const Nutrients = sequelize.define('Nutrients', {
     tableName: 'nutrients',
     timestamps: false
 });
-Recipe.belongsToMany(Nutrients, { through: RecipeNutrients, foreignKey: 'recipe_id' });
 /* RECIPE NUTRIENTS */
 const RecipeNutrients = sequelize.define('RecipeNutrients', {
     nutrient_id: {
@@ -979,4 +978,6 @@ async function loadRecipesIntoDatabase(transformedData) {
     }
 }
 
-module.exports = { loadRecipesIntoDatabase };
+module.exports = { 
+    Recipe,
+    loadRecipesIntoDatabase };
