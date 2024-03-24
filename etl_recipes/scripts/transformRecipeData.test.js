@@ -598,12 +598,8 @@ test('TEST 13: NUTRITION - RECIPE WEIGHT PER SERVING', () => {
 });
 
 test('TEST 14: INSTRUTIONS', () => {
-  // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
-  // const ingredients = transformedRecipes[0].ingredients;
   const firstRecipe = transformedRecipes[2].instructions;
-
   const analyzedInstructions = [
     [
       {
@@ -812,7 +808,57 @@ test('TEST 14: INSTRUTIONS', () => {
 
 });
 
-// test('TEST 15: INSTRUTIONS - INGREDIENTS', () => {
+test('TEST 15: NUTRITION -  RECIPE INGREDIENTS NUTRIENTS', () => {
+  const transformedRecipes = transformRecipeData(dummyApiResponse);
+  const firstRecipe = transformedRecipes[0].recipeIngredientsNutrients[0];
+  const expectedrecipeIngredientsNutrients = 
+    {
+      id: 93647,
+      amount: 1.0,
+      name: "sale e pepe",
+      unit: "serving",
+      nutrients: [
+        {amount: 0.0, name: "Caffeine", percentOfDailyNeeds: 0.0, unit: "mg"},
+        {amount: 0.0, name: "Vitamin B3", percentOfDailyNeeds: 16.91, unit: "mg"},
+        {amount: 197.68, name: "Calories", percentOfDailyNeeds: 47.37, unit: "kcal"},
+        {amount: 1.96, name: "Sugar", percentOfDailyNeeds: 12.47, unit: "g"},
+        {amount: 0.0, name: "Calcium", percentOfDailyNeeds: 21.4, unit: "mg"},
+        {amount: 0.0, name: "Fluoride", percentOfDailyNeeds: 0.0, unit: "mg"},{amount: 0.0, name: "Manganese", percentOfDailyNeeds: 51.62, unit: "mg"},{amount: 0.0, name: "Sodium", percentOfDailyNeeds: 13.06, unit: "mg"},{amount: 1.01, name: "Fat", percentOfDailyNeeds: 112.34, unit: "g"},{amount: 0.0, name: "Magnesium", percentOfDailyNeeds: 31.15, unit: "mg"},
+        {amount:0.0,name:  "Selenium",  percentOfDailyNeeds:  5.56, unit: "µg"},
+        {amount: 0.0 ,name:"Trans Fat",percentOfDailyNeeds:51.0, unit: "g"},
+        {amount:0.0,name: "Potassium", percentOfDailyNeeds: 24.84, unit: "mg"},
+        {amount: 0.0, name: "Vitamin B2", percentOfDailyNeeds: 28.21, unit: "mg"},
+        {amount:0.0,name:"Mono Unsaturated Fat",percentOfDailyNeeds:0,unit: "g"},
+        {amount:0.0, name: "Folate", percentOfDailyNeeds: 23.76, unit:"µg"},
+        {amount:0.0, name: "Vitamin B6", percentOfDailyNeeds: 13.88, unit:"mg"},
+        {amount:0.0, name: "Zinc", percentOfDailyNeeds: 10.66, unit:"mg"},
+        {amount:39.48,name: "Net Carbohydrates", percentOfDailyNeeds: 19.82, unit:"g"},
+        {amount:0.0, name: "Vitamin B5", percentOfDailyNeeds: 7.99, unit:"mg"},
+        {amount:0.0, name: "Alcohol", percentOfDailyNeeds:0.0, unit:"g"},
+        {amount:1.81,name: "Iron", percentOfDailyNeeds: 25.48, unit:"mg"},
+        {amount:1.96,name:"Fiber", percentOfDailyNeeds: 40.32, unit:"g"},
+        {amount:0.0,name:"Vitamin E", percentOfDailyNeeds: 112.46, unit:"mg"},
+        {amount:0.0,name: "Copper", percentOfDailyNeeds:21.16, unit:"mg"},
+        {amount:0.0,name:"Cholesterol", percentOfDailyNeeds:1.28, unit:"mg"},
+        {amount:6.89,name:"Protein", percentOfDailyNeeds:34.3, unit:"g"},
+        {amount:0.0, name:"Vitamin C", percentOfDailyNeeds:39.51, unit:"mg"},
+        {amount:0.0,name:"Vitamin B1", percentOfDailyNeeds: 11.92, unit:"mg"},
+        {amount:0.0, name:"Saturated Fat", percentOfDailyNeeds:56.57, unit:"g"},
+        {amount:41.44,name:"Carbohydrates",percentOfDailyNeeds:21.53, unit:"g"},
+        {amount:0.0, name:"Vitamin B12",percentOfDailyNeeds:0.66, unit:"µg"},
+        {amount:0.0, name:"Poly Unsaturated Fat",percentOfDailyNeeds:0, unit:"g"},
+        {amount:0.0, name:"Vitamin D",percentOfDailyNeeds:0.0, unit:"µg"},
+        {amount:0.0,name:"Phosphorus",percentOfDailyNeeds:22.82, unit:"mg"},
+        {amount:0.0,name:"Vitamin A",percentOfDailyNeeds:431.48, unit:"IU"},
+        {amount:0.0,name:"Vitamin K",percentOfDailyNeeds:99.5, unit:"µg"},
+      ],
+  };
+
+  expect(firstRecipe).toEqual((expectedrecipeIngredientsNutrients));
+});
+
+
+// test('TEST 16: INSTRUTIONS - INGREDIENTS', () => {
 //   // Call the transformation function
 //   const transformedRecipes = transformRecipeData(dummyApiResponse);
 
@@ -1019,52 +1065,3 @@ test('TEST 14: INSTRUTIONS', () => {
 
 //   expect(firstRecipe).toEqual(expect.arrayContaining(expectedinstructionLength));
 // });
-
-test('TEST 18: NUTRITION -  RECIPE INGREDIENTS NUTRIENTS', () => {
-  const transformedRecipes = transformRecipeData(dummyApiResponse);
-  const firstRecipe = transformedRecipes[0].recipeIngredientsNutrients[0];
-  const expectedrecipeIngredientsNutrients = 
-    {
-      id: 93647,
-      amount: 1.0,
-      name: "sale e pepe",
-      unit: "serving",
-      nutrients: [
-        {amount: 0.0, name: "Caffeine", percentOfDailyNeeds: 0.0, unit: "mg"},
-        {amount: 0.0, name: "Vitamin B3", percentOfDailyNeeds: 16.91, unit: "mg"},
-        {amount: 197.68, name: "Calories", percentOfDailyNeeds: 47.37, unit: "kcal"},
-        {amount: 1.96, name: "Sugar", percentOfDailyNeeds: 12.47, unit: "g"},
-        {amount: 0.0, name: "Calcium", percentOfDailyNeeds: 21.4, unit: "mg"},
-        {amount: 0.0, name: "Fluoride", percentOfDailyNeeds: 0.0, unit: "mg"},{amount: 0.0, name: "Manganese", percentOfDailyNeeds: 51.62, unit: "mg"},{amount: 0.0, name: "Sodium", percentOfDailyNeeds: 13.06, unit: "mg"},{amount: 1.01, name: "Fat", percentOfDailyNeeds: 112.34, unit: "g"},{amount: 0.0, name: "Magnesium", percentOfDailyNeeds: 31.15, unit: "mg"},
-        {amount:0.0,name:  "Selenium",  percentOfDailyNeeds:  5.56, unit: "µg"},
-        {amount: 0.0 ,name:"Trans Fat",percentOfDailyNeeds:51.0, unit: "g"},
-        {amount:0.0,name: "Potassium", percentOfDailyNeeds: 24.84, unit: "mg"},
-        {amount: 0.0, name: "Vitamin B2", percentOfDailyNeeds: 28.21, unit: "mg"},
-        {amount:0.0,name:"Mono Unsaturated Fat",percentOfDailyNeeds:0,unit: "g"},
-        {amount:0.0, name: "Folate", percentOfDailyNeeds: 23.76, unit:"µg"},
-        {amount:0.0, name: "Vitamin B6", percentOfDailyNeeds: 13.88, unit:"mg"},
-        {amount:0.0, name: "Zinc", percentOfDailyNeeds: 10.66, unit:"mg"},
-        {amount:39.48,name: "Net Carbohydrates", percentOfDailyNeeds: 19.82, unit:"g"},
-        {amount:0.0, name: "Vitamin B5", percentOfDailyNeeds: 7.99, unit:"mg"},
-        {amount:0.0, name: "Alcohol", percentOfDailyNeeds:0.0, unit:"g"},
-        {amount:1.81,name: "Iron", percentOfDailyNeeds: 25.48, unit:"mg"},
-        {amount:1.96,name:"Fiber", percentOfDailyNeeds: 40.32, unit:"g"},
-        {amount:0.0,name:"Vitamin E", percentOfDailyNeeds: 112.46, unit:"mg"},
-        {amount:0.0,name: "Copper", percentOfDailyNeeds:21.16, unit:"mg"},
-        {amount:0.0,name:"Cholesterol", percentOfDailyNeeds:1.28, unit:"mg"},
-        {amount:6.89,name:"Protein", percentOfDailyNeeds:34.3, unit:"g"},
-        {amount:0.0, name:"Vitamin C", percentOfDailyNeeds:39.51, unit:"mg"},
-        {amount:0.0,name:"Vitamin B1", percentOfDailyNeeds: 11.92, unit:"mg"},
-        {amount:0.0, name:"Saturated Fat", percentOfDailyNeeds:56.57, unit:"g"},
-        {amount:41.44,name:"Carbohydrates",percentOfDailyNeeds:21.53, unit:"g"},
-        {amount:0.0, name:"Vitamin B12",percentOfDailyNeeds:0.66, unit:"µg"},
-        {amount:0.0, name:"Poly Unsaturated Fat",percentOfDailyNeeds:0, unit:"g"},
-        {amount:0.0, name:"Vitamin D",percentOfDailyNeeds:0.0, unit:"µg"},
-        {amount:0.0,name:"Phosphorus",percentOfDailyNeeds:22.82, unit:"mg"},
-        {amount:0.0,name:"Vitamin A",percentOfDailyNeeds:431.48, unit:"IU"},
-        {amount:0.0,name:"Vitamin K",percentOfDailyNeeds:99.5, unit:"µg"},
-      ],
-  };
-
-  expect(firstRecipe).toEqual((expectedrecipeIngredientsNutrients));
-});
