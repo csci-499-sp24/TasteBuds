@@ -67,57 +67,62 @@ function transformRecipeData(dummyApiResponse) {
         /* INGREDIENTS AND RECIPE INGREDIENTS */
         // Array to store transformed ingredients
         const transformedIngredients = [];
-        const transformedRecipeIngredients = [];
+        // const transformedRecipeIngredients = [];
         if(recipe.extendedIngredients && recipe.extendedIngredients.length > 0){
             recipe.extendedIngredients.forEach(ingredient => {
                  // Object transformation for recipe ingredients
-                const transformedRecipeIngredient = {
+                const transformedIngredient = {
                     ingredient_id: ingredient.id,
                     specialized_name: ingredient.originalName,
                     us_unit: ingredient.measures.us.unitShort,
                     us_amount: ingredient.measures.us.amount,
                     metric_unit: ingredient.measures.metric.unitShort,
                     metric_amount: ingredient.measures.metric.amount,
- 
-                };
-                transformedRecipeIngredients.push(transformedRecipeIngredient);
-                    // Object transformation for ingredients
-                   const transformedIngredient = {
-                    ingredient_id: ingredient.id,
                     image: ingredient.image,
                     standard_name: ingredient.nameClean,
                     aisle: ingredient.aisle,
+ 
                 };
                 transformedIngredients.push(transformedIngredient);
+                //     // Object transformation for ingredients
+                //    const transformedIngredient = {
+                //     ingredient_id: ingredient.id,
+                //     image: ingredient.image,
+                //     standard_name: ingredient.nameClean,
+                //     aisle: ingredient.aisle,
+                // };
+                // transformedIngredients.push(transformedIngredient);
             });
         }
 
         /* INSTRUTIONS, EQUIPMENT, INSTRUCTIONS-INGREDIENTS, and INSTRUCATION-LENGTH  */
         // Array to store transformed instructions
         const transformedInstructions = [];
-        const transformedInstructionsIngredients = [];
-        const transformedEquipment = [];
-        const transformedInstructionsLength = [];
         if (recipe.analyzedInstructions && recipe.analyzedInstructions.length > 0) {
             recipe.analyzedInstructions.forEach(instruction => { 
                  // API can have differnt type of instruction
-                const innerInstructions = [];
-                const innerInstructionsIngredients = [];
-                const innerEquipment = [];
-                const innerInstructionsLength = [];
+                const innerRecipe = [];
+           
                 instruction.steps.forEach(step => {
-            
+
+                    let lengthData = {};
+                    if (step.length && Object.keys(step.length).length !== 0) {
+                        lengthData = {      
+                            number: step.length.number,
+                            unit: step.length.unit,
+                        };
+                    }
                     // Object transformation for instructions
                     const instructionData = {
                         name: instruction.name,
                         number: step.number,
                         step: step.step,
-                        //recipe_id: recipe.id
+                        ingredients: [],
+                        equipments: [],
+                        length: lengthData,
                     };
-                    innerInstructions.push(instructionData);
 
                     // Object transformation for ingredients within instructions
-                    const recipeIndIngredent = [];
                     if (step.ingredients && step.ingredients.length > 0) {
                         step.ingredients.forEach(ingredient => {
                             const ingredientData = {
@@ -125,46 +130,28 @@ function transformRecipeData(dummyApiResponse) {
                                 name: ingredient.name,
                                 image: ingredient.image
                             };
-                            recipeIndIngredent.push(ingredientData);
+                            instructionData.ingredients.push(ingredientData);
                         });
                     } 
-                    innerInstructionsIngredients.push(recipeIndIngredent);
                     
-
                     // object transformation for equipment
-                    const recipeIndEquipment = [];
                     if (step.equipment && step.equipment.length > 0) {
                         step.equipment.forEach(item => {
                             const equipmentData = {
                                 id: item.id,
-                                // number: step.number,
                                 name: item.name,
                                 image: item.image
                             };
-                            recipeIndEquipment.push(equipmentData);
+                            instructionData.equipments.push(equipmentData);
                             
                         });
                     }
-                    innerEquipment.push(recipeIndEquipment);
+                                        
+                    innerRecipe.push(instructionData);
 
-                    // object transformation for instrution length
-                    const recipeIndLength = [];
-                    if (step.length && Object.keys(step.length).length !== 0) {
-                            const lengthData = {
-                                //length_id: step.length.id,
-                                number: step.length.number,
-                                unit: step.length.unit,
-                                // stepNumber: step.number,
-                            };
-                            recipeIndLength.push(lengthData);
-                    }
-                     innerInstructionsLength.push(recipeIndLength);
                 });
                 // Push the transformed data for this instruction set into the arrays
-                transformedInstructions.push(innerInstructions);
-                transformedInstructionsIngredients.push(innerInstructionsIngredients);
-                transformedEquipment.push(innerEquipment);
-                transformedInstructionsLength.push(innerInstructionsLength);
+                transformedInstructions.push(innerRecipe);
             });
         }
     
@@ -284,13 +271,13 @@ function transformRecipeData(dummyApiResponse) {
             diet: transformedDiet, // array of diet names
             dishType: transformedDishType, // array of dish type names
             occasions: transformedOccasions, // array of occasions type names
-            ingredients: transformedIngredients, // array of transformed ingredients objects
-            recipeIngredients: transformedRecipeIngredients, // array of transformed ingredients objects
-            instructions: transformedInstructions, // array of transformed instructions objects
-            instructionsIngredients: transformedInstructionsIngredients,
-            instructionLength: transformedInstructionsLength,
-            equipment: transformedEquipment, // array of equipment objects
             tips: transformedRecipeTips, // array of recipe tips objects
+            ingredients: transformedIngredients, // array of transformed ingredients objects
+            // recipeIngredients: transformedRecipeIngredients, // array of transformed ingredients objects
+            instructions: transformedInstructions, // array of transformed instructions objects
+            // instructionsIngredients: transformedInstructionsIngredients,
+            // instructionLength: transformedInstructionsLength,
+            // equipment: transformedEquipment, // array of equipment objects
             recipeNutrients: transformedRecipeNutrients, // array of recipe nutrients
             flavonoids: transformedFlavonoids, // array of flavonoids
             properties: transformedNutritionProperties, // array of nutrition properties

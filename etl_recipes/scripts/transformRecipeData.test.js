@@ -33,219 +33,157 @@ test('TEST 2: Basic Recipe Info', () => {
 test('TEST 3: Cuisine', () => {
   // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
-  // 1st recipe - info for the Recipe table
   const firstRecipe = transformedRecipes[0].cuisine;
-
   const expectedCuisines = [];
-  expect(firstRecipe).toEqual(expect.arrayContaining(expectedCuisines));
+  expect(firstRecipe).toEqual(expectedCuisines);
 });
 
 test('TEST 4: Diet', () => {
-  // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
   const firstRecipe = transformedRecipes[0].diet;
-
   const expectedDiet = [ "dairy free", "pescatarian"];
   expect(firstRecipe).toEqual(expect.arrayContaining(expectedDiet));
 });
 
 test('TEST 5: Occasions', () => {
-  // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
   const firstRecipe = transformedRecipes[0].occasions;
-
   const expectedOccasions = [];
   expect(firstRecipe).toEqual(expect.arrayContaining(expectedOccasions));
 });
 
-test('TEST 6: RECIPE INGREDIENTS', () => {
-  // Call the transformation function
+test('TEST 6: INGREDIENTS', () => {
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
-  // const ingredients = transformedRecipes[0].ingredients;
-  const firstRecipe = transformedRecipes[0].recipeIngredients;
-
-  const expectedRecipeIngredients = [{
-    ingredient_id : 93647,
-    specialized_name : "Sale e pepe",
-    us_unit : "serving",
-    us_amount: 1.0,
-    metric_unit : "serving",
-    metric_amount: 1.0,
-  },
-  {
-    ingredient_id : 12061,
-    specialized_name : "almonds",
-    us_unit : "handful",
-    us_amount: 1.0,
-    metric_unit : "handful",
-    metric_amount: 1.0,
-  },
-  {
-    ingredient_id : 15001,
-    specialized_name : "Anchovies (or Sardines)",
-    us_unit : "",
-    us_amount:  0.8,
-    metric_unit : "",
-    metric_amount:  0.8,
-  },
-  {
-    ingredient_id : 15001,
-    specialized_name : "Anchovies (or Sardines)",
-    us_unit : "",
-    us_amount:  0.8,
-    metric_unit : "",
-    metric_amount:  0.8,
-  },
-  {
-    ingredient_id : 11124,
-    specialized_name : "raw pealed carrots",
-    us_unit : "",
-    us_amount:  2.0,
-    metric_unit : "",
-    metric_amount:  2.0,
-  },
-  {
-    ingredient_id : 11135,
-    specialized_name : "A quarter of a raw cauliflower",
-    us_unit : "serving",
-    us_amount:  1.0,
-    metric_unit : "serving",
-    metric_amount:  1.0,
-  },
-  {
-    ingredient_id : 1034053,
-    specialized_name : "Extra virgin olive oil",
-    us_unit : "serving",
-    us_amount:  1.0,
-    metric_unit : "serving",
-    metric_amount:  1.0,
-  },
-  {
-    ingredient_id : 1034053,
-    specialized_name : "Dressing: Extra virgin olive oil, Salt and pepper, Lemon juice",
-    us_unit : "Tbs",
-    us_amount:  3.0,
-    metric_unit : "Tbs",
-    metric_amount:  3.0,
-  },
-  {
-    ingredient_id : 9152,
-    specialized_name : "Lemon juice",
-    us_unit : "Tbs",
-    us_amount:  3.0,
-    metric_unit : "Tbs",
-    metric_amount:  3.0,
-  },
-  {
-    ingredient_id : 11959,
-    specialized_name : "Rocket (arugula)",
-    us_unit : "oz",
-    us_amount:  1.764,
-    metric_unit : "gr",
-    metric_amount:  50.0,
-  },
-  {
-    ingredient_id : 1102047,
-    specialized_name : "Salt and pepper",
-    us_unit : "serving",
-    us_amount:  1.0,
-    metric_unit : "serving",
-    metric_amount:  1.0,
-  },
-];
-
+  const firstRecipe = transformedRecipes[0].ingredients;
+  const expectedRecipeIngredients = [
+    {
+      ingredient_id : 93647,
+      specialized_name : "Sale e pepe",
+      us_unit : "serving",
+      us_amount: 1.0,
+      metric_unit : "serving",
+      metric_amount: 1.0,
+      image: "pastina.jpg",
+      standard_name: "pastina",
+      aisle: "Pasta and Rice",
+    },
+    {
+      ingredient_id : 12061,
+      specialized_name : "almonds",
+      us_unit : "handful",
+      us_amount: 1.0,
+      metric_unit : "handful",
+      metric_amount: 1.0,
+      image: "almonds.jpg",
+      standard_name: "almonds",
+      aisle: "Nuts",
+    },
+    {
+      ingredient_id : 15001,
+      specialized_name : "Anchovies (or Sardines)",
+      us_unit : "",
+      us_amount:  0.8,
+      metric_unit : "",
+      metric_amount:  0.8,
+      image: "anchovies.jpg",
+      standard_name: "boquerones",
+      aisle: "Seafood",
+    },
+    {
+      ingredient_id : 15001,
+      specialized_name : "Anchovies (or Sardines)",
+      us_unit : "",
+      us_amount:  0.8,
+      metric_unit : "",
+      metric_amount:  0.8,
+      image: "anchovies.jpg",
+      standard_name: "boquerones",
+      aisle: "Seafood",
+    },
+    {
+      ingredient_id : 11124,
+      specialized_name : "raw pealed carrots",
+      us_unit : "",
+      us_amount:  2.0,
+      metric_unit : "",
+      metric_amount:  2.0,
+      image: "sliced-carrot.png",
+      standard_name: "carrot",
+      aisle: "Produce",
+    },
+    {
+      ingredient_id : 11135,
+      specialized_name : "A quarter of a raw cauliflower",
+      us_unit : "serving",
+      us_amount:  1.0,
+      metric_unit : "serving",
+      metric_amount:  1.0,
+      image: "cauliflower.jpg",
+      standard_name: "cauliflower",
+      aisle: "Produce",
+    },
+    {
+      ingredient_id : 1034053,
+      specialized_name : "Extra virgin olive oil",
+      us_unit : "serving",
+      us_amount:  1.0,
+      metric_unit : "serving",
+      metric_amount:  1.0,
+      image: "olive-oil.jpg",
+      standard_name: "extra virgin olive oil",
+      aisle: "Oil, Vinegar, Salad Dressing",
+    },
+    {
+      ingredient_id : 1034053,
+      specialized_name : "Dressing: Extra virgin olive oil, Salt and pepper, Lemon juice",
+      us_unit : "Tbs",
+      us_amount:  3.0,
+      metric_unit : "Tbs",
+      metric_amount:  3.0,
+      image: "olive-oil.jpg",
+      standard_name: "extra virgin olive oil",
+      aisle: "Oil, Vinegar, Salad Dressing",
+    },
+    {
+      ingredient_id : 9152,
+      specialized_name : "Lemon juice",
+      us_unit : "Tbs",
+      us_amount:  3.0,
+      metric_unit : "Tbs",
+      metric_amount:  3.0,
+      image: "lemon-juice.jpg",
+      standard_name: "lemon juice",
+      aisle: "Produce",
+    },
+    {
+      ingredient_id : 11959,
+      specialized_name : "Rocket (arugula)",
+      us_unit : "oz",
+      us_amount:  1.764,
+      metric_unit : "gr",
+      metric_amount:  50.0,
+      image: "arugula-or-rocket-salad.jpg",
+      standard_name: "arugula",
+      aisle: "Produce",
+    },
+    {
+      ingredient_id : 1102047,
+      specialized_name : "Salt and pepper",
+      us_unit : "serving",
+      us_amount:  1.0,
+      metric_unit : "serving",
+      metric_amount:  1.0,
+          image: "salt-and-pepper.jpg",
+      standard_name: "salt and pepper",
+      aisle: "Spices and Seasonings",
+    },
+  ];
   expect(firstRecipe).toEqual(expect.arrayContaining(expectedRecipeIngredients));
 });
 
-test('TEST 7: INGREDIENTS', () => {
-  // Call the transformation function
-  const transformedRecipes = transformRecipeData(dummyApiResponse);
-
-  // const ingredients = transformedRecipes[0].ingredients;
-  const firstRecipe = transformedRecipes[0].ingredients;
-
-  const expectedIngredients = [{
-    ingredient_id : 93647,
-    image: "pastina.jpg",
-    standard_name: "pastina",
-    aisle: "Pasta and Rice",
-  },
-  {
-    ingredient_id : 12061,
-    image: "almonds.jpg",
-    standard_name: "almonds",
-    aisle: "Nuts",
-  },
-  {
-    ingredient_id : 15001,
-    image: "anchovies.jpg",
-    standard_name: "boquerones",
-    aisle: "Seafood",
-  },
-  {
-    ingredient_id : 15001,
-    image: "anchovies.jpg",
-    standard_name: "boquerones",
-    aisle: "Seafood",
-  },
-  {
-    ingredient_id : 11124,
-    image: "sliced-carrot.png",
-    standard_name: "carrot",
-    aisle: "Produce",
-  },
-  {
-    ingredient_id : 11135,
-    image: "cauliflower.jpg",
-    standard_name: "cauliflower",
-    aisle: "Produce",
-  },
-  {
-    ingredient_id : 1034053,
-    image: "olive-oil.jpg",
-    standard_name: "extra virgin olive oil",
-    aisle: "Oil, Vinegar, Salad Dressing",
-  },
-  {
-    ingredient_id : 1034053,
-    image: "olive-oil.jpg",
-    standard_name: "extra virgin olive oil",
-    aisle: "Oil, Vinegar, Salad Dressing",
-  },
-  {
-    ingredient_id : 9152,
-    image: "lemon-juice.jpg",
-    standard_name: "lemon juice",
-    aisle: "Produce",
-  },
-  {
-    ingredient_id : 11959,
-    image: "arugula-or-rocket-salad.jpg",
-    standard_name: "arugula",
-    aisle: "Produce",
-  },
-  {
-    ingredient_id : 1102047,
-    image: "salt-and-pepper.jpg",
-    standard_name: "salt and pepper",
-    aisle: "Spices and Seasonings",
-  },
-];
-
-  expect(firstRecipe).toEqual(expect.arrayContaining(expectedIngredients));
-});
-
 test('TEST 8: TIPS ', () => {
-  // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
   const firstRecipe = transformedRecipes[0].tips;
-
-
   const expectedTips = [
     {
       type: "health",
@@ -280,12 +218,8 @@ test('TEST 8: TIPS ', () => {
 });
 
 test('TEST 9: NUTRITION - RECIPE NUTRIENTS', () => {
-  // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
-  // 1st recipe - info for the Recipe table
   const firstRecipe = transformedRecipes[0].recipeNutrients;
-
   const expectedrecipeNutrients = [
     {
       name: "Calories",
@@ -640,12 +574,8 @@ test('TEST 11: NUTRITION -  RECIPE PROPERTIES', () => {
 });
 
 test('TEST 12: NUTRITION - RECIPE CALORIC BREAKDOWN', () => {
-  // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
-  // 1st recipe - info for the Recipe table
   const firstRecipe = transformedRecipes[0].recipeCaloricBreakdown;
-
   const expectedrecipeCaloricBreakdown = [
     {
       percentProtein: 6.97,
@@ -658,12 +588,8 @@ test('TEST 12: NUTRITION - RECIPE CALORIC BREAKDOWN', () => {
 });
 
 test('TEST 13: NUTRITION - RECIPE WEIGHT PER SERVING', () => {
-  // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
-  // 1st recipe - info for the Recipe table
   const firstRecipe = transformedRecipes[0].recipeWeightPerServing;
-
   const expectedRecipeWeightPerServing = [{
     amount: 367,
     unit: "g"
@@ -684,36 +610,178 @@ test('TEST 14: INSTRUTIONS', () => {
         number: 1,
         step: "Preheat broiler.",
         name: "",
+        ingredients: [],
+        equipments: [
+          {
+            id: 405914,
+            name: "broiler",
+            image: "oven.jpg",
+          },
+        ],
+        length: {},
       },
       {
         number: 2,
         step: "Broil bell peppers on a broiler pan about 5 inches from heat, turning occasionally with tongs, until skins are blackened, 15 to 20 minutes.",
         name: "",
+        ingredients: [
+          {
+            id: 10211821,
+            name: "bell pepper",
+            image: "bell-pepper-orange.png",
+          },
+        ],
+        equipments: [
+          {
+            id: 404698,
+            name: "broiler pan",
+            image: "broiler-pan.jpg",
+          },
+          {
+            id: 404641,
+            name: "tongs",
+            image: "tongs.jpg"
+          },
+        ],
+        length: {
+            number: 15,
+            unit: "minutes",
+          },
       }, 
       {
         number: 3,
         step: "Transfer to a large bowl and cover bowl tightly with plastic wrap, then let steam 20 minutes.",
         name: "",
+        ingredients: [
+          {
+            id: 10018364,
+            name: "wrap",
+            image: "flour-tortilla.jpg"
+          },
+        ],
+        equipments: [
+          {
+            id: 404730,
+            name: "plastic wrap",
+            image: "plastic-wrap.jpg",
+          },
+          {
+            id: 404783,
+            name: "bowl",
+            image: "bowl.jpg",
+          },
+        ],
+        length:{
+            number: 20,
+            unit: "minutes",
+        },
       },
       {
         number: 4,
         step: "When peppers are cool enough to handle, peel them, reserving all juices in bowl, and discard stems and seeds.",
         name: "",
+        ingredients: [
+          {
+            id: 10111333,
+            name: "peppers",
+            image: "green-pepper.jpg",
+          },
+          {
+            id: 93818,
+            name: "seeds",
+            image: "sunflower-seeds.jpg"
+          },
+        ],
+        equipments: [
+          {
+            id: 404783,
+            name: "bowl",
+            image: "bowl.jpg"
+          },     
+        ],
+        length: {},
       },
       {
         number: 5,
         step: "Cut peppers lengthwise into 1/4-inch-wide strips.",
         name: "",
+        ingredients: [
+          {
+            id: 10111333,
+            name: "peppers",
+            image: "green-pepper.jpg",
+          },
+        ],
+        equipments:[],
+        length: {},
       },
       {
         number: 6,
         step: "Pour pepper juices through a sieve into another bowl, then add vinegar and sugar to juices, stirring until sugar is dissolved, then stir in peppers. Marinate peppers at room temperature, stirring occasionally, at least 2 hours.",
         name: "",
+        ingredients: [
+          {
+            id: 10111333,
+            name: "peppers",
+            image: "green-pepper.jpg",
+          },
+          {
+            id: 2053,
+            name: "vinegar",
+            image: "vinegar-(white).jpg",
+          },
+          {
+            id: 1002030,
+            name: "pepper",
+            image: "pepper.jpg",
+          },
+          {
+            id: 19335,
+            name: "sugar",
+            image: "sugar-in-bowl.png",
+          },
+        ],
+        equipments: [
+          {
+            id: 405600,
+            name: "sieve",
+            image: "strainer.png"
+          },
+          {
+              id: 404783,
+              name: "bowl",
+              image: "bowl.jpg"
+          },
+        ],
+        length: {
+            number: 120,
+            unit: "minutes",
+          },
       },
       {
         number: 7,
         step: "Spoon peppers and juices into a shallow bowl and arrange anchovy strips decoratively on top.",
         name: "",
+        ingredients: [
+          {
+            id: 15001, 
+            name: "anchovies",
+            image: "anchovies.jpg",
+          },
+          {
+            id: 10111333,
+            name: "peppers",
+            image: "green-pepper.jpg"
+          },
+        ],
+        equipments:[
+          {
+            id: 404783,
+            name: "bowl",
+            image: "bowl.jpg"
+          },
+        ],
+        length:{},
       },
     ],
     [
@@ -721,6 +789,20 @@ test('TEST 14: INSTRUTIONS', () => {
         name: "Cooks' note",
         step: "Peppers can marinate (without anchovies), covered and chilled, up to 3 days. Bring to room temperature before serving.",
         number: 1,
+        ingredients: [
+          {
+            id: 15001,
+            name: "anchovies",
+            image: "anchovies.jpg",
+          },
+          {
+              id: 10111333,
+              name: "peppers",
+              image: "green-pepper.jpg",
+          },
+        ],
+        equipments: [],
+        length: {},
       },
 
     ],
@@ -730,219 +812,216 @@ test('TEST 14: INSTRUTIONS', () => {
 
 });
 
-test('TEST 15: INSTRUTIONS - INGREDIENTS', () => {
-  // Call the transformation function
-  const transformedRecipes = transformRecipeData(dummyApiResponse);
+// test('TEST 15: INSTRUTIONS - INGREDIENTS', () => {
+//   // Call the transformation function
+//   const transformedRecipes = transformRecipeData(dummyApiResponse);
 
-  // 1st recipe - info for the Recipe table
-  const firstRecipe = transformedRecipes[2].instructionsIngredients;
+//   // 1st recipe - info for the Recipe table
+//   const firstRecipe = transformedRecipes[2].instructionsIngredients;
 
-  const expectedinstructionsIngredients = [
-    [
-      [], // 1
-      [
-        {
-          id: 10211821,
-          name: "bell pepper",
-          image: "bell-pepper-orange.png",
-        },
-      ],
-      [
-        {
-          id: 10018364,
-          name: "wrap",
-          image: "flour-tortilla.jpg"
-        },
-      ],
-      [
-        {
-          id: 10111333,
-          name: "peppers",
-          image: "green-pepper.jpg",
-        },
-        {
-          id: 93818,
-          name: "seeds",
-          image: "sunflower-seeds.jpg"
-        },
-      ],
-      [
-        {
-          id: 10111333,
-          name: "peppers",
-          image: "green-pepper.jpg",
-        },
-      ],
-      [
-        {
-          id: 10111333,
-          name: "peppers",
-          image: "green-pepper.jpg",
-        },
-        {
-          id: 2053,
-          name: "vinegar",
-          image: "vinegar-(white).jpg",
-        },
-        {
-          id: 1002030,
-          name: "pepper",
-          image: "pepper.jpg",
-        },
-        {
-          id: 19335,
-          name: "sugar",
-          image: "sugar-in-bowl.png",
-        },
-      ],
-      [
-        {
-          id: 15001, 
-          name: "anchovies",
-          image: "anchovies.jpg",
-        },
-        {
-          id: 10111333,
-          name: "peppers",
-          image: "green-pepper.jpg"
-        },
-      ],
-    ],
-    [
-      [
-        {
-          id: 15001,
-          name: "anchovies",
-          image: "anchovies.jpg",
-        },
-        {
-            id: 10111333,
-            name: "peppers",
-            image: "green-pepper.jpg",
-        },
-      ]
-    ]
-  ];
-  expect(firstRecipe).toEqual(expect.arrayContaining(expectedinstructionsIngredients));
-});
+//   const expectedinstructionsIngredients = [
+//     [
+//       [], // 1
+//       [
+//         {
+//           id: 10211821,
+//           name: "bell pepper",
+//           image: "bell-pepper-orange.png",
+//         },
+//       ],
+//       [
+//         {
+//           id: 10018364,
+//           name: "wrap",
+//           image: "flour-tortilla.jpg"
+//         },
+//       ],
+//       [
+//         {
+//           id: 10111333,
+//           name: "peppers",
+//           image: "green-pepper.jpg",
+//         },
+//         {
+//           id: 93818,
+//           name: "seeds",
+//           image: "sunflower-seeds.jpg"
+//         },
+//       ],
+//       [
+//         {
+//           id: 10111333,
+//           name: "peppers",
+//           image: "green-pepper.jpg",
+//         },
+//       ],
+//       [
+//         {
+//           id: 10111333,
+//           name: "peppers",
+//           image: "green-pepper.jpg",
+//         },
+//         {
+//           id: 2053,
+//           name: "vinegar",
+//           image: "vinegar-(white).jpg",
+//         },
+//         {
+//           id: 1002030,
+//           name: "pepper",
+//           image: "pepper.jpg",
+//         },
+//         {
+//           id: 19335,
+//           name: "sugar",
+//           image: "sugar-in-bowl.png",
+//         },
+//       ],
+//       [
+//         {
+//           id: 15001, 
+//           name: "anchovies",
+//           image: "anchovies.jpg",
+//         },
+//         {
+//           id: 10111333,
+//           name: "peppers",
+//           image: "green-pepper.jpg"
+//         },
+//       ],
+//     ],
+//     [
+//       [
+//         {
+//           id: 15001,
+//           name: "anchovies",
+//           image: "anchovies.jpg",
+//         },
+//         {
+//             id: 10111333,
+//             name: "peppers",
+//             image: "green-pepper.jpg",
+//         },
+//       ]
+//     ]
+//   ];
+//   expect(firstRecipe).toEqual(expect.arrayContaining(expectedinstructionsIngredients));
+// });
 
-test('TEST 16: INSTRUTIONS - EQUIPMENT', () => {
-  // Call the transformation function
-  const transformedRecipes = transformRecipeData(dummyApiResponse);
+// test('TEST 16: INSTRUTIONS - EQUIPMENT', () => {
+//   // Call the transformation function
+//   const transformedRecipes = transformRecipeData(dummyApiResponse);
 
-  // 1st recipe - info for the Recipe table
-  const firstRecipe = transformedRecipes[2].equipment;
+//   // 1st recipe - info for the Recipe table
+//   const firstRecipe = transformedRecipes[2].equipment;
 
-  const expectedEquipment = [
-    [
-      [
-        {
-          id: 405914,
-          name: "broiler",
-          image: "oven.jpg",
-        },
-      ],
-      [
-        {
-          id: 404698,
-          name: "broiler pan",
-          image: "broiler-pan.jpg",
-        },
-        {
-          id: 404641,
-          name: "tongs",
-          image: "tongs.jpg"
-        },
-      ],
-      [
-        {
-          id: 404730,
-          name: "plastic wrap",
-          image: "plastic-wrap.jpg",
-        },
-        {
-          id: 404783,
-          name: "bowl",
-          image: "bowl.jpg",
-        },
-      ],
-      [
-        {
-          id: 404783,
-          name: "bowl",
-          image: "bowl.jpg"
-        },     
-      ],
-      [],
-      [
-        {
-          id: 405600,
-          name: "sieve",
-          image: "strainer.png"
-        },
-        {
-            id: 404783,
-            name: "bowl",
-            image: "bowl.jpg"
-        },
-      ],
-      [
-        {
-          id: 404783,
-          name: "bowl",
-          image: "bowl.jpg"
-        },
-      ],
-    ],
-    [
-      [],
-    ],
-  ];
-  expect(firstRecipe).toEqual(expect.arrayContaining(expectedEquipment));
-});
+//   const expectedEquipment = [
+//     [
+//       [
+//         {
+//           id: 405914,
+//           name: "broiler",
+//           image: "oven.jpg",
+//         },
+//       ],
+//       [
+//         {
+//           id: 404698,
+//           name: "broiler pan",
+//           image: "broiler-pan.jpg",
+//         },
+//         {
+//           id: 404641,
+//           name: "tongs",
+//           image: "tongs.jpg"
+//         },
+//       ],
+//       [
+//         {
+//           id: 404730,
+//           name: "plastic wrap",
+//           image: "plastic-wrap.jpg",
+//         },
+//         {
+//           id: 404783,
+//           name: "bowl",
+//           image: "bowl.jpg",
+//         },
+//       ],
+//       [
+//         {
+//           id: 404783,
+//           name: "bowl",
+//           image: "bowl.jpg"
+//         },     
+//       ],
+//       [],
+//       [
+//         {
+//           id: 405600,
+//           name: "sieve",
+//           image: "strainer.png"
+//         },
+//         {
+//             id: 404783,
+//             name: "bowl",
+//             image: "bowl.jpg"
+//         },
+//       ],
+//       [
+//         {
+//           id: 404783,
+//           name: "bowl",
+//           image: "bowl.jpg"
+//         },
+//       ],
+//     ],
+//     [
+//       [],
+//     ],
+//   ];
+//   expect(firstRecipe).toEqual(expect.arrayContaining(expectedEquipment));
+// });
 
-test('TEST 17: INSTRUTIONS - INSTRUCATION-LENGTH', () => {
-  // Call the transformation function
-  const transformedRecipes = transformRecipeData(dummyApiResponse);
+// test('TEST 17: INSTRUTIONS - INSTRUCATION-LENGTH', () => {
+//   // Call the transformation function
+//   const transformedRecipes = transformRecipeData(dummyApiResponse);
 
-  // 1st recipe - info for the Recipe table
-  const firstRecipe = transformedRecipes[2].instructionLength;
+//   // 1st recipe - info for the Recipe table
+//   const firstRecipe = transformedRecipes[2].instructionLength;
 
-  const expectedinstructionLength = [
-    [
-      [],
-      [
-        {
-          number: 15,
-          unit: "minutes",
-        },
-      ],
-      [
-        {
-          number: 20,
-          unit: "minutes",
-        },
-      ], [],[],
-      [
-        {
-          number: 120,
-          unit: "minutes",
-        },
-      ],[],
-    ],
-    [
-      []
-    ],
-  ];
+//   const expectedinstructionLength = [
+//     [
+//       [],
+//       [
+//         {
+//           number: 15,
+//           unit: "minutes",
+//         },
+//       ],
+//       [
+//         {
+//           number: 20,
+//           unit: "minutes",
+//         },
+//       ], [],[],
+//       [
+//         {
+//           number: 120,
+//           unit: "minutes",
+//         },
+//       ],[],
+//     ],
+//     [
+//       []
+//     ],
+//   ];
 
-  expect(firstRecipe).toEqual(expect.arrayContaining(expectedinstructionLength));
-});
+//   expect(firstRecipe).toEqual(expect.arrayContaining(expectedinstructionLength));
+// });
 
 test('TEST 18: NUTRITION -  RECIPE INGREDIENTS NUTRIENTS', () => {
-  // Call the transformation function
   const transformedRecipes = transformRecipeData(dummyApiResponse);
-
-  // 1st recipe - info for the Recipe table
   const firstRecipe = transformedRecipes[0].recipeIngredientsNutrients[0];
   const expectedrecipeIngredientsNutrients = 
     {
@@ -989,10 +1068,3 @@ test('TEST 18: NUTRITION -  RECIPE INGREDIENTS NUTRIENTS', () => {
 
   expect(firstRecipe).toEqual((expectedrecipeIngredientsNutrients));
 });
-
-
-
-
-
-
-
