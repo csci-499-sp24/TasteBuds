@@ -40,55 +40,57 @@ async function syncDB() {
 syncDB();
 
 // Sequelize table object.
-const database = sequelize.define("sample_data", {
-        "\"(PK) id\"": {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
-        title: {
-            type: DataTypes.STRING,
-        },
-        summary: {
-            type: DataTypes.STRING,
-        },
-        instructions: {
-            type: DataTypes.STRING,
-        },
-        cuisines: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        preparationMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        cookingMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        readyInMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        priceperServing: {
-            type: DataTypes.INTEGER,
-        },
-        dishTypes: {
-            type: DataTypes.STRING,
-        },
-        servings: {
-            type: DataTypes.INTEGER,
-        },
-        image: {
-            type: DataTypes.STRING,
-        },
-        diet: {
-            type: DataTypes.STRING,
-        },
-    },
-    {
-        tableName: "sample_data",
-        timestamps: false,
-    },
-)
+// const database = sequelize.define("sample_data", {
+//         "\"(PK) id\"": {
+//             type: DataTypes.INTEGER,
+//             allowNull: false,
+//             primaryKey: true,
+//         },
+//         title: {
+//             type: DataTypes.STRING,
+//         },
+//         summary: {
+//             type: DataTypes.STRING,
+//         },
+//         instructions: {
+//             type: DataTypes.STRING,
+//         },
+//         cuisines: {
+//             type: DataTypes.STRING,
+//             allowNull: true,
+//         },
+//         preparationMinutes: {
+//             type: DataTypes.INTEGER,
+//         },
+//         cookingMinutes: {
+//             type: DataTypes.INTEGER,
+//         },
+//         readyInMinutes: {
+//             type: DataTypes.INTEGER,
+//         },
+//         priceperServing: {
+//             type: DataTypes.INTEGER,
+//         },
+//         dishTypes: {
+//             type: DataTypes.STRING,
+//         },
+//         servings: {
+//             type: DataTypes.INTEGER,
+//         },
+//         image: {
+//             type: DataTypes.STRING,
+//         },
+//         diet: {
+//             type: DataTypes.STRING,
+//         },
+//     },
+//     {
+//         tableName: "sample_data",
+//         timestamps: false,
+//     },
+// )
+
+const database = require("./tables/old_model.js")(sequelize, DataTypes);
 
 async function sync_table() {
     try {
@@ -100,6 +102,9 @@ async function sync_table() {
     }
 };
 sync_table();
+
+const {recipes_table,nutrients_table,calories_table,secondary_recipes_table
+        } = require("./tables/recipes.js")(sequelize, DataTypes);
 
 // async function get_first_ten() {
 //     try {
@@ -125,6 +130,7 @@ app.get("/", async (req,res)=>{
             raw: true,
         });
         res.status(200).json({recipeData: first_ten});
+        console.log("app.get / call successful");
     }
     catch(error){
         console.log("encountered error: ", error)
