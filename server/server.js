@@ -31,6 +31,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 // const postgres_db = new Sequelize(process.env.DB_HOST);
 async function syncDB() {
     try {
+        console.log("beginning sequelize authenticate");
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
     } catch (error) {
@@ -39,56 +40,23 @@ async function syncDB() {
 };
 syncDB();
 
-// Sequelize table object.
-// const database = sequelize.define("sample_data", {
-//         "\"(PK) id\"": {
-//             type: DataTypes.INTEGER,
-//             allowNull: false,
-//             primaryKey: true,
-//         },
-//         title: {
-//             type: DataTypes.STRING,
-//         },
-//         summary: {
-//             type: DataTypes.STRING,
-//         },
-//         instructions: {
-//             type: DataTypes.STRING,
-//         },
-//         cuisines: {
-//             type: DataTypes.STRING,
-//             allowNull: true,
-//         },
-//         preparationMinutes: {
-//             type: DataTypes.INTEGER,
-//         },
-//         cookingMinutes: {
-//             type: DataTypes.INTEGER,
-//         },
-//         readyInMinutes: {
-//             type: DataTypes.INTEGER,
-//         },
-//         priceperServing: {
-//             type: DataTypes.INTEGER,
-//         },
-//         dishTypes: {
-//             type: DataTypes.STRING,
-//         },
-//         servings: {
-//             type: DataTypes.INTEGER,
-//         },
-//         image: {
-//             type: DataTypes.STRING,
-//         },
-//         diet: {
-//             type: DataTypes.STRING,
-//         },
+// Demonstration of how to define a foreign key (see fk_id).
+// const test = sequelize.define("EXAMPLE", {
+//     pk_id: {
+//         type: DataTypes.INTEGER,
+//         allowNull: false,
+//         primaryKey: true,
 //     },
-//     {
-//         tableName: "sample_data",
-//         timestamps: false,
+//     fk_id: {
+//         type: DataTypes.INTEGER,
+//         allowNull: false,
+//         primaryKey: true,
+//         references: {
+//             model: recipes_table,
+//             key: "hi",
+//         }
 //     },
-// )
+// })
 
 const database = require("./tables/old_model.js")(sequelize, DataTypes);
 
@@ -103,6 +71,9 @@ async function sync_table() {
 };
 sync_table();
 
+// Calling up all the table objects,
+// They don't work right now, Sequelize insists that the db relations don't exist
+// I will add them here and figure that out later.
 const {recipes_table,nutrients_table,calories_table,secondary_recipes_table
         } = require("./tables/recipes.js")(sequelize, DataTypes);
 
@@ -130,6 +101,21 @@ app.get("/", async (req,res)=>{
             raw: true,
         });
         res.status(200).json({recipeData: first_ten});
+        console.log("app.get / call successful");
+    }
+    catch(error){
+        console.log("encountered error: ", error)
+    }
+})
+
+app.get("/mytest", async (req,res)=>{
+    try {
+        const first_ten = await calories_table.findAll({
+            subQuery: false,
+            limit: 10,
+            raw: true,
+        });
+        res.status(200).json({recipeData: first_ten[0]});
         console.log("app.get / call successful");
     }
     catch(error){
