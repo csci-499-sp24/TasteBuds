@@ -46,7 +46,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "InstructionsEquipment",
+        tableName: "instructions_equipment",
         timestamps: false,
     },
     );
@@ -63,7 +63,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "RecipeCuisines",
+        tableName: "recipe_cuisines",
         timestamps: false,
     },
     );
@@ -127,7 +127,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "RecipeDishType",
+        tableName: "recipe_dishType",
         timestamps: false,
     },
     );

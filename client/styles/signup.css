@@ -1,0 +1,145 @@
+*{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+  }
+  .sidebar {
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    left:-250px;
+    background: #161616;
+    transition: all .5s ease;
+  }
+  .sidebar header{
+    font-size: 22px;
+    text-align: center;
+    line-height: 70px;
+    color:white;
+    background: #0dbbf0;
+    user-select: none;
+  }
+  .sidebar ul a{
+    font-size: 20px;
+    line-height: 65px;
+    display:block;
+    height: 100%;
+    width: 100%;
+    color: white;
+    padding-left: 40px;
+    box-sizing: border-box;
+    border-top: 1px solid rgba(255,255,255,.1);
+    border-bottom: 1px solid black;
+    transition: .4s;
+  }
+  ul li:hover a{
+    padding-left: 50px;
+  }
+  #check{
+    display: none;
+  }
+  label #btn,label #cancel{
+    position: absolute;
+    background: #042331;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  label #btn{
+    left: 40px;
+    top: 25px;
+    font-size: 35px;
+    color: white;
+    padding: 6px 12px;
+    transition: all .5s;
+  }
+  label #cancel{
+    z-index: 1111;
+    left: -195px;
+    top: 17px;
+    font-size: 30px;
+    color: #0a5275;
+    padding: 4px 9px;
+    transition: all .5s ease;
+  }
+  #check:checked ~ .sidebar{
+    left: 0;
+  }
+  #check:checked ~ label #btn{
+    left: 250px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #check:checked ~ label #cancel{
+    left: 195px;
+  }
+  #check:checked ~ section{
+    margin-left: 250px;
+  }
+  section{
+    background: url(bg2.jpg) no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    transition: all .5s;
+  }
+  .sidebar ul a i{
+    margin-right: 16px;
+  }
+
+  .main {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      padding: 10px 20px;
+      transition: transform 0.2s;
+      width: 500px;
+      text-align: center;
+  }
+  
+  h1 {
+      color: #4CAF50;
+  }
+  
+  label {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      margin-bottom: 5px;
+      text-align: left;
+      color: #555;
+  }
+  
+  
+  input {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 10px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+  }
+  
+  button {
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      background-color: #4CAF50;
+      width: 100%;
+      font-size: 16px;
+  }
+  
+  .wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }

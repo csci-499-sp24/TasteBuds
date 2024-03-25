@@ -109,21 +109,7 @@ const {
     dish_type,
 } = require("./tables/other_tables.js")(sequelize, DataTypes)
 
-// async function get_first_ten() {
-//     try {
-//         const first_ten = await database.findAll({
-//             subQuery: false,
-//             limit: 10,
-//             raw: true,
-//         });
-//         console.log("attempting to find the first entries in db");
-//         console.log(first_ten[0]);
-//     }
-//     catch(error){
-//         console.log("encountered error: ", error)
-//     }
-// }
-//get_first_ten();
+
 
 app.get("/", async (req,res)=>{
     try {
@@ -147,7 +133,7 @@ app.get("/mytest", async (req,res)=>{
             limit: 10,
             raw: true,
         });
-        res.status(200).json({recipeData: first_ten[0]});
+        res.status(200).json({recipeData: first_ten});
         console.log("app.get / call successful");
     }
     catch(error){
@@ -155,75 +141,34 @@ app.get("/mytest", async (req,res)=>{
     }
 })
 
-// Database connection info
-// const pool = new Pool({
-//     user: process.env.DB_USER,
-//     host: process.env.DB_HOST,
-//     database: process.env.DB_NAME,
-//     password: process.env.DB_PASS,
-//     port: process.env.DB_PORT,
-//     ssl: {
-//         rejectUnauthorized: false // just for development only; 
-//     }
-// });
+app.get('/search', async (req, res) => {
+    try {
+        const { query } = req.query; // search query is passed as a query parameter
 
-// pool.connect();
+        // Check if search query is provided and is a valid string
+        if (!query || typeof query !== 'string') {
+            return res.status(400).json({ error: "Invalid search query" });
+        }
 
-// pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, res)=>{
-//     if(!err){
-//         console.log(res.rows);
-//     } else{
-//         console.log(err.message);
-//     }
-// })
+        // Fetch recipes from the database
+        const recipes = await recipes_table.findAll({
+            subQuery: false,
+            raw: true,
+        });
 
-// app.get("/api/home", (req, res) => {
-//     pool.query('SELECT NOW()', (err, dbRes) => {
-//         if (err) {
-//             console.error(err);
-//             return res.status(500).json({error: 'Database error', details: err.message});
-//         }
-//         res.json({message: "Hello World!", timestamp: dbRes.rows[0].now});
-//     });
-// });
+        // Filter recipes based on the search query
+        const filteredResults = recipes.filter(recipe =>
+            recipe.title.toLowerCase().includes(query.toLowerCase())
+        );
 
-// app.get("/", (req, res) => {
-//     pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         res.json({message: dbRes.rows});
-//     })
-// });
+        // Send filtered results as JSON response
+        res.json(filteredResults);
+    } catch (error) {
+        console.error("Error searching recipes:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
-// Queries for recipes of a specific cuisine type.
-// Added by Ze Hong Wu at the request of Philip.
-// Self reminder: use single quotations for values and double quotations for colnames
-// app.get("/mediterranean", (req, res) => {
-//     pool.query("SELECT * FROM public.sample_data\n WHERE cuisines LIKE \'%Mediterranean%\'\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         try {
-//             res.json({message: dbRes.rows});
-//         } catch {
-//             console.log("see the error")
-//         }
-//     })
-// });
-
-// app.get("/cuisines_types", (req, res) => {
-//     pool.query("SELECT DISTINCT cuisines FROM public.sample_data\n ORDER BY \"cuisines\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         try {
-//             res.json({message: dbRes.rows});
-//         } catch {
-//             console.log("dbRes.rows doesn't exist or something")
-//         }
-//     })
-// });
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
