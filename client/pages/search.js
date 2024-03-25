@@ -1,7 +1,6 @@
 import Link from "next/link"
 
 function Search() {
-
   return (
     <div>
         <input type="checkbox" id="check" />
