@@ -71,6 +71,7 @@ async function sync_table() {
 };
 sync_table();
 
+
 // Calling up all the table objects,
 // They don't work right now, Sequelize insists that the db relations don't exist
 // I will add them here and figure that out later.
@@ -153,21 +154,22 @@ app.get("/mytest", async (req,res)=>{
     catch(error){
         console.log("encountered error: ", error)
     }
-})
+}
+get_first_ten()
 
 // Database connection info
-// const pool = new Pool({
-//     user: process.env.DB_USER,
-//     host: process.env.DB_HOST,
-//     database: process.env.DB_NAME,
-//     password: process.env.DB_PASS,
-//     port: process.env.DB_PORT,
-//     ssl: {
-//         rejectUnauthorized: false // just for development only; 
-//     }
-// });
+const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASS,
+    port: process.env.DB_PORT,
+    ssl: {
+        rejectUnauthorized: false // just for development only; 
+    }
+});
 
-// pool.connect();
+pool.connect();
 
 // pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, res)=>{
 //     if(!err){
@@ -177,53 +179,53 @@ app.get("/mytest", async (req,res)=>{
 //     }
 // })
 
-// app.get("/api/home", (req, res) => {
-//     pool.query('SELECT NOW()', (err, dbRes) => {
-//         if (err) {
-//             console.error(err);
-//             return res.status(500).json({error: 'Database error', details: err.message});
-//         }
-//         res.json({message: "Hello World!", timestamp: dbRes.rows[0].now});
-//     });
-// });
+app.get("/api/home", (req, res) => {
+    pool.query('SELECT NOW()', (err, dbRes) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({error: 'Database error', details: err.message});
+        }
+        res.json({message: "Hello World!", timestamp: dbRes.rows[0].now});
+    });
+});
 
-// app.get("/", (req, res) => {
-//     pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         res.json({message: dbRes.rows});
-//     })
-// });
+app.get("/", (req, res) => {
+    pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        res.json({message: dbRes.rows});
+    })
+});
 
 // Queries for recipes of a specific cuisine type.
 // Added by Ze Hong Wu at the request of Philip.
 // Self reminder: use single quotations for values and double quotations for colnames
-// app.get("/mediterranean", (req, res) => {
-//     pool.query("SELECT * FROM public.sample_data\n WHERE cuisines LIKE \'%Mediterranean%\'\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         try {
-//             res.json({message: dbRes.rows});
-//         } catch {
-//             console.log("see the error")
-//         }
-//     })
-// });
+app.get("/mediterranean", (req, res) => {
+    pool.query("SELECT * FROM public.sample_data\n WHERE cuisines LIKE \'%Mediterranean%\'\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        try {
+            res.json({message: dbRes.rows});
+        } catch {
+            console.log("see the error")
+        }
+    })
+});
 
-// app.get("/cuisines_types", (req, res) => {
-//     pool.query("SELECT DISTINCT cuisines FROM public.sample_data\n ORDER BY \"cuisines\" ASC ", (err, dbRes)=>{
-//         if(err){
-//             console.log(err.message);
-//         }
-//         try {
-//             res.json({message: dbRes.rows});
-//         } catch {
-//             console.log("dbRes.rows doesn't exist or something")
-//         }
-//     })
-// });
+app.get("/cuisines_types", (req, res) => {
+    pool.query("SELECT DISTINCT cuisines FROM public.sample_data\n ORDER BY \"cuisines\" ASC ", (err, dbRes)=>{
+        if(err){
+            console.log(err.message);
+        }
+        try {
+            res.json({message: dbRes.rows});
+        } catch {
+            console.log("dbRes.rows doesn't exist or something")
+        }
+    })
+});
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {

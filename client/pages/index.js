@@ -1,21 +1,23 @@
 import React, {useEffect, useState} from 'react'
 import Link from 'next/link'
 
-import Link from "next/link";
 import {kebabCase} from "lodash"
 
-export const getStaticProps = async () =>{
-    const res = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/");
-    const data = await res.json();
+function Index() {
+  
+  const [message, setMessage] = useState("Loading")
 
-    return{
-      props: {recipes: data.recipeData}
-    }
-}
-
-const Index = ({recipes}) =>{
-
-  console.log(recipes);
+  console.log(process.env.NEXT_PUBLIC_SERVER_URL + "/api/home")
+  useEffect(() => {
+    fetch(process.env.NEXT_PUBLIC_SERVER_URL + "/api/home").then(
+      response => response.json()
+    ).then(
+      data => {
+        console.log(data)
+        setMessage(data.message)
+      }
+    )
+  }, [])
 
   return (
     <div>
@@ -63,6 +65,12 @@ const Index = ({recipes}) =>{
           <Link className="recipe-link" href={`/recipe/${recipes[2].title}`}>Read more...</Link>
         </div>
       </div>
+    </div> 
+    <div className="homePage">
+      <div className="container">
+        <h1>Welcome to TasteBuds</h1>
+      </div>
+  </div>
     </div>
   )
 }
