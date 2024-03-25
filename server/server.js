@@ -1,34 +1,13 @@
 // https://medium.com/@ibrahimhz/creating-your-first-backend-with-node-js-step-by-step-guide-892769af4cb0
 
+// server.js
 const express = require("express");
 const cors = require('cors');
-const { Pool } = require('pg');
-const { Sequelize, DataTypes } = require('sequelize');
-require('dotenv').config();
+const sequelize = require('./database'); // Adjust the path as necessary
 
 const app = express();
 app.use(cors());
 
-//const sequelize = new Sequelize(process.env.DB_HOST + "/" + process.env.DB_NAME)
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
-    database: process.env.DB_NAME,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: 'postgres', 
-    /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
-    dialectOptions: {
-        // https://stackoverflow.com/questions/25000183/node-js-postgresql-error-no-pg-hba-conf-entry-for-host
-        // See the answer from Victor Fazer.
-        ssl: {
-            require: true,
-            rejectUnauthorized: false, // for dev only
-        }
-    },
-});
-
-// const postgres_db = new Sequelize(process.env.DB_HOST);
 async function syncDB() {
     try {
         await sequelize.authenticate();
