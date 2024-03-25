@@ -4,7 +4,7 @@
   "description": "",
   "main": "etl.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "extract": "node scripts/extract.js",
     "testextract": "node scripts/testextract.js",
     "transform": "node scripts/transform.js",
@@ -23,5 +23,8 @@
   },
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }
