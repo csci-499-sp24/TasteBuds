@@ -1,4 +1,5 @@
 // https://dstackoverflow.com/questions/62556633/sequelize-6-import-models-from-file
+
 module.exports = function (sequelize, DataTypes) {
     const recipe = sequelize.define("recipe", {
         recipe_id: {
@@ -53,11 +54,10 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "recipe",
+        tableName: "recipes",
         timestamps: false,
     },
     );
-    //
     const WeightPerServing = sequelize.define("WeightPerServing", {
         recipe_id: {
             type: DataTypes.INTEGER,
@@ -75,11 +75,10 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "WeightPerServing",
+        tableName: "weightperServing",
         timestamps: false,
     },
     );
-    //
     const CaloricBreakdown = sequelize.define("CaloricBreakdown", {
         recipe_id: {
             type: DataTypes.INTEGER,
@@ -94,23 +93,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "CaloricBreakdown",
-        timestamps: false,
-    },
-    );
-    const SecondaryRecipes = sequelize.define("Secondary Recipes", {
-        recipe_id: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
-        name: {
-            type: DataTypes.STRING,
-            primaryKey: true,
-        },
-    },
-    {
-        tableName: "Secondary Recipes",
+        tableName: "caloricBreakdown",
         timestamps: false,
     },
     );
@@ -122,6 +105,8 @@ module.exports = function (sequelize, DataTypes) {
         },
         recipe_id: {
             type: DataTypes.INTEGER,
+            allowNull: false,
+            primaryKey: true,
         },
         amount: {
             type: DataTypes.DOUBLE,
@@ -136,7 +121,6 @@ module.exports = function (sequelize, DataTypes) {
         recipes_table: recipe,
         weight_per_serving: WeightPerServing,
         calories_table: CaloricBreakdown,
-        secondary_recipes_table: SecondaryRecipes,
         recipe_flavors: recipe_flavonoids,
     }
     //return recipes;
