@@ -14,6 +14,7 @@ function Signup(){
             <li><Link href="/"><i class="fas fa-home"></i>Home</Link></li>    
             <li><a href="#"><i class="fas fa-star"></i>Saved Recipes</a></li>
             <li><a href="#"><i class="fas fa-cog"></i>User Settings</a></li>
+            <li><a href="/search"><i className="fas fa-search"></i>Search</a></li>
             <li><Link href="/login"><i class="fas fa-sign-in-alt"></i>Login</Link></li>
         </ul>
        </div>
