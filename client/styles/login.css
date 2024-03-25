@@ -5,7 +5,6 @@
     text-decoration: none;
   }
   .sidebar {
-    z-index: 2;
     position: fixed;
     width: 250px;
     height: 100%;
@@ -143,10 +142,4 @@
       display: flex;
       justify-content: center;
       align-items: center;
-  }
-
-  .button{
-    color: black;
-    border: solid gray 1px;
-    background-color: #4CAF50;
   }
