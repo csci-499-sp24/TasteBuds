@@ -32,7 +32,7 @@ function Signup(){
                 name="password"
                 placeholder="Enter your Password" required />
             <div class="wrap">
-                <button type="submit"onclick="solve()">Submit</button>
+                <button className="button" type="submit"onclick="solve()">Submit</button>
             </div>
         </form>
     </div>
