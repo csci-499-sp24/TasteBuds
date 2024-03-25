@@ -1030,4 +1030,6 @@ async function loadRecipesIntoDatabase(transformedData) {
 module.exports = { 
     Recipe,
     Diet,
+    RecipeDiet,
+    sequelize,
     loadRecipesIntoDatabase };
