@@ -31,6 +31,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 // const postgres_db = new Sequelize(process.env.DB_HOST);
 async function syncDB() {
     try {
+        console.log("beginning sequelize authenticate");
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
     } catch (error) {
@@ -39,56 +40,25 @@ async function syncDB() {
 };
 syncDB();
 
-// Sequelize table object.
-const database = sequelize.define("sample_data", {
-        "\"(PK) id\"": {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
-        title: {
-            type: DataTypes.STRING,
-        },
-        summary: {
-            type: DataTypes.STRING,
-        },
-        instructions: {
-            type: DataTypes.STRING,
-        },
-        cuisines: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        preparationMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        cookingMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        readyInMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        priceperServing: {
-            type: DataTypes.INTEGER,
-        },
-        dishTypes: {
-            type: DataTypes.STRING,
-        },
-        servings: {
-            type: DataTypes.INTEGER,
-        },
-        image: {
-            type: DataTypes.STRING,
-        },
-        diet: {
-            type: DataTypes.STRING,
-        },
-    },
-    {
-        tableName: "sample_data",
-        timestamps: false,
-    },
-)
+// Demonstration of how to define a foreign key (see fk_id).
+// const test = sequelize.define("EXAMPLE", {
+//     pk_id: {
+//         type: DataTypes.INTEGER,
+//         allowNull: false,
+//         primaryKey: true,
+//     },
+//     fk_id: {
+//         type: DataTypes.INTEGER,
+//         allowNull: false,
+//         primaryKey: true,
+//         references: {
+//             model: recipes_table,
+//             key: "hi",
+//         }
+//     },
+// })
+
+const database = require("./tables/old_model.js")(sequelize, DataTypes);
 
 async function sync_table() {
     try {
@@ -101,91 +71,104 @@ async function sync_table() {
 };
 sync_table();
 
-async function get_first_ten() {
+// Calling up all the table objects,
+// They don't work right now, Sequelize insists that the db relations don't exist
+// I will add them here and figure that out later.
+const {
+    recipes_table,
+    weight_per_serving,
+    calories_table,
+    secondary_recipes_table,
+    recipes_flavors
+} = require("./tables/recipes.js")(sequelize, DataTypes);
+const {
+    recipe_to_equip,
+    instr_to_ingr,
+    instr_to_equip,
+    recipe_to_cusine,
+    recipe_to_diet,
+    recipe_to_occasions,
+    recipe_to_properties,
+    recipe_to_dishtype,
+} = require("./tables/table_connectors.js")(sequelize, DataTypes)
+const {
+    tips_table,
+    equipment_table,
+    instructions_id,
+    instr_length,
+    ingredients_table,
+    recipe_ingredients,
+    recipe_nutrients,
+    recipe_ingredient_nutrient,
+    cuisine_table,
+    diet_table,
+    flavonoid_table,
+    nutrients_table,
+    properties_table,
+    occasions_table,
+    dish_type,
+} = require("./tables/other_tables.js")(sequelize, DataTypes)
+
+
+
+app.get("/", async (req,res)=>{
     try {
         const first_ten = await database.findAll({
             subQuery: false,
             limit: 10,
             raw: true,
         });
-        console.log("attempting to find the first entries in db");
-        console.log(first_ten[0]);
+        res.status(200).json({recipeData: first_ten});
+        console.log("app.get / call successful");
     }
     catch(error){
         console.log("encountered error: ", error)
     }
-}
-get_first_ten()
+})
 
-// Database connection info
-const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASS,
-    port: process.env.DB_PORT,
-    ssl: {
-        rejectUnauthorized: false // just for development only; 
+app.get("/mytest", async (req,res)=>{
+    try {
+        const first_ten = await recipes_table.findAll({
+            subQuery: false,
+            limit: 10,
+            raw: true,
+        });
+        res.status(200).json({recipeData: first_ten});
+        console.log("app.get / call successful");
+    }
+    catch(error){
+        console.log("encountered error: ", error)
+    }
+})
+
+app.get('/search', async (req, res) => {
+    try {
+        const { query } = req.query; // search query is passed as a query parameter
+
+        // Check if search query is provided and is a valid string
+        if (!query || typeof query !== 'string') {
+            return res.status(400).json({ error: "Invalid search query" });
+        }
+
+        // Fetch recipes from the database
+        const recipes = await recipes_table.findAll({
+            subQuery: false,
+            raw: true,
+        });
+
+        // Filter recipes based on the search query
+        const filteredResults = recipes.filter(recipe =>
+            recipe.title.toLowerCase().includes(query.toLowerCase())
+        );
+
+        // Send filtered results as JSON response
+        res.json(filteredResults);
+    } catch (error) {
+        console.error("Error searching recipes:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
-pool.connect();
-
-// pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, res)=>{
-//     if(!err){
-//         console.log(res.rows);
-//     } else{
-//         console.log(err.message);
-//     }
-// })
-
-app.get("/api/home", (req, res) => {
-    pool.query('SELECT NOW()', (err, dbRes) => {
-        if (err) {
-            console.error(err);
-            return res.status(500).json({error: 'Database error', details: err.message});
-        }
-        res.json({message: "Hello World!", timestamp: dbRes.rows[0].now});
-    });
-});
-
-app.get("/", (req, res) => {
-    pool.query("SELECT * FROM public.sample_data\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-        if(err){
-            console.log(err.message);
-        }
-        res.json({message: dbRes.rows});
-    })
-});
-
-// Queries for recipes of a specific cuisine type.
-// Added by Ze Hong Wu at the request of Philip.
-// Self reminder: use single quotations for values and double quotations for colnames
-app.get("/mediterranean", (req, res) => {
-    pool.query("SELECT * FROM public.sample_data\n WHERE cuisines LIKE \'%Mediterranean%\'\n ORDER BY \"(PK) id\" ASC ", (err, dbRes)=>{
-        if(err){
-            console.log(err.message);
-        }
-        try {
-            res.json({message: dbRes.rows});
-        } catch {
-            console.log("see the error")
-        }
-    })
-});
-
-app.get("/cuisines_types", (req, res) => {
-    pool.query("SELECT DISTINCT cuisines FROM public.sample_data\n ORDER BY \"cuisines\" ASC ", (err, dbRes)=>{
-        if(err){
-            console.log(err.message);
-        }
-        try {
-            res.json({message: dbRes.rows});
-        } catch {
-            console.log("dbRes.rows doesn't exist or something")
-        }
-    })
-});
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
