@@ -8,7 +8,8 @@
     "extract": "node scripts/extract.js",
     "testextract": "node scripts/testextract.js",
     "transform": "node scripts/transform.js",
-    "load": "node scripts/load.js"
+    "load": "node scripts/load.js",
+    "testtransform": "node scripts/testtransform.js"
   },
   "keywords": [],
   "author": "",
