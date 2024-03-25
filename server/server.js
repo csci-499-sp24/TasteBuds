@@ -157,12 +157,16 @@ app.get('/search', async (req, res) => {
         });
 
         // Filter recipes based on the search query
+        
+
         const filteredResults = recipes.filter(recipe =>
             recipe.title.toLowerCase().includes(query.toLowerCase())
         );
 
         // Send filtered results as JSON response
+        console.log("Filtered Results:", filteredResults);
         res.json(filteredResults);
+        
     } catch (error) {
         console.error("Error searching recipes:", error);
         res.status(500).json({ error: "Internal server error" });
