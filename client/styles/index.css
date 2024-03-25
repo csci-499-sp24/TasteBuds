@@ -51,37 +51,9 @@
   .dropdown:hover .dropdown-content {
     display: block;
   } 
+
   body {
       background-color: #d39d09;
   }
-body{
 
-}
 
-.featured{
-    margin-left: 15px;
-}
-
-.recipes{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
-    margin: 15px;
-}
-
-.recipe-card{
-    background-color: rgb(236, 236, 236);
-    padding: 10px;
-    border-radius: 3px;
-}
-
-.recipe-link{
-    color: rgb(19, 0, 190);
-}
-
-.header{
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    font-weight: 700;
-}
