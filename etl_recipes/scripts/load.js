@@ -150,7 +150,7 @@ Diet.belongsToMany(Recipe, { through: RecipeDiet, foreignKey: 'diet_id' });
 Recipe.belongsToMany(Diet, { through: RecipeDiet, foreignKey: 'recipe_id' });
 
 /* DISH TYPE */
- const Dish_Type = sequelize.define('Dish_Type', {
+ const DishType = sequelize.define('DishType', {
     dish_type_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -162,7 +162,7 @@ Recipe.belongsToMany(Diet, { through: RecipeDiet, foreignKey: 'recipe_id' });
         allowNull: false,
     }
 }, {
-    tableName: 'dish_type',
+    tableName: 'dishType',
     timestamps: false,
 });
 const RecipeDishType = sequelize.define('RecipeDishType', {
@@ -178,12 +178,12 @@ const RecipeDishType = sequelize.define('RecipeDishType', {
         allowNull: false,
     },
 }, {
-    tableName: 'recipe_dish_type',
+    tableName: 'recipe_dishType',
     timestamps: false
 });
 // Define the ER of DishType and Recipe (M:M)
-Recipe.belongsToMany(Dish_Type, { through: RecipeDishType, foreignKey: 'recipe_id' });
-Dish_Type.belongsToMany(Recipe, { through: RecipeDishType, foreignKey: 'dish_type_id' });
+Recipe.belongsToMany(DishType, { through: RecipeDishType, foreignKey: 'recipe_id' });
+DishType.belongsToMany(Recipe, { through: RecipeDishType, foreignKey: 'dish_type_id' });
 
 /* OCCASION TYPE */
 const Occasions = sequelize.define('Occasions', {
@@ -414,7 +414,7 @@ const InstructionLength = sequelize.define('InstructionLength', {
         type: DataTypes.STRING 
     }
 }, {
-    tableName: 'instruction_length', 
+    tableName: 'instructionLength', 
     timestamps: false 
 });
 // Define the relationship with Instructions and Length (1:1)
@@ -636,7 +636,7 @@ const WeightPerServing = sequelize.define('WeightPerServing', {
         allowNull: false,
     }
 }, {
-    tableName: 'weight_per_serving',
+    tableName: 'weightPerServing',
     timestamps: false
 });
 
@@ -663,7 +663,7 @@ const CaloricBreakdown = sequelize.define('CaloricBreakdown', {
         allowNull: false,
     }
 }, {
-    tableName: 'caloric_breakdown',
+    tableName: 'caloricBreakdown',
     timestamps: false,
 });
 
@@ -754,7 +754,7 @@ async function loadRecipesIntoDatabase(transformedData) {
 
             // Iterate over each Dish Type
             for (const dishTypeData of recipeResponse.dishType) {
-                let createddishType = await Dish_Type.findOne({ where: { dish_type_name: dishTypeData} });
+                let createddishType = await DishType.findOne({ where: { dish_type_name: dishTypeData} });
 
                 if (!createddishType) {
                     createddishType = await Dish_Type.create(dishTypeData);
