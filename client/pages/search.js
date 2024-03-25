@@ -7,7 +7,7 @@ function Search() {
 
   const fetchRecipes = async (searchQuery) => {
     try {
-      const response = await fetch(`http://localhost:8080/search?query=${searchQuery}`);
+      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/search?query=${searchQuery}`);
       const data = await response.json();
       setSearchResults(data);
     } catch (error) {
