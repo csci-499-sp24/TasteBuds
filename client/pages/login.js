@@ -20,7 +20,7 @@ function Login(){
       <section></section>
       <div className="main">
         <h3>Login</h3>
-        <form action=""> 
+        <form action="/login" method="post"> 
         {/* </form><!--<form action="login.php" method="post">--> */}
           <label for="user"><b>Username: </b></label>
           <input type="text"
