@@ -1,17 +1,27 @@
-import { useState } from "react"; // React Hooks - for managing states of components
+import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState(""); 
   const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const fetchRecipes = async (searchQuery) => {
+    setIsLoading(true);
+    setError(null);
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/search?query=${searchQuery}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
       const data = await response.json();
       setSearchResults(data);
     } catch (error) {
       console.error("Error fetching recipes:", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,15 +65,17 @@ function Search() {
           />
         </div>
         <div id="div-center" className="user-recipes" data-user-cards-container>
-          {searchResults.map(recipe => (
-            <div key={recipe.id} className="card">
+          {isLoading && <p>Loading...</p>}
+          {error && <p>Error: {error}</p>}
+          {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
+            <div key={recipe.recipe_id} className="card">
               <div className="header" data-header>{recipe.title}</div>
               <img src={recipe.image} alt={recipe.title} className="recipe-image" />
               {/* Add more details here */}
               <div className="body" data-body>{/* Add more details here */}</div>
             </div>
           ))}
-          {!Array.isArray(searchResults) && <p>No results found.</p>}
+          {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
         </div>
       </section>
     </div>
