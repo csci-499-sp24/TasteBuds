@@ -11,7 +11,8 @@ function Signup(){
       <div class="sidebar">
         <header>TasteBuds</header>
         <ul>
-            <li><Link href="/"><i class="fas fa-home"></i>Home</Link></li>    
+            <li><Link href="/"><i class="fas fa-home"></i>Home</Link></li> 
+            <li><Link href="/search"><i className="fas fa-search"></i>Search</Link></li>    
             <li><a href="#"><i class="fas fa-star"></i>Saved Recipes</a></li>
             <li><a href="#"><i class="fas fa-cog"></i>User Settings</a></li>
             <li><Link href="/login"><i class="fas fa-sign-in-alt"></i>Login</Link></li>
@@ -32,7 +33,7 @@ function Signup(){
                 name="password"
                 placeholder="Enter your Password" required />
             <div class="wrap">
-                <button type="submit"onclick="solve()">Submit</button>
+                <button className="submit" type="submit"onclick="solve()">Submit</button>
             </div>
         </form>
     </div>
