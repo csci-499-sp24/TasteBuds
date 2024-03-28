@@ -146,7 +146,7 @@ app.get('/search', async (req, res) => {
         const { query } = req.query; // search query is passed as a query parameter
 
         // Check if search query is provided and is a valid string
-        if (!query || typeof query !== 'string') {
+        if (!query) {
             return res.status(400).json({ error: "Invalid search query" });
         }
 
