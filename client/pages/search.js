@@ -7,30 +7,23 @@ function Search() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/search?query=${searchQuery}`);
-        if (!response.ok) {
-          const errorMessage = `Failed to fetch data. Status: ${response.status}`;
-          throw new Error(errorMessage);
-        }
-        const data = await response.json();
-        setSearchResults(data);
-      } catch (error) {
-        console.error("Error fetching recipes:", error);
-        setError(error.message);
-      } finally {
-        setIsLoading(false);
+  const fetchRecipes = async (searchQuery) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/search?query=${searchQuery}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
       }
-    };
-
-    if (searchQuery !== "") {
-      fetchRecipes();
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
     }
-  }, [searchQuery]);
+  };
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
@@ -39,7 +32,7 @@ function Search() {
 
   const handleEnterKeyPress = (event) => {
     if (event.key === "Enter") {
-      setSearchQuery(event.target.value.toLowerCase());
+      fetchRecipes(searchQuery); // Call fetchRecipes when Enter key is pressed
     }
   };
 
