@@ -76,40 +76,7 @@ sync_table();
 // I will add them here and figure that out later.
 const {
     recipes_table,
-    weight_per_serving,
-    calories_table,
-    secondary_recipes_table,
-    recipes_flavors
 } = require("./tables/recipes.js")(sequelize, DataTypes);
-// const {
-//     recipe_to_equip,
-//     instr_to_ingr,
-//     instr_to_equip,
-//     recipe_to_cusine,
-//     recipe_to_diet,
-//     recipe_to_occasions,
-//     recipe_to_properties,
-//     recipe_to_dishtype,
-// } = require("./tables/table_connectors.js")(sequelize, DataTypes)
-// const {
-//     tips_table,
-//     equipment_table,
-//     instructions_id,
-//     instr_length,
-//     ingredients_table,
-//     recipe_ingredients,
-//     recipe_nutrients,
-//     recipe_ingredient_nutrient,
-//     cuisine_table,
-//     diet_table,
-//     flavonoid_table,
-//     nutrients_table,
-//     properties_table,
-//     occasions_table,
-//     dish_type,
-// } = require("./tables/other_tables.js")(sequelize, DataTypes)
-
-
 
 app.get("/", async (req,res)=>{
     try {
