@@ -1,11 +1,11 @@
 /**
- * Transforms the recipe data obtained from the API response into a structured format.
- * @param {Array} dummyApiResponse - The array containing recipe data from the API response.
+ * Transforms the recipe data obtained from the extracted API response into a structured format.
+ * @param {Array} extractResponse - The array containing recipe data from the extracted API response.
  * @returns {Array} An array of transformed recipe objects.
  */
-function transformRecipeData(dummyApiResponse) {
+function transformRecipeData(extractResponse) {
 
-    return dummyApiResponse.map(recipe => {
+    return extractResponse.map(recipe => {
         /* RECIPE */
         // Object to store transformed recipe data
         const transformedRecipe = {
