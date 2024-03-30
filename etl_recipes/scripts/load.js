@@ -1,7 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 require('dotenv').config();
 
-
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
@@ -676,9 +675,10 @@ CaloricBreakdown.belongsTo(Recipe, { foreignKey: 'recipe_id' });
 async function loadRecipesIntoDatabase(transformedData) {
     try {
         // Authenticate the sequelize connection
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-        await sequelize.sync();
+        // comment out to test code
+        // await sequelize.authenticate();
+        // console.log('Connection has been established successfully.');
+        // await sequelize.sync();
 
         // Iterate over each recipe response object in transformedData
         let createdRecipe; // Declare createdRecipe outside of the try block
@@ -689,66 +689,64 @@ async function loadRecipesIntoDatabase(transformedData) {
             // Attempt to create the recipe in the database
             createdRecipe = await Recipe.create(recipeData);
             console.log(`Recipe with ID ${createdRecipe.recipe_id} loaded successfully.`);
-                        // Iterate over each Tips
-
+                    
             // Iterate over each cuisine 
             for (const cuisineData of recipeResponse.cuisine) {
                 // returns either an object representing the found record or null 
-                let createdCusine = await Cuisines.findOne({ where: { cuisine_name: cuisineData } });
+                let createdCuisine = await Cuisines.findOne({ where: { cuisine_name: cuisineData} });
 
-                // If cuisine doesn't exist, create it
-                if (!createdCusine) {
-                    createdCusine = await Cuisines.create({ cuisine_name: cuisineData },  { validate: true });
-                    console.log(`Cuisine with ID ${createdCusine.cuisine_id} created successfully.`);
+                if (!createdCuisine) {
+                    createdCuisine = await Cuisines.create(cuisineData);
+                    console.log(`Created cuisine:`, createdCuisine); // Add this line to log the created cuisine
+                    if (!createdCuisine) {
+                        console.error(`Failed to create cuisine for data:`, cuisineData);
+                        continue; // Skip this iteration if cuisine creation failed
+                    }
+                    console.log(`Cuisines with ID ${createdCuisine.cuisine_id} created successfully.`);
                 }
-                // Create entry in the RecipeCuisine join table
+
                 const existingRecipeCuisine = await RecipeCuisines.findOne({
                     where: {
                         recipe_id: createdRecipe.recipe_id,
-                        cuisine_id: createdCusine.cuisine_id
+                        cuisine_id: createdCuisine.cuisine_id,
                     }
                 });
-  
+ 
                 if (!existingRecipeCuisine) {
                     // If no existing record found, create a new one
                     await RecipeCuisines.create({
                         recipe_id: createdRecipe.recipe_id,
-                        cuisine_id: createdCusine.cuisine_id
+                        cuisine_id: createdCuisine.cuisine_id
                     });
-                    console.log(`RecipeCuisines entry created successfully for recipe ${createdRecipe.recipe_id} and cuisine ${createdCusine.cuisine_id}.`);
+                    console.log(`RecipeCuisines entry created successfully for recipe ${createdRecipe.recipe_id} and cuisine ${createdCuisine.cuisine_id}.`);
                 } else {
                     // Handle the case where the record already exists
-                    console.log(`RecipeCuisines entry for recipe ${createdRecipe.recipe_id} and cuisine ${createdCusine.cuisine_id}.`);
+                    console.log(`RecipeCuisines entry for recipe ${createdRecipe.recipe_id} and cuisine ${createdCuisine.cuisine_id} already exists.`);
                 }
-            
             }
 
             // Iterate over each diet
             for (const dietData of recipeResponse.diet) {
-                let diet = await Diet.findOne({ where: { diet_name: dietData} });
+                let createdDiet = await Diet.findOne({ where: { diet_name: dietData} });
 
-                if (!diet) {
-                    diet = await Diet.create(dietData);
-                    console.log(`Diet with ID ${diet.diet_id} created successfully.`);
+                if (!createdDiet) {
+                    createdDiet = await Diet.create(dietData);
+                    console.log(`Diet with ID ${createdDiet.diet_id} created successfully.`);
                 }
-                // Check if a record with the same recipe_id and diet_id exists
                 const existingRecipeDiet = await RecipeDiet.findOne({
                     where: {
                         recipe_id: createdRecipe.recipe_id,
-                        diet_id: diet.diet_id
+                        diet_id: createdDiet.diet_id
                     }
                 });
-
                 if (!existingRecipeDiet) {
-                    // If no existing record found, create a new one
                     await RecipeDiet.create({
                         recipe_id: createdRecipe.recipe_id,
-                        diet_id: diet.diet_id
+                        diet_id: createdDiet.diet_id
                     });
-                    console.log(`RecipeDiet entry created successfully for recipe ${createdRecipe.recipe_id} and Diet ${diet.diet_id}.`);
+                    console.log(`RecipeDiet entry created successfully for recipe ${createdRecipe.recipe_id} and Diet ${createdDiet.diet_id}.`);
                 } else {
-                    // Handle the case where the record already exists
-                    console.log(`RecipeDiet entry for recipe ${createdRecipe.recipe_id} and Diet ${diet.diet_id} already exists.`);
+                    console.log(`RecipeDiet entry for recipe ${createdRecipe.recipe_id} and Diet ${createdDiet.diet_id} already exists.`);
                 }
             }
 
@@ -805,9 +803,7 @@ async function loadRecipesIntoDatabase(transformedData) {
                 console.log(`Tip with ID ${createdTip.tip_id} loaded successfully.`);
     
                 // Associate the tip with the recipe using Sequelize's built-in and automatically generated association methods.
-                await createdRecipe.addTip(createdTip); 
-
-                
+                await createdRecipe.addTip(createdTip);    
             }
 
             // Iterate over each Recipe Ingredients and Ingredients
@@ -1031,5 +1027,6 @@ module.exports = {
     Recipe,
     Diet,
     RecipeDiet,
-    sequelize,
+    Cuisines,
+    RecipeCuisines,
     loadRecipesIntoDatabase };
