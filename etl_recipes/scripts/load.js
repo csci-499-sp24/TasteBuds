@@ -17,7 +17,7 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     },
     define: {
         // Define the schema to be used by default
-        schema: 'test_schema'
+        schema: 'public'
     }
 });
 
