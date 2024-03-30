@@ -79,7 +79,7 @@ module.exports = function (sequelize, DataTypes) {
         timestamps: false,
     },
     );
-    const CaloricBreakdown = sequelize.define("CaloricBreakdown", {
+    const recipeCaloricBreakdowns = sequelize.define("recipeCaloricBreakdowns", {
         recipe_id: {
             type: DataTypes.INTEGER,
             allowNull: false,
@@ -93,7 +93,7 @@ module.exports = function (sequelize, DataTypes) {
         },
     },
     {
-        tableName: "caloricBreakdown",
+        tableName: "recipeCaloricBreakdowns",
         timestamps: false,
     },
     );
@@ -120,7 +120,7 @@ module.exports = function (sequelize, DataTypes) {
     return {
         recipes_table: recipe,
         weight_per_serving: WeightPerServing,
-        calories_table: CaloricBreakdown,
+        calories_table: recipeCaloricBreakdowns,
         recipe_flavors: recipe_flavonoids,
     }
     //return recipes;

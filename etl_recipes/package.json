@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "extract": "node scripts/extract.js",
     "transform": "node scripts/transform.js",
-    "load": "node scripts/load.js"
+    "load": "node scripts/load.js",
+    "testLoad": "node scripts/testLoad.js"
   },
   "keywords": [],
   "author": "",
