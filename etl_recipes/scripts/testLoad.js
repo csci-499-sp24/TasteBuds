@@ -1,6 +1,6 @@
 // test whole pipeline
 const { transformRecipeData } = require('./transform');
-const dummyApiResponse = require('./dummyApiResponse');
+// const dummyApiResponse = require('./dummyApiResponse');
 const { loadRecipesIntoDatabase } = require('./load');
 const { fetchRecipesFromSource } = require('./extract');
 const URL = 'https://api.spoonacular.com/recipes/informationBulk?ids=13&includeIngredients=true&includeinstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=666e4501970a4b5881385974bb528c58';

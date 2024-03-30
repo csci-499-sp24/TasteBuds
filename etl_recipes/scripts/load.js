@@ -275,9 +275,6 @@ const Ingredients = sequelize.define('Ingredients', {
     image: {
         type: DataTypes.STRING
     },
-    aisle: {
-        type: DataTypes.STRING
-    }
 }, {
     tableName: 'ingredients',
     timestamps: false
@@ -313,8 +310,9 @@ const RecipeIngredients = sequelize.define('RecipeIngredients', {
     timestamps: false
 });
 // Define the ER of Ingredients and Recipe (M:M)
-Ingredients.belongsToMany(Recipe, { through: RecipeIngredients, foreignKey: 'ingredient_id' });
-Recipe.belongsToMany(Ingredients, { through: RecipeIngredients, foreignKey: 'recipe_id' });
+RecipeIngredients.belongsTo(Ingredients, { foreignKey: 'ingredient_id', references: { model: 'Ingredients', key: 'ingredient_id' } });
+RecipeIngredients.belongsTo(Recipe, { foreignKey: 'recipe_id', references: { model: 'Recipe', key: 'recipe_id' } });
+
 
 /* INSTRUTIONS, EQUIPMENT, INSTRUCTIONS-INGREDIENTS, and INSTRUCATION-LENGTH */
 const Instructions = sequelize.define('Instructions', {
@@ -820,26 +818,29 @@ async function loadRecipesIntoDatabase(transformedData) {
             
             // Iterate over each Recipe Ingredients and Ingredients
             for (const ingredientData of recipeResponse.ingredients) {
-               let ingredient = await Ingredients.findOne({where: {ingredient_id: ingredientData.ingredient_id}});
-               if(!ingredient){
-                    const createdIngredient = await Ingredients.create({
+               let createdIngredient = await Ingredients.findOne({where: {ingredient_id: ingredientData.ingredient_id}});
+               if(!createdIngredient){
+                    createdIngredient = await Ingredients.create({
                         ingredient_id: ingredientData.ingredient_id,
                         standard_name: ingredientData.standard_name,
                         image: ingredientData.image,
-                        aisle: ingredientData.aisle,
                         }, { validate: true });
                     console.log(`Ingredient with ID ${createdIngredient.ingredient_id} inserted into Ingredients table.`);
                }
-               await RecipeIngredients.create({
-                    ingredient_id: ingredientData.ingredient_id,
-                    recipe_id: createdRecipe.recipe_id,
-                    specialized_name : ingredientData.specialized_name,
-                    us_unit : ingredientData.us_unit,
-                    us_amount: ingredientData.us_amount,
-                    metric_unit : ingredientData.metric_unit,
-                    metric_amount: ingredientData.metric_amount,
-                }, { validate: true });
-                console.log(`Ingredients with ID ${ingredientData.ingredient_id} linked to recipe with ID ${createdRecipe.recipe_id}.`);
+
+               const recipeIngredientsExits =  await RecipeIngredients.findOne({where: {ingredient_id: createdIngredient.ingredient_id,recipe_id: createdRecipe.recipe_id, us_amount: ingredientData.us_amount}});
+               if(!recipeIngredientsExits){
+                    await RecipeIngredients.create({
+                        ingredient_id: createdIngredient.ingredient_id,
+                        recipe_id: createdRecipe.recipe_id,
+                        specialized_name : ingredientData.specialized_name,
+                        us_unit : ingredientData.us_unit,
+                        us_amount: ingredientData.us_amount,
+                        metric_unit : ingredientData.metric_unit,
+                        metric_amount: ingredientData.metric_amount,
+                    }, { validate: true });
+                    console.log(`Ingredients with ID ${createdIngredient.ingredient_id} linked to recipe with ID ${createdRecipe.recipe_id}.`);
+               }
             }
             //  Iterate over each Recipe Nutrients and Nutrients
             for (const nutrientData of recipeResponse.recipeNutrients) {
@@ -953,32 +954,10 @@ async function loadRecipesIntoDatabase(transformedData) {
                             let createdInstructionIngredients =  await Ingredients.findOne({ where: { ingredient_id: instructionIngredientsData.id } });
                             
                             if(!createdInstructionIngredients){
-                                
-                                let aisle_tag  = "";
-                                let matchingIngredients = await Ingredients.findAll({ where: { image: instructionIngredientsData.image } }); // Attempt to find a matching ingredient based on image
-                                
-                                matchingIngredients = matchingIngredients.length > 0 ? matchingIngredients[0] : null;
-                                if(!matchingIngredients){
-                                    const ingredientId = instructionIngredientsData.id.toString();
-                                    const lastFourDigits = ingredientId.length >= 4 ? ingredientId.slice(-4) : null;
-                                    if(lastFourDigits !== null){
-                                        const lastFourDigitsInt = +lastFourDigits; // Convert to integer
-                                        matchingIngredients = await Ingredients.findOne({ where: {
-                                            ingredient_id: {
-                                                [Op.between]: [lastFourDigitsInt * 10000, (lastFourDigitsInt + 1) * 10000] // Check if ingredient_id falls within this range
-                                            }
-                                        } });
-                                        if (matchingIngredients !== null && matchingIngredients.length > 0) {
-                                            aisle_tag = matchingIngredients[0].aisle;
-                                        }                                                                               
-                                    }
-                                }
-
                                 createdInstructionIngredients = await Ingredients.create({
                                     ingredient_id: instructionIngredientsData.id,
                                     standard_name:  instructionIngredientsData.name,
                                     image:  instructionIngredientsData.image,
-                                    aisle: aisle_tag,
                                 }, { validate: true });
                                 console.log(`Ingredient with ID ${createdInstructionIngredients.ingredient_id} inserted successfully.`);
                             }
@@ -1027,16 +1006,20 @@ async function loadRecipesIntoDatabase(transformedData) {
                         })
                         console.log(`Nutrient "${creatednutrient.name}" inserted into Nutrients table.`);
                     }
-                    await RecipeIngredientsNutrients.create({
-                        recipe_id: createdRecipe.recipe_id,
-                        nutrient_id: creatednutrient.nutrient_id,
-                        ingredient_id: ingredientNutrientsResponse.id,
-                        ingredient_amount: ingredientNutrientsResponse.amount,
-                        nutrient_amount: nutrientData.amount,
-                        ingredient_unit: ingredientNutrientsResponse.unit,
-                        percent_of_daily_needs: nutrientData.percentOfDailyNeeds,
-                    })
-                    console.log(`Nutrient "${creatednutrient.name}" linked to Recipe with ID ${createdRecipe.recipe_id}, Ingredient with ID ${ingredientNutrientsResponse.id}.`);
+                    const recipeingredientsNutrientsExists = await RecipeIngredientsNutrients.findOne({ where: {recipe_id: createdRecipe.recipe_id, nutrient_id: creatednutrient.nutrient_id,
+                        ingredient_id: ingredientNutrientsResponse.id,} });
+                    if(!recipeingredientsNutrientsExists){
+                        await RecipeIngredientsNutrients.create({
+                            recipe_id: createdRecipe.recipe_id,
+                            nutrient_id: creatednutrient.nutrient_id,
+                            ingredient_id: ingredientNutrientsResponse.id,
+                            ingredient_amount: ingredientNutrientsResponse.amount,
+                            nutrient_amount: nutrientData.amount,
+                            ingredient_unit: ingredientNutrientsResponse.unit,
+                            percent_of_daily_needs: nutrientData.percentOfDailyNeeds,
+                        })
+                        console.log(`Nutrient "${creatednutrient.name}" linked to Recipe with ID ${createdRecipe.recipe_id}, Ingredient with ID ${ingredientNutrientsResponse.id}.`);
+                    }
                 }
 
             }

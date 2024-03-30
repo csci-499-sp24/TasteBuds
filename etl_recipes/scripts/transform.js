@@ -82,7 +82,6 @@ function transformRecipeData(extractResponse) {
                     metric_amount: ingredient.measures.metric.amount,
                     image: ingredient.image,
                     standard_name: ingredient.nameClean,
-                    aisle: ingredient.aisle,
  
                 };
                 transformedIngredients.push(transformedIngredient);
