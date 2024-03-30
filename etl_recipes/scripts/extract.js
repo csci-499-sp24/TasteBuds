@@ -1,30 +1,37 @@
-// Utility function to perform API requests
 const axios = require('axios');
-const { dbPool } = require('./server');
+const { dbPool } = require('../../server/server'); 
 
 async function fetchRecipesFromSource(apiEndpoint) {
     try {
         const response = await axios.get(apiEndpoint, {
             headers: { 'Authorization': `Bearer ${process.env.SPOON_RECIPES_API_KEY}` }
         });
-
         const recipes = response.data;
         const newRecipes = [];
 
-        for (const recipe of recipes) {
-            const res = await dbPool.query('SELECT id FROM fetchedRecipes WHERE id = $1', [recipe.id]);
-            if (res.rows.length === 0) {
-                await dbPool.query('INSERT INTO fetchedRecipes(id, recipe_data) VALUES($1, $2)', [recipe.id, JSON.stringify(recipe)]);
-                newRecipes.push(recipe);
+        if (recipes.length === 0) {
+            console.log('No recipes to check.');
+            return [];
+        } else {
+            for (const recipe of recipes) {
+                if (recipe.id) {
+                    console.log("Recipe ID:", recipe.id);
+                    const [results, metadata] = await dbPool.query('SELECT recipe_id FROM recipes WHERE recipe_id = ?', 
+                         { replacements: [recipe.id], type: dbPool.QueryTypes.SELECT });
 
-                if (newRecipes.length >= 100) break;
+                    if (!results || results.length === 0) {
+                        newRecipes.push(recipe);
+                        if (newRecipes.length >= 100) break; 
+                    }
+                }
             }
         }
 
-        console.log("New data fetched successfully:", newRecipes);
+        console.log("New recipes ready for processing:", newRecipes.length);
         return newRecipes;
+        
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error during recipe fetching:', error);
         return null;
     }
 }
