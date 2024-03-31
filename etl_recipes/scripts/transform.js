@@ -54,8 +54,8 @@ function transformRecipeData(extractResponse) {
         // Array to store dishType names
         const transformedDishType = [];
         // Extract dishType names
-        if (recipe.dishType && recipe.dishType.length > 0) {
-            transformedDishType.push(...recipe.dishType);
+        if (recipe.dishTypes && recipe.dishTypes.length > 0) {
+            transformedDishType.push(...recipe.dishTypes);
         }
         
         /* OCCASION TYPE */
@@ -271,7 +271,7 @@ function transformRecipeData(extractResponse) {
             recipe: transformedRecipe, // recipe object
             cuisine: transformedCuisine, // array of cuisine names
             diet: transformedDiet, // array of diet names
-            dishType: transformedDishType, // array of dish type names
+            dishTypes: transformedDishType, // array of dish type names
             occasions: transformedOccasions, // array of occasions type names
             tips: transformedRecipeTips, // array of recipe tips objects
             ingredients: transformedIngredients, // array of transformed ingredients objects

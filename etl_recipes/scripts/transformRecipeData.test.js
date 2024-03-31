@@ -869,6 +869,12 @@ test('TEST 15: NUTRITION -  RECIPE INGREDIENTS NUTRIENTS', async () => {
 
   expect(firstRecipe).toEqual((expectedrecipeIngredientsNutrients));
 });
+test('TEST 16: DiShType', async () => { 
+  const transformedRecipes = transformRecipeData(extactedRecipe); 
+  const firstRecipe = transformedRecipes[0].dishTypes;
+  const expectedDishType = ["antipasti", "starter", "snack", "appetizer", "antipasto", "hor d'oeuvre"];
+  expect(firstRecipe).toEqual(expect.arrayContaining(expectedDishType));
+});
 
 
 // test('TEST 16: INSTRUTIONS - INGREDIENTS', () => {
