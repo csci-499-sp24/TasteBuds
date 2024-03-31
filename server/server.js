@@ -173,6 +173,23 @@ app.get('/search', async (req, res) => {
     }
 });
 
+app.get('/login', async (req, res) => {
+    try {
+        // get username and password (presumably salted and hashed)
+        // from the login query
+        const { username, password } = (req.username, req.password);
+        // if either one is missing, return an error
+        if (!username || !password) {
+            return res.status(400).json({ error: "Username or password is missing" });
+        }
+        // query the login table to see if this user-pass combo exists
+        // waiting for the table schema to be known before I continue
+    } catch(error) {
+        console.error("Error logging in:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 // Log requests
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
