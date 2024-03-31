@@ -146,7 +146,7 @@ app.get('/search', async (req, res) => {
         const { query } = req.query; // search query is passed as a query parameter
 
         // Check if search query is provided and is a valid string
-        if (!query || typeof query !== 'string') {
+        if (!query) {
             return res.status(400).json({ error: "Invalid search query" });
         }
 
@@ -157,16 +157,32 @@ app.get('/search', async (req, res) => {
         });
 
         // Filter recipes based on the search query
+        
+
         const filteredResults = recipes.filter(recipe =>
             recipe.title.toLowerCase().includes(query.toLowerCase())
         );
 
         // Send filtered results as JSON response
+        console.log("Filtered Results:", filteredResults);
         res.json(filteredResults);
+        
     } catch (error) {
         console.error("Error searching recipes:", error);
         res.status(500).json({ error: "Internal server error" });
     }
+});
+
+// Log requests
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 
