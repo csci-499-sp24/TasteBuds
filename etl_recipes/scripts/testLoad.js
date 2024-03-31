@@ -1,3 +1,4 @@
+// test whole pipeline
 const { transformRecipeData } = require('./transform');
 const dummyApiResponse = require('./dummyApiResponse');
 const { loadRecipesIntoDatabase } = require('./load');
