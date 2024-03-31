@@ -1,4 +1,4 @@
-'user client'
+'use client'
 import Link from "next/link";
 import { FormEvent } from "react";
 import {signIn} from 'next-auth/react';
