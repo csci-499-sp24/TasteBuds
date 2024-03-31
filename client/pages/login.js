@@ -11,7 +11,8 @@ function Login(){
       <div className="sidebar">
         <header>TasteBuds</header>
         <ul>
-            <li><Link href="/"><i className="fas fa-home"></i>Home</Link></li>  
+            <li><Link href="/"><i className="fas fa-home"></i>Home</Link></li>
+            <li><Link href="/search"><i className="fas fa-search"></i>Search</Link></li>   
             <li><a href="#"><i className="fas fa-star"></i>Saved Recipes</a></li>
             <li><a href="#"><i className="fas fa-cog"></i>User Settings</a></li>
             <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
@@ -33,10 +34,10 @@ function Login(){
               name="password"
               placeholder="Enter your Password" required />
           <div className="wrap">
-              <button type="submit"onclick="solve()">Submit</button>
+              <button className="submit" type="submit"onclick="solve()">Submit</button>
             </div>
         </form>
-        <p>Not registered? Create an account <Link href="/signup" style={{textDecoration: "none"}}>here</Link></p>
+        <p>Not registered? Create an account <Link href="/signup" className="sign-up">here</Link></p>
     </div>
         </div>
     )

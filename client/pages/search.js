@@ -1,15 +1,13 @@
-import { useState, useEffect } from "react"; // React Hooks - for managing states of components
+import { useState } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState(""); 
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const fetchRecipes = async (searchQuery) => {
     setIsLoading(true);
-    setError(null);
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/search?query=${searchQuery}`);
       if (!response.ok) {
@@ -19,7 +17,6 @@ function Search() {
       setSearchResults(data);
     } catch (error) {
       console.error("Error fetching recipes:", error);
-      setError(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -46,7 +43,8 @@ function Search() {
       <div className="sidebar">
         <header>TasteBuds</header>
         <ul>
-          <li><Link href="/"><i className="fas fa-home"></i>Home</Link></li>  
+          <li><Link href="/"><i className="fas fa-home"></i>Home</Link></li> 
+          <li><Link href="/search"><i className="fas fa-search"></i>Search</Link></li>  
           <li><a href="#"><i className="fas fa-star"></i>Saved Recipes</a></li>
           <li><a href="#"><i className="fas fa-cog"></i>User Settings</a></li>
           <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
@@ -66,7 +64,6 @@ function Search() {
         </div>
         <div id="div-center" className="user-recipes" data-user-cards-container>
           {isLoading && <p>Loading...</p>}
-          {error && <p>Error: {error}</p>}
           {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
             <div key={recipe.recipe_id} className="card">
               <div className="header" data-header>{recipe.title}</div>
