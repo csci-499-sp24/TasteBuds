@@ -72,7 +72,7 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 3.0,
       image: "fresh-anchovies.jpg",
       standard_name: "boquerones",
-      aisle: "Seafood",
+     
     },
     {
       ingredient_id : 15001,
@@ -83,7 +83,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 3.0,
       image: "anchovies.jpg",
       standard_name: "boquerones",
-      aisle: "Seafood",
     },
     {
       ingredient_id : 2044,
@@ -94,7 +93,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 2.0,
       image:  "fresh-basil.jpg",
       standard_name: "fresh basil",
-      aisle: "Produce",
     },
     {
       ingredient_id : 2044,
@@ -105,7 +103,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 2.0,
       image:  "fresh-basil.jpg",
       standard_name: "fresh basil",
-      aisle: "Produce",
     },
     {
       ingredient_id : 2044,
@@ -116,7 +113,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 2.0,
       image:  "basil.jpg",
       standard_name: "fresh basil",
-      aisle: "Produce",
     },
     {
       ingredient_id : 18079,
@@ -127,7 +123,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 1.0,
       image: "breadcrumbs.jpg",
       standard_name: "breadcrumbs",
-      aisle: "Pasta and Rice",
     },
     {
       ingredient_id : 1034053,
@@ -138,7 +133,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 2.0,
       image: "olive-oil.jpg",
       standard_name: "extra virgin olive oil",
-      aisle: "Oil, Vinegar, Salad Dressing",
     },
     {
       ingredient_id : 1002030,
@@ -149,7 +143,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount:  1.0,
       image: "pepper.jpg",
       standard_name: "black pepper",
-      aisle: "Spices and Seasonings",
     },
     {
       ingredient_id : 10011282,
@@ -160,7 +153,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 0.125,
       image: "red-onion.png",
       standard_name: "red onion",
-      aisle: "Produce",
     },
     {
       ingredient_id: 1012068,
@@ -171,7 +163,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 0.5,
       image: "dark-sauce.jpg",
       standard_name: "sherry vinegar",
-      aisle: "Oil, Vinegar, Salad Dressing",
     },
     {
       ingredient_id : 11529,
@@ -182,7 +173,6 @@ test('TEST 6: INGREDIENTS', async () => {
       metric_amount: 2.0,
       image: "tomato.png",
       standard_name: "tomato",
-      aisle: "Produce",
     },
   ];
   expect(firstRecipe).toEqual(expect.arrayContaining(expectedRecipeIngredients));

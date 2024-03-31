@@ -275,9 +275,6 @@ const Ingredients = sequelize.define('Ingredients', {
     image: {
         type: DataTypes.STRING
     },
-    aisle: {
-        type: DataTypes.STRING
-    }
 }, {
     tableName: 'ingredients',
     timestamps: false
@@ -826,7 +823,6 @@ async function loadRecipesIntoDatabase(transformedData) {
                         ingredient_id: ingredientData.ingredient_id,
                         standard_name: ingredientData.standard_name,
                         image: ingredientData.image,
-                        aisle: ingredientData.aisle,
                         }, { validate: true });
                     console.log(`Ingredient with ID ${createdIngredient.ingredient_id} inserted into Ingredients table.`);
                }
@@ -953,32 +949,10 @@ async function loadRecipesIntoDatabase(transformedData) {
                             let createdInstructionIngredients =  await Ingredients.findOne({ where: { ingredient_id: instructionIngredientsData.id } });
                             
                             if(!createdInstructionIngredients){
-                                
-                                let aisle_tag  = "";
-                                let matchingIngredients = await Ingredients.findAll({ where: { image: instructionIngredientsData.image } }); // Attempt to find a matching ingredient based on image
-                                
-                                matchingIngredients = matchingIngredients.length > 0 ? matchingIngredients[0] : null;
-                                if(!matchingIngredients){
-                                    const ingredientId = instructionIngredientsData.id.toString();
-                                    const lastFourDigits = ingredientId.length >= 4 ? ingredientId.slice(-4) : null;
-                                    if(lastFourDigits !== null){
-                                        const lastFourDigitsInt = +lastFourDigits; // Convert to integer
-                                        matchingIngredients = await Ingredients.findOne({ where: {
-                                            ingredient_id: {
-                                                [Op.between]: [lastFourDigitsInt * 10000, (lastFourDigitsInt + 1) * 10000] // Check if ingredient_id falls within this range
-                                            }
-                                        } });
-                                        if (matchingIngredients !== null && matchingIngredients.length > 0) {
-                                            aisle_tag = matchingIngredients[0].aisle;
-                                        }                                                                               
-                                    }
-                                }
-
                                 createdInstructionIngredients = await Ingredients.create({
                                     ingredient_id: instructionIngredientsData.id,
                                     standard_name:  instructionIngredientsData.name,
                                     image:  instructionIngredientsData.image,
-                                    aisle: aisle_tag,
                                 }, { validate: true });
                                 console.log(`Ingredient with ID ${createdInstructionIngredients.ingredient_id} inserted successfully.`);
                             }
