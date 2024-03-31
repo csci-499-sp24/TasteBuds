@@ -25,10 +25,15 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
             rejectUnauthorized: false, // for dev only
         }
     },
+    define: {
+        // Define the schema to be used by default
+        schema: 'public'
+    }
 });
 
 async function syncDB() {
     try {
+        console.log("beginning sequelize authenticate");
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
     } catch (error) {
@@ -37,56 +42,25 @@ async function syncDB() {
 };
 syncDB();
 
-// Sequelize table object.
-const database = sequelize.define("sample_data", {
-        "\"(PK) id\"": {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true,
-        },
-        title: {
-            type: DataTypes.STRING,
-        },
-        summary: {
-            type: DataTypes.STRING,
-        },
-        instructions: {
-            type: DataTypes.STRING,
-        },
-        cuisines: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        preparationMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        cookingMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        readyInMinutes: {
-            type: DataTypes.INTEGER,
-        },
-        priceperServing: {
-            type: DataTypes.INTEGER,
-        },
-        dishTypes: {
-            type: DataTypes.STRING,
-        },
-        servings: {
-            type: DataTypes.INTEGER,
-        },
-        image: {
-            type: DataTypes.STRING,
-        },
-        diet: {
-            type: DataTypes.STRING,
-        },
-    },
-    {
-        tableName: "sample_data",
-        timestamps: false,
-    },
-)
+// Demonstration of how to define a foreign key (see fk_id).
+// const test = sequelize.define("EXAMPLE", {
+//     pk_id: {
+//         type: DataTypes.INTEGER,
+//         allowNull: false,
+//         primaryKey: true,
+//     },
+//     fk_id: {
+//         type: DataTypes.INTEGER,
+//         allowNull: false,
+//         primaryKey: true,
+//         references: {
+//             model: recipes_table,
+//             key: "hi",
+//         }
+//     },
+// })
+
+const database = require("./tables/old_model.js")(sequelize, DataTypes);
 
 async function sync_table() {
     try {
@@ -99,6 +73,46 @@ async function sync_table() {
 };
 sync_table();
 
+// Calling up all the table objects,
+// They don't work right now, Sequelize insists that the db relations don't exist
+// I will add them here and figure that out later.
+const {
+    recipes_table,
+    weight_per_serving,
+    calories_table,
+    secondary_recipes_table,
+    recipes_flavors
+} = require("./tables/recipes.js")(sequelize, DataTypes);
+const {
+    recipe_to_equip,
+    instr_to_ingr,
+    instr_to_equip,
+    recipe_to_cusine,
+    recipe_to_diet,
+    recipe_to_occasions,
+    recipe_to_properties,
+    recipe_to_dishtype,
+} = require("./tables/table_connectors.js")(sequelize, DataTypes)
+const {
+    tips_table,
+    equipment_table,
+    instructions_id,
+    instr_length,
+    ingredients_table,
+    recipe_ingredients,
+    recipe_nutrients,
+    recipe_ingredient_nutrient,
+    cuisine_table,
+    diet_table,
+    flavonoid_table,
+    nutrients_table,
+    properties_table,
+    occasions_table,
+    dish_type,
+} = require("./tables/other_tables.js")(sequelize, DataTypes)
+
+
+
 app.get("/", async (req,res)=>{
     try {
         const first_ten = await database.findAll({
@@ -107,11 +121,72 @@ app.get("/", async (req,res)=>{
             raw: true,
         });
         res.status(200).json({recipeData: first_ten});
+        console.log("app.get / call successful");
     }
     catch(error){
         console.log("encountered error: ", error)
     }
 })
+
+app.get("/mytest", async (req,res)=>{
+    try {
+        const first_ten = await recipes_table.findAll({
+            subQuery: false,
+            limit: 10,
+            raw: true,
+        });
+        res.status(200).json({recipeData: first_ten});
+        console.log("app.get / call successful");
+    }
+    catch(error){
+        console.log("encountered error: ", error)
+    }
+})
+
+app.get('/search', async (req, res) => {
+    try {
+        const { query } = req.query; // search query is passed as a query parameter
+
+        // Check if search query is provided and is a valid string
+        if (!query) {
+            return res.status(400).json({ error: "Invalid search query" });
+        }
+
+        // Fetch recipes from the database
+        const recipes = await recipes_table.findAll({
+            subQuery: false,
+            raw: true,
+        });
+
+        // Filter recipes based on the search query
+        
+
+        const filteredResults = recipes.filter(recipe =>
+            recipe.title.toLowerCase().includes(query.toLowerCase())
+        );
+
+        // Send filtered results as JSON response
+        console.log("Filtered Results:", filteredResults);
+        res.json(filteredResults);
+        
+    } catch (error) {
+        console.error("Error searching recipes:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Log requests
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
 
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
