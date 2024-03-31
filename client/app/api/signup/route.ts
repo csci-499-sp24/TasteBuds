@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import {hash} from 'bcrypt';
 import {sql} from '@vercel/postgres';
-export default async function POST(request: Request){
+export async function POST(request: Request){
     try{
         //For validation
         const {username, password} = await request.json();
