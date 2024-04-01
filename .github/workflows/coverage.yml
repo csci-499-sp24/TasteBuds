@@ -1,4 +1,5 @@
 name: Jest Coverage Report
+
 on:
   pull_request:
     branches:
@@ -8,7 +9,12 @@ jobs:
   coverage:
     runs-on: ubuntu-latest
     steps:
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+
       - uses: actions/checkout@v3
+
       - name: Run Jest tests
         run: npm test -- testPathPattern=server
-
