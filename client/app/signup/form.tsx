@@ -1,4 +1,9 @@
 'use client'
+import "@/styles/globals.css";
+import "/styles/index.css";
+import "/styles/search.css";
+import "/styles/login.css";
+import "/styles/login.css";
 import Link from "next/link";
 import { FormEvent } from "react";
 
