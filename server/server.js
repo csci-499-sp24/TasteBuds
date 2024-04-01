@@ -3,7 +3,7 @@
 const express = require("express");
 const cors = require('cors');
 const { Pool } = require('pg');
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, Op } = require('sequelize');
 require('dotenv').config();
 
 const app = express();
@@ -153,21 +153,26 @@ app.get('/search', async (req, res) => {
         }
 
         // Fetch recipes from the database
+        // Attempted to refactor it by directly filtering the SQL query
+        // instead of doing it in a separate step below.
         const recipes = await recipes_table.findAll({
             subQuery: false,
             raw: true,
+            where: {
+                title: {
+                    [Op.iLike]: `%${query}%` // case-insensitive matching
+                }
+            }
         });
 
         // Filter recipes based on the search query
-        
-
-        const filteredResults = recipes.filter(recipe =>
-            recipe.title.toLowerCase().includes(query.toLowerCase())
-        );
+        // const filteredResults = recipes.filter(recipe =>
+        //     recipe.title.toLowerCase().includes(query.toLowerCase())
+        // );
 
         // Send filtered results as JSON response
-        console.log("Filtered Results:", filteredResults);
-        res.json(filteredResults);
+        console.log("Filtered Results:", recipes);
+        res.json(recipes);
         
     } catch (error) {
         console.error("Error searching recipes:", error);
@@ -198,7 +203,7 @@ app.get('/login', async (req, res) => {
         }
         else {// registered user exists
             // what do I put here?
-            //return res.json("True");
+            //return res.json("Placeholder text");
         }
     } catch(error) {
         console.error("Error logging in:", error);
