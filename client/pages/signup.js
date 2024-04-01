@@ -1,6 +1,28 @@
 import Link from "next/link";
+import { useState } from "react";
 
 function Signup(){
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+
+    async function signUp(e){
+        try {
+            const response = await fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
+            const data = await response.json();
+            console.log(data);
+            // Handle successful signup
+        } catch (error) {
+            console.error('Error signing up:', error);
+            // Handle error
+        }
+    }
+
     return(
         <div>
             <input type="checkbox" id="check" />
@@ -21,19 +43,25 @@ function Signup(){
       <section></section>
       <div class="main">
         <h3>Sign Up</h3>
-        <form action="">
+        <form onSubmit={signUp} action="">
           <label for="user"><b>Username: </b></label>
           <input type="text"
               id="user"
               name="user"
-              placeholder="Enter your Username" required />
+              placeholder="Enter your Username" 
+              value={username}
+              onChange={(e)=>setUsername(e.target.value)}
+              required />
           <label for="password"><b>Password: </b></label>
             <input type="password"
                 id="password"
                 name="password"
-                placeholder="Enter your Password" required />
+                placeholder="Enter your Password" 
+                value={password}
+                onChange={(e)=>setPassword(e.target.value)}
+                required />
             <div class="wrap">
-                <button className="submit" type="submit"onclick="solve()">Submit</button>
+                <button className="submit" type="submit">Submit</button>
             </div>
         </form>
     </div>

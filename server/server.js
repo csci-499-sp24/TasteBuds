@@ -5,9 +5,12 @@ const cors = require('cors');
 const { Pool } = require('pg');
 const { Sequelize, DataTypes } = require('sequelize');
 require('dotenv').config();
+const bodyParser = require("body-parser");
 
 const app = express();
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 //const sequelize = new Sequelize(process.env.DB_HOST + "/" + process.env.DB_NAME)
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
@@ -39,6 +42,31 @@ async function syncDB() {
     }
 };
 syncDB();
+
+//create user model in database
+const User = sequelize.define('User', {
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
+
+//create user endpoint
+app.post("/signup", async (req, res) => {
+    const { username, password } = req.body;
+    try {
+        const user = await User.create({ username, password });
+        res.status(201).json({ message: "User signed up successfully", user });
+    } catch (error) {
+        console.error("Error signing up user:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 // Demonstration of how to define a foreign key (see fk_id).
 // const test = sequelize.define("EXAMPLE", {
@@ -146,7 +174,7 @@ app.get('/search', async (req, res) => {
         const { query } = req.query; // search query is passed as a query parameter
 
         // Check if search query is provided and is a valid string
-        if (!query) {
+        if (!query || typeof query !== 'string') {
             return res.status(400).json({ error: "Invalid search query" });
         }
 
