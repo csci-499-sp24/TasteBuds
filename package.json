@@ -2,5 +2,8 @@
   "dependencies": {
     "sequelize": "^6.37.1",
     "@material-ui/core": "^4.12.4"
-  }
+  },
+  "scripts": {
+    "test": "jest"
+}
 }
