@@ -1,0 +1,12 @@
+name: Jest Coverage Report
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+          - uses: ArtiomTr/jest-coverage-report-action@v2

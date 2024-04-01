@@ -3,7 +3,7 @@
  * @param {Array} extractResponse - The array containing recipe data from the extracted API response.
  * @returns {Array} An array of transformed recipe objects.
  */
-function transformRecipeData(extractResponse) {
+function transformRecipeDataV2(extractResponse) {
 
     return extractResponse.map(recipe => {
         /* RECIPE */
@@ -281,4 +281,4 @@ function transformRecipeData(extractResponse) {
     });
 }
 
-module.exports = { transformRecipeData };
+module.exports = { transformRecipeDataV2 };
