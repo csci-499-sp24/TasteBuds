@@ -108,7 +108,9 @@ const {
     occasions_table,
     dish_type,
 } = require("./tables/other_tables.js")(sequelize, DataTypes)
-
+const {
+    users
+} = require("./tables/users.js")(sequelize, DataTypes)
 
 
 app.get("/", async (req,res)=>{
@@ -183,7 +185,21 @@ app.get('/login', async (req, res) => {
             return res.status(400).json({ error: "Username or password is missing" });
         }
         // query the login table to see if this user-pass combo exists
-        // waiting for the table schema to be known before I continue
+        const user_pass = await users.findOne({
+            subQuery: false,
+            raw: true,
+            where: {
+                username: username,
+                password: password,
+            }
+        });
+        if (!user_pass) {// no user-pass combo found
+            return res.status(400).json({ error: "No username-password combo found" });
+        }
+        else {// registered user exists
+            // what do I put here?
+            //return res.json("True");
+        }
     } catch(error) {
         console.error("Error logging in:", error);
         res.status(500).json({ error: "Internal server error" });
