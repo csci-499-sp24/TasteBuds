@@ -145,7 +145,11 @@ app.get("/mytest", async (req,res)=>{
 
 app.get('/search', async (req, res) => {
     try {
-        const { query } = req.query; // search query is passed as a query parameter
+        console.log(req)
+        const { query, filter } = req.query // search query is passed as a query parameter
+        console.log(query)
+        console.log(filter)
+        //const {filters} = query.filters
 
         // Check if search query is provided and is a valid string
         if (!query) {
@@ -155,15 +159,35 @@ app.get('/search', async (req, res) => {
         // Fetch recipes from the database
         // Attempted to refactor it by directly filtering the SQL query
         // instead of doing it in a separate step below.
-        const recipes = await recipes_table.findAll({
-            subQuery: false,
-            raw: true,
-            where: {
-                title: {
-                    [Op.iLike]: `%${query}%` // case-insensitive matching
+        if (!filter) {
+            console.log("Filters DNE")
+            const recipes = await recipes_table.findAll({
+                subQuery: false,
+                raw: true,
+                where: {
+                    title: {
+                        [Op.iLike]: `%${query}%` // case-insensitive matching
+                    }
                 }
-            }
-        });
+            });
+            console.log("Filtered Results:", recipes);
+            res.json(recipes);
+        }
+        else {
+            // https://stackoverflow.com/questions/46553128/how-to-filter-data-with-sequelize
+            console.log("We got this cuisine value:", filter.cuisine)
+            const recipes = await recipes_table.findAll({
+                subQuery: false,
+                raw: true,
+                where: {
+                    title: {
+                        [Op.iLike]: `%${query}%` // case-insensitive matching
+                    }
+                }
+            });
+            console.log("Filtered Results:", recipes);
+            res.json(recipes);
+        }
 
         // Filter recipes based on the search query
         // const filteredResults = recipes.filter(recipe =>
@@ -171,8 +195,8 @@ app.get('/search', async (req, res) => {
         // );
 
         // Send filtered results as JSON response
-        console.log("Filtered Results:", recipes);
-        res.json(recipes);
+        // console.log("Filtered Results:", recipes);
+        // res.json(recipes);
         
     } catch (error) {
         console.error("Error searching recipes:", error);
