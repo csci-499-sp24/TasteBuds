@@ -99,28 +99,27 @@ const Cuisines = sequelize.define('Cuisines', {
 });
 
 const RecipeCuisines = sequelize.define('RecipeCuisines', {
-    // No need to define primaryKey: true here
-    cuisine_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: Cuisines, // Assuming Cuisines is defined elsewhere
-            key: 'id' // Assuming 'id' is the primary key of Cuisines
-        }
-    },
     recipe_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: Recipe, // Assuming Recipe is defined elsewhere
-            key: 'id' // Assuming 'id' is the primary key of Recipe
-        }
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      references: {
+        model: 'recipes',
+        key: 'recipe_id'
+      }
     },
-}, {
+    cuisine_id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      references: {
+        model: 'cuisines',
+        key: 'cuisine_id'
+      }
+    },
+  }, {
     tableName: 'recipe_cuisine',
     timestamps: false
-});
-
+  });
+  
 // Define the ER of Cuisines and Recipe (M:M)
 Cuisines.belongsToMany(Recipe, { through: RecipeCuisines, foreignKey: 'cuisine_id' });
 Recipe.belongsToMany(Cuisines, { through: RecipeCuisines, foreignKey: 'recipe_id' });
@@ -141,17 +140,22 @@ const Diet = sequelize.define('Diet', {
     timestamps: false,
 });
 const RecipeDiet = sequelize.define('RecipeDiet', {
-    diet_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-    },
     recipe_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-    },
+        references: {
+          model: 'recipes',
+          key: 'recipe_id'
+        }
+      },
+      diet_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        references: {
+          model: 'diets',
+          key: 'diet_id'
+        }
+      }, 
 }, {
     tableName: 'recipe_diet',
     timestamps: false
@@ -177,17 +181,22 @@ Recipe.belongsToMany(Diet, { through: RecipeDiet, foreignKey: 'recipe_id' });
     timestamps: false,
 });
 const RecipeDishType = sequelize.define('RecipeDishType', {
-    dish_type_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-    },
     recipe_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-    },
+        references: {
+          model: 'recipes',
+          key: 'recipe_id'
+        }
+      },
+      dish_type_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        references: {
+          model: 'dishTypes',
+          key: 'dish_type_id:'
+        }
+      }
 }, {
     tableName: 'recipe_dishType',
     timestamps: false
@@ -212,17 +221,22 @@ const Occasions = sequelize.define('Occasions', {
     timestamps: false,
 });
 const RecipeOccasions = sequelize.define('RecipeOccasions', {
-    occasion_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        autoIncrement: true,
-        allowNull: false,
-    },
     recipe_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-    },
+        references: {
+          model: 'recipes',
+          key: 'recipe_id'
+        }
+      },
+      occasion_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        references: {
+          model: 'occasions',
+          key: 'occasion_id'
+        }
+      }
 }, {
     tableName: 'recipe_occasion',
     timestamps: false
@@ -283,12 +297,18 @@ const RecipeIngredients = sequelize.define('RecipeIngredients', {
     ingredient_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-    },
+        references: {
+          model: 'ingredients',
+          key: 'ingredient_id'
+        }
+      },
     recipe_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        references: {
+          model: 'recipes',
+          key: 'recipe_id'
+        }
     },
     specialized_name: {
         type: DataTypes.STRING
@@ -310,9 +330,8 @@ const RecipeIngredients = sequelize.define('RecipeIngredients', {
     timestamps: false
 });
 // Define the ER of Ingredients and Recipe (M:M)
-RecipeIngredients.belongsTo(Ingredients, { foreignKey: 'ingredient_id', references: { model: 'Ingredients', key: 'ingredient_id' } });
-RecipeIngredients.belongsTo(Recipe, { foreignKey: 'recipe_id', references: { model: 'Recipe', key: 'recipe_id' } });
-
+RecipeIngredients.belongsTo(Ingredients, { foreignKey: 'ingredient_id' });
+RecipeIngredients.belongsTo(Recipe, { foreignKey: 'recipe_id' });
 
 /* INSTRUTIONS, EQUIPMENT, INSTRUCTIONS-INGREDIENTS, and INSTRUCATION-LENGTH */
 const Instructions = sequelize.define('Instructions', {
@@ -377,31 +396,47 @@ const Equipment = sequelize.define('Equipment', {
     timestamps: false
 });
 const RecipeEquipment = sequelize.define('RecipeEquipment', {
-    equipment_id: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        allowNull: false
-    },
     recipe_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-    },
+        references: {
+          model: 'recipes',
+          key: 'recipe_id'
+        }
+      },
+      equipment_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        references: {
+          model: 'equipments',
+          key: 'equipment_id'
+        }
+      },
 }, {
     tableName: 'recipe_equipment',
     timestamps: false
 });
+// Define the ER of Recipe and Equipment (M:M)
+Equipment.belongsToMany(Recipe, { through: RecipeEquipment, foreignKey: 'equipment_id' });
+Recipe.belongsToMany(Equipment, { through: RecipeEquipment, foreignKey: 'recipe_id' });
+
 const InstructionsEquipment = sequelize.define('InstructionsEquipment', {
     equipment_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false
+        references: {
+          model: 'equipments',
+          key: 'equipment_id'
+        }
     },
     instruction_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-    },
+        references: {
+          model: 'instructions',
+          key: 'rinstruction_id'
+        }
+      },
 }, {
     tableName: 'instruction_equipment',
     timestamps: false
@@ -409,9 +444,7 @@ const InstructionsEquipment = sequelize.define('InstructionsEquipment', {
 // Define the ER of Instructions and Equipment (M:M)
 Equipment.belongsToMany(Instructions, { through: InstructionsEquipment, foreignKey: 'equipment_id' });
 Instructions.belongsToMany(Equipment, { through: InstructionsEquipment, foreignKey: 'instruction_id' });
-// Define the ER of Recipe and Equipment (M:M)
-Equipment.belongsToMany(Recipe, { through: RecipeEquipment, foreignKey: 'equipment_id' });
-Recipe.belongsToMany(Equipment, { through: RecipeEquipment, foreignKey: 'recipe_id' });
+
 
 const InstructionLength = sequelize.define('InstructionLength', {
     instruction_id: {
@@ -436,8 +469,8 @@ const InstructionLength = sequelize.define('InstructionLength', {
     timestamps: false 
 });
 // Define the relationship with Instructions and Length (1:1)
-InstructionLength.belongsTo(Instructions, { foreignKey: 'instruction_id' });
-Instructions.hasOne(InstructionLength, { foreignKey: 'instruction_id' });
+InstructionLength.belongsTo(Instructions, { foreignKey: 'instruction_id', primaryKey: true });
+
 
 /* NUTRITION TABLES */
 
@@ -466,12 +499,18 @@ const RecipeNutrients = sequelize.define('RecipeNutrients', {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false,
+        references: {
+            model: 'nutrients',
+            key: 'nutrient_id'
+        }
     },
     recipe_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        references: {
+          model: 'recipes',
+          key: 'recipe_id'
+        }
     },
     amount: {
         type: DataTypes.DOUBLE,
@@ -499,7 +538,6 @@ const RecipeIngredientsNutrients = sequelize.define('RecipeIngredientsNutrients'
     nutrient_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true, 
         allowNull: false,
     },
     recipe_id: {
@@ -527,19 +565,20 @@ const RecipeIngredientsNutrients = sequelize.define('RecipeIngredientsNutrients'
     tableName: 'recipe_ingredient_nutrient',
     timestamps: false
 });
-// Define the  the relationship with Recipes, Nutrients, and Ingredients tabel (M:M)
-Ingredients.belongsToMany(Nutrients, { through: RecipeIngredientsNutrients, foreignKey: 'ingredient_id' });
-Nutrients.belongsToMany(Ingredients, { through: RecipeIngredientsNutrients, foreignKey: 'nutrient_id' });
+// Define the relationships with Recipes, Nutrients, and Ingredients table (M:M)
+Ingredients.belongsToMany(Nutrients, { through: RecipeIngredientsNutrients, foreignKey: 'ingredient_id', otherKey: 'nutrient_id' });
+Nutrients.belongsToMany(Ingredients, { through: RecipeIngredientsNutrients, foreignKey: 'nutrient_id', otherKey: 'ingredient_id' });
 
-Recipe.belongsToMany(Ingredients, { through: RecipeIngredientsNutrients, foreignKey: 'recipe_id' });
-Ingredients.belongsToMany(Recipe, { through: RecipeIngredientsNutrients, foreignKey: 'ingredient_id' });
+Recipe.belongsToMany(Ingredients, { through: RecipeIngredientsNutrients, foreignKey: 'recipe_id', otherKey: 'ingredient_id' });
+Ingredients.belongsToMany(Recipe, { through: RecipeIngredientsNutrients, foreignKey: 'ingredient_id', otherKey: 'recipe_id' });
 
-Recipe.belongsToMany(Nutrients, { through: RecipeIngredientsNutrients, foreignKey: 'recipe_id' });
-Nutrients.belongsToMany(Recipe, { through: RecipeIngredientsNutrients, foreignKey: 'nutrient_id' });
+Recipe.belongsToMany(Nutrients, { through: RecipeIngredientsNutrients, foreignKey: 'recipe_id', otherKey: 'nutrient_id' });
+Nutrients.belongsToMany(Recipe, { through: RecipeIngredientsNutrients, foreignKey: 'nutrient_id', otherKey: 'recipe_id' });
 
-RecipeIngredientsNutrients.belongsTo(Recipe, { foreignKey: 'recipe_id' });
-RecipeIngredientsNutrients.belongsTo(Ingredients, { foreignKey: 'ingredient_id' });
-RecipeIngredientsNutrients.belongsTo(Nutrients, { foreignKey: 'nutrient_id' });
+// Define the relationships between RecipeIngredientsNutrients and other tables
+RecipeIngredientsNutrients.belongsTo(Recipe, { foreignKey: 'recipe_id', targetKey: 'recipe_id' });
+RecipeIngredientsNutrients.belongsTo(Ingredients, { foreignKey: 'ingredient_id', targetKey: 'ingredient_id' });
+RecipeIngredientsNutrients.belongsTo(Nutrients, { foreignKey: 'nutrient_id', targetKey: 'nutrient_id' });
 
 /* FLAVONOIDS */
 const Flavonoids = sequelize.define('Flavonoids', {
@@ -566,12 +605,18 @@ const RecipeFlavonoids = sequelize.define('RecipeFlavonoids', {
     recipe_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        references: {
+          model: 'recipes',
+          key: 'recipe_id'
+        }
     },
     flavonoid_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
+        references: {
+            model: 'flavonoids',
+            key: 'flavonoid_id'
+        }
     },
     amount: {
         type: DataTypes.DOUBLE,
@@ -610,13 +655,19 @@ const RecipeProperties = sequelize.define('RecipeProperties', {
     recipe_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
-        allowNull: false,
-    },
+        references: {
+          model: 'recipes',
+          key: 'recipe_id'
+        }
+      },
     property_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false,
+        references: {
+            model: 'properties',
+            key: 'property_id'
+          }
     },
     amount: {
         type: DataTypes.DOUBLE,
@@ -694,230 +745,322 @@ CaloricBreakdown.belongsTo(Recipe, { foreignKey: 'recipe_id' });
 async function loadRecipesIntoDatabase(transformedData) {
     try {
         // Authenticate the sequelize connection
-        // comment out to test code
         await sequelize.authenticate();
         console.log('Connection has been established successfully.');
         await sequelize.sync();
 
         // Iterate over each recipe response object in transformedData
-        let createdRecipe; // Declare createdRecipe outside of the try block
+        let createdRecipe; 
         for (const recipeResponse of transformedData) {
             // Extract data for the Recipe table
             const recipeData = recipeResponse.recipe;
-            console.log(`Recipe with ID ${recipeData.recipe_id} loading...`);
-            // Attempt to create the recipe in the database
-            createdRecipe = await Recipe.create(recipeData);
-            console.log(`Recipe with ID ${createdRecipe.recipe_id} loaded successfully.`);
-                    
-            // Iterate over each cuisine 
-            for (const cuisineData of recipeResponse.cuisine) {
+            try {
                 // returns either an object representing the found record or null 
-                let createdCuisine = await Cuisines.findOne({ where: { cuisine_name: cuisineData} });
-
-                if (!createdCuisine) {
-                    createdCuisine = await Cuisines.create({
-                        cuisine_name: cuisineData
-                    });
-                    console.log(`Created cuisine with ID ${createdCuisine.cuisine_id} and Name "${createdCuisine.cuisine_name}" created successfully.`);
-                }
-
-                const existingRecipeCuisine = await RecipeCuisines.findOne({
-                    where: {
-                        recipe_id: createdRecipe.recipe_id,
-                        cuisine_id: createdCuisine.cuisine_id,
-                    }
-                });
- 
-                if (!existingRecipeCuisine) {
-                    // If no existing record found, create a new one
-                    await RecipeCuisines.create({
-                        recipe_id: createdRecipe.recipe_id,
-                        cuisine_id: createdCuisine.cuisine_id
-                    });
-                    console.log(`RecipeCuisines entry created successfully for recipe ${createdRecipe.recipe_id} and cuisine ${createdCuisine.cuisine_id}, "${createdCuisine.cuisine_name}" .`);
+                createdRecipe = await Recipe.findOne({ where: { recipe_id: recipeData.recipe_id } });
+                if (!createdRecipe) {
+                    createdRecipe = await Recipe.create(recipeData);
+                    console.log(`Recipe with ID ${createdRecipe.recipe_id} loaded successfully.`);
                 } else {
-                    // Handle the case where the record already exists
-                    console.log(`RecipeCuisines entry for recipe ${createdRecipe.recipe_id} and cuisine ${createdCuisine.cuisine_id}, "${createdCuisine.cuisine_name}" already exists.`);
+                    console.log(`Recipe with ID ${createdRecipe.recipe_id} already exists.`);
                 }
+            } catch (error) {
+                console.error(`Error loading recipe with ID ${recipeData.recipe_id}: ${error.message}`);
             }
 
-            // Iterate over each diet
-            for (const dietData of recipeResponse.diet) {
-                let createdDiet = await Diet.findOne({ where: { diet_name: dietData} });
-
-                if (!createdDiet) {
                     
-                    createdDiet = await Diet.create({
-                        diet_name: dietData
-                    });
-                    // console.log(`Diet with ID ${createdDiet.diet_id} and  Name "${createdDiet.diet_name}" created successfully.`);
-                }
-                const existingRecipeDiet = await RecipeDiet.findOne({
-                    where: {
-                        recipe_id: createdRecipe.recipe_id,
-                        diet_id: createdDiet.diet_id,
+            /* CUISINIE */ 
+            for (const cuisineData of recipeResponse.cuisine) {
+                let createdCuisine = await Cuisines.findOne({ where: { cuisine_name: cuisineData} });
+                try {
+                    if (!createdCuisine) {
+                        createdCuisine = await Cuisines.create({
+                            cuisine_name: cuisineData
+                        });
                     }
-                });
+                }
+                catch(error){
+                    console.error(`Error loading cuisine "${cuisineData}" and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
+                }
 
-                if (!existingRecipeDiet) {
-                    await RecipeDiet.create({
-                        recipe_id: createdRecipe.recipe_id,
-                        diet_id: createdDiet.diet_id
+                /* RECIPE CUISINIE  */ 
+                try{
+                    const existingRecipeCuisine = await RecipeCuisines.findOne({
+                        where: {
+                            recipe_id: createdRecipe.recipe_id,
+                            cuisine_id: createdCuisine.cuisine_id,
+                        }
                     });
-                    // console.log(`RecipeDiet entry created successfully for recipe ${createdRecipe.recipe_id} and Diet ${createdDiet.diet_id}, "${createdDiet.diet_name}" .`);
-                } 
-                // else {
-                //     console.log(`RecipeDiet entry for recipe ${createdRecipe.recipe_id} and Diet ${createdDiet.diet_id}, "${createdDiet.diet_id},${createdDiet.diet_name}"  already exists.`);
-                // }
+                    if (!existingRecipeCuisine && createdCuisine && createdRecipe) {
+                        await RecipeCuisines.create({
+                            recipe_id: createdRecipe.recipe_id,
+                            cuisine_id: createdCuisine.cuisine_id
+                        });
+                    }
+                }
+                catch(error){
+                    console.error(`Error loading cuisine "${cuisineData}" and recipe with ID ${recipeData.recipe_id} into RecipeCuisines. An error occurred: ${error.message}`);
+                }
+            }
+            /* DIET */
+            for (const dietData of recipeResponse.diet) {
+                try{
+                    let createdDiet = await Diet.findOne({ where: { diet_name: dietData} });
+                    if (!createdDiet) {
+                        createdDiet = await Diet.create({
+                            diet_name: dietData
+                        });
+                    }
+                }
+                catch (error){
+                    console.error(`Error loading diet "${dietData}" and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
+                }
+
+                /* RECIPE DIET */
+                try{
+                    const existingRecipeDiet = await RecipeDiet.findOne({
+                        where: {
+                            recipe_id: createdRecipe.recipe_id,
+                            diet_id: createdDiet.diet_id,
+                        }
+                    });
+                    if (!existingRecipeDiet && createdDiet && createdRecipe) {
+                        await RecipeDiet.create({
+                            recipe_id: createdRecipe.recipe_id,
+                            diet_id: createdDiet.diet_id
+                        });
+                    } 
+                    }
+                catch (error){
+                    console.error(`Error loading diet "${dietData}" and recipe with ID ${recipeData.recipe_id} into RecipeDiet. An error occurred: ${error.message}`);
+                }
             }
 
-            // Iterate over each Dish Type
+            /* DISH TYPE */
             for (const dishTypeData of recipeResponse.dishTypes) {
                 let createdDishType = await DishType.findOne({ where: { dish_type_name: dishTypeData} });
-
-                if (!createdDishType) {
-                    createdDishType = await DishType.create({
-                        dish_type_name: dishTypeData});
-                    // console.log(`Dish Type with ID ${createdDishType.dish_type_id} and Name "${createdDishType.dish_type_name}" created successfully.`);
-                }
-                const existingRecipeDishType = await RecipeDishType.findOne({
-                    where: {
-                        recipe_id: createdRecipe.recipe_id,
-                        dish_type_id: createdDishType.dish_type_id
+                try{
+                    if (!createdDishType) {
+                        createdDishType = await DishType.create({
+                            dish_type_name: dishTypeData
+                        });
                     }
-                });
-                if (!existingRecipeDishType) {
-                    await RecipeDishType.create({
-                        recipe_id: createdRecipe.recipe_id,
-                        dish_type_id:  createdDishType.dish_type_id,
+                }
+                catch(error){
+                    console.error(`Error loading cuisine "${dishTypeData}" and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
+                }
+                 /* RECIPE DISH TYPE */
+                try{
+                    const existingRecipeDishType = await RecipeDishType.findOne({
+                        where: {
+                            recipe_id: createdRecipe.recipe_id,
+                            dish_type_id: createdDishType.dish_type_id
+                        }
                     });
-                    // console.log(`RecipeDishType entry created successfully for recipe ${createdRecipe.recipe_id} and DishType ${createdDishType.dish_type_id},${createdDishType.dish_type_name}.`);
+                    if (!existingRecipeDishType && createdDishType && createdRecipe) {
+                        await RecipeDishType.create({
+                            recipe_id: createdRecipe.recipe_id,
+                            dish_type_id:  createdDishType.dish_type_id,
+                        });                
+                    }
+                }
+                catch(error){
+                    console.error(`Error loading cuisine "${dishTypeData}" and recipe with ID ${recipeData.recipe_id} for RecipeDishType. An error occurred: ${error.message}`);
                 } 
-                // else {
-                //     // Handle the case where the record already exists
-                //     console.log(`RecipeDishType entry for recipe ${createdRecipe.recipe_id} and DishType ${createdDishType.dish_type_id}, "${createdDishType.dish_type_name}".`);
-                // }
             }
 
-            // Iterate over each Occasions
+            /* OCCASION */
             for (const occasionsData of recipeResponse.occasions) {
                 let createdOccasions = await Occasions.findOne({ where: { occasion_name: occasionsData} });
-
-                if (!createdOccasions) {
-                    createdOccasions = await Occasions.create({
-                        occasion_name: occasionsData});
-                    console.log(`Occasions with ID ${createdOccasions.occasion_id} and Name " ${createdOccasions.occasion_name}" created successfully.`);
+                try{
+                    if (!createdOccasions) {
+                        createdOccasions = await Occasions.create({
+                            occasion_name: occasionsData});
+                    }
+                } catch(error){
+                    console.error(`Error loading occasion "${cuisineData}" and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
                 }
 
-                await RecipeOccasions.create({
-                    recipe_id: createdRecipe.recipe_id,
-                    occasion_id: createdOccasions.occasion_id
-                });
-                console.log(`RecipeOccasions entry created successfully for recipe ${createdRecipe.recipe_id} and Occasions ${createdOccasions.occasion_id}, "${createdOccasions.occasion_name}" .`);
+                try{
+                    const existingRecipeOccasions  = await RecipeOccasions.findOne({
+                        where: {
+                            recipe_id: createdRecipe.recipe_id,
+                            occasion_id: createdOccasions.occasion_id
+                        }
+                    });
+                    if(!existingRecipeOccasions && createdOccasions && createdRecipe){
+                        await RecipeOccasions.create({
+                            recipe_id: createdRecipe.recipe_id,
+                            occasion_id: createdOccasions.occasion_id
+                        });
+                    }    
+                } catch (error) {
+                    console.error(`Error loading Occasions "${occasionsData}" and recipe with ID ${recipeData.recipe_id} into RecipeOccasions. An error occurred: ${error.message}`);
+                }
             }
-            
-            // Iterate over each Recipe Ingredients and Ingredients
+            /* INGREDIENTS */
             for (const ingredientData of recipeResponse.ingredients) {
-               let createdIngredient = await Ingredients.findOne({where: {ingredient_id: ingredientData.ingredient_id}});
-               if(!createdIngredient){
-                    createdIngredient = await Ingredients.create({
-                        ingredient_id: ingredientData.ingredient_id,
-                        standard_name: ingredientData.standard_name,
-                        image: ingredientData.image,
+                let createdIngredient = await Ingredients.findOne({where: {ingredient_id: ingredientData.ingredient_id}});
+                try{
+                    if(!createdIngredient){
+                        createdIngredient = await Ingredients.create({
+                            ingredient_id: ingredientData.ingredient_id,
+                            standard_name: ingredientData.standard_name,
+                            image: ingredientData.image,
                         }, { validate: true });
-                    console.log(`Ingredient with ID ${createdIngredient.ingredient_id} inserted into Ingredients table.`);
-               }
+                    }
+                }
+                catch(error){
+                    console.error(`Error loading ingredientData "${ingredientData.standard_name}", ID: ${ingredientData.ingredient_id} and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
+                }
 
-               const recipeIngredientsExits =  await RecipeIngredients.findOne({where: {ingredient_id: createdIngredient.ingredient_id,recipe_id: createdRecipe.recipe_id, us_amount: ingredientData.us_amount}});
-               if(!recipeIngredientsExits){
-                    await RecipeIngredients.create({
-                        ingredient_id: createdIngredient.ingredient_id,
-                        recipe_id: createdRecipe.recipe_id,
-                        specialized_name : ingredientData.specialized_name,
-                        us_unit : ingredientData.us_unit,
-                        us_amount: ingredientData.us_amount,
-                        metric_unit : ingredientData.metric_unit,
-                        metric_amount: ingredientData.metric_amount,
-                    }, { validate: true });
-                    console.log(`Ingredients with ID ${createdIngredient.ingredient_id} linked to recipe with ID ${createdRecipe.recipe_id}.`);
-               }
+                try{
+                    const recipeIngredientsExits =  await RecipeIngredients.findOne({where: {ingredient_id: createdIngredient.ingredient_id, recipe_id: createdRecipe.recipe_id, us_amount: ingredientData.us_amount}});
+                    if(!recipeIngredientsExits && createdIngredient && createdRecipe){
+                        await RecipeIngredients.create({
+                            ingredient_id: createdIngredient.ingredient_id,
+                            recipe_id: createdRecipe.recipe_id,
+                            specialized_name : ingredientData.specialized_name,
+                            us_unit : ingredientData.us_unit,
+                            us_amount: ingredientData.us_amount,
+                            metric_unit : ingredientData.metric_unit,
+                            metric_amount: ingredientData.metric_amount,
+                        }, { validate: true });
+                    }
+                } catch(error){
+                    console.error(`Error loading Ingredient "${ingredientData.standard_name}", ID: ${ingredientData.ingredient_id} and recipe with ID ${recipeData.recipe_id} for the RecipeIngredients. An error occurred: ${error.message}`);
+                }
             }
-            //  Iterate over each Recipe Nutrients and Nutrients
+            /* RECIPE NUTRIENTS AND NUTRIENTS*/
             for (const nutrientData of recipeResponse.recipeNutrients) {
                 let createdNutrients = await Nutrients.findOne({ where: { name: nutrientData.name } });
-                if(!createdNutrients){
-                    createdNutrients = await Nutrients.create({
-                        name: nutrientData.name,
-                        unit: nutrientData.unit,
-                    }, { validate: true });
-                    // console.log(`Nutrient ${createdNutrients.name} with ID ${createdNutrients.nutrient_id} inserted into Nutrients table.`);
+                try{
+                    if(!createdNutrients){
+                        createdNutrients = await Nutrients.create({
+                            name: nutrientData.name,
+                            unit: nutrientData.unit,
+                        }, { validate: true });
+                    }
+                } catch (error){
+                    console.error(`Error loading Nutrient "${nutrientData.name}" and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
                 }
-                await RecipeNutrients.create({
-                    nutrient_id: createdNutrients.nutrient_id,
-                    recipe_id: createdRecipe.recipe_id,
-                    amount: nutrientData.amount,
-                    percent_of_daily_needs: nutrientData.percentOfDailyNeeds,
-                }, { validate: true });
-                // console.log(`Nutrient ${createdNutrients.name} linked to recipe with ID ${createdRecipe.recipe_id}.`);
+                try{
+                    const existingRecipeNutrients = await RecipeNutrients.findOne({
+                        where: {
+                            recipe_id: createdRecipe.recipe_id,
+                            nutrient_id: createdNutrients.nutrient_id,
+                        }
+                    });
+                    if(!existingRecipeNutrients && createdRecipe && createdNutrients){
+                        await RecipeNutrients.create({
+                            nutrient_id: createdNutrients.nutrient_id,
+                            recipe_id: createdRecipe.recipe_id,
+                            amount: nutrientData.amount,
+                            percent_of_daily_needs: nutrientData.percentOfDailyNeeds,
+                        }, { validate: true });
+                    }
+                } catch (error){
+                    console.error(`Error loading Nutrient "${nutrientData.name}" and recipe with ID ${recipeData.recipe_id} for RecipeNutrients. An error occurred: ${error.message}`);
+                }
             }
-            // Iterate over each flavonoid 
+
+            /* FLAVONOID*/
             for (const flavonoidData of recipeResponse.flavonoids) {
                 let createdFlavonoid = await Flavonoids.findOne({ where: { name: flavonoidData.name } });
-                if(!createdFlavonoid){
-                    createdFlavonoid = await Flavonoids.create({
-                        name: flavonoidData.name,
-                        unit: flavonoidData.unit
-                    }, { validate: true });
-                    // console.log(`Flavonoids ${createdFlavonoid.name} with ID ${createdFlavonoid.flavonoid_id} inserted into Flavonoids table.`);
+                try{
+                    if(!createdFlavonoid){
+                        createdFlavonoid = await Flavonoids.create({
+                            name: flavonoidData.name,
+                            unit: flavonoidData.unit
+                        }, { validate: true });
+                    }
+                } catch(error){
+
                 }
-                await RecipeFlavonoids.create({
-                    flavonoid_id: createdFlavonoid.flavonoid_id,
-                    recipe_id: createdRecipe.recipe_id,
-                    amount: flavonoidData.amount
-                }, { validate: true });
-                // console.log(`Flavonoid ${createdFlavonoid.name} linked to recipe with ID ${createdRecipe.recipe_id}.`);
+                try{
+                    const existingRecipeFlavonoids = await RecipeFlavonoids.findOne({
+                        where: {
+                            recipe_id: createdRecipe.recipe_id,
+                            flavonoid_id: createdFlavonoid.flavonoid_id,
+                        }
+                    });
+                    if(!existingRecipeFlavonoids && createdFlavonoid && createdRecipe){
+                        await RecipeFlavonoids.create({
+                            flavonoid_id: createdFlavonoid.flavonoid_id,
+                            recipe_id: createdRecipe.recipe_id,
+                            amount: flavonoidData.amount
+                        }, { validate: true });
+                    }
+                } catch (error){
+                    console.error(`Error loading Flavonoids "${flavonoidData.name}" and recipe with ID ${recipeData.recipe_id} into RecipeFlavonoids. An error occurred: ${error.message}`);
+                }
             }
-            // Iterate over each properties 
+            /* PROPERTIES */
             for (const propertiesData of recipeResponse.properties) {
                 let createdProperties = await Properties.findOne({ where: { name: propertiesData.name } });
-                if(!createdProperties){
-                    createdProperties = await Properties.create({
-                        name: propertiesData.name,
-                        unit: propertiesData.unit
-                    }, { validate: true });
-                    // console.log(`Properties ${createdProperties.name} with ID ${createdProperties.property_id} inserted into Properties table.`);
+                try{
+                    if(!createdProperties){
+                        createdProperties = await Properties.create({
+                            name: propertiesData.name,
+                            unit: propertiesData.unit
+                        }, { validate: true });
+                    }
+                } catch(error){
+                    console.error(`Error loading properties "${propertiesData.name}" and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
                 }
-                await RecipeProperties.create({
-                    property_id: createdProperties.property_id,
-                    recipe_id: createdRecipe.recipe_id,
-                    amount: propertiesData.amount
-                }, { validate: true });
-                // console.log(`Properties ${createdProperties.name} with ID ${createdProperties.property_id} linked to recipe with ID ${createdRecipe.recipe_id}.`);
+                try{
+                    const existingRecipeProperties = await RecipeProperties.findOne({
+                        where: {
+                            recipe_id: createdRecipe.recipe_id,
+                            property_id: createdProperties.property_id,
+                        }
+                    }); 
+                    if(!existingRecipeProperties && createdRecipe && createdProperties){
+                        await RecipeProperties.create({
+                            property_id: createdProperties.property_id,
+                            recipe_id: createdRecipe.recipe_id,
+                            amount: propertiesData.amount
+                        }, { validate: true });
+                    }
+                } catch(error){
+                    console.error(`Error loading properties "${propertiesData.name}" and recipe with ID ${recipeData.recipe_id} for RecipeProperties. An error occurred: ${error.message}`);
+                }
             }
-            // Insert data into the WeightPerServing table
+
+            /* WEIGHT PER SERVING */
             const weightPerServingData = recipeResponse.recipeWeightPerServing[0];
-            // console.log(`weightPerServingData.amount: ${weightPerServingData.amount}`)
-            const createdWeightPerServing = await WeightPerServing.create({
-                recipe_id: createdRecipe.recipe_id,
-                amount: weightPerServingData.amount,
-                unit: weightPerServingData.unit,
-            }, { validate: true });
-            
-            // console.log(`Weight per serving for recipe with ID ${createdRecipe.recipe_id} inserted successfully.`);
+            try{
+                let createdweightPerServingData= await WeightPerServing.findOne({ where: { recipe_id: createdRecipe.recipe_id} });
+                if(!createdweightPerServingData && createdRecipe){
+                    createdweightPerServingData = await WeightPerServing.create({
+                        recipe_id: createdRecipe.recipe_id,
+                        amount: weightPerServingData.amount,
+                        unit: weightPerServingData.unit,
+                    }, { validate: true });
+                }
+            } catch (error){
+                console.error(`Error loading Weight per serving for recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
+            }
 
-            // Insert data into the CaloricBreakdown table
+            /* CALORIC BREAKDOWN */
             const caloricBreakdownData = recipeResponse.recipeCaloricBreakdown[0];
-            const createdCaloricBreakdown = await CaloricBreakdown.create({
-                recipe_id: createdRecipe.recipe_id,
-                percent_protein: caloricBreakdownData.percentProtein,
-                percent_fat: caloricBreakdownData.percentFat,
-                percent_carbs: caloricBreakdownData.percentCarbs
-            }, { validate: true });
-            // console.log(`Caloric breakdown for recipe with ID ${createdRecipe.recipe_id} inserted successfully.`);
+            try{
+                let createdCaloricBreakdown = await CaloricBreakdown.findOne({ where: { recipe_id: createdRecipe.recipe_id} });
+                if(!createdCaloricBreakdown && createdRecipe){
+                    createdCaloricBreakdown = await CaloricBreakdown.create({
+                        recipe_id: createdRecipe.recipe_id,
+                        percent_protein: caloricBreakdownData.percentProtein,
+                        percent_fat: caloricBreakdownData.percentFat,
+                        percent_carbs: caloricBreakdownData.percentCarbs
+                    }, { validate: true });
+                }
+            } catch(error){
+                console.error(`Error loading Caloric breakdow for recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
+            }
 
-            // Iterate over instructions sets
+            /* INSTRUCTION */
             for(const instructionsResponse of recipeResponse.instructions){
                 for (const instructionData of instructionsResponse) {
+
                     let isSecondaryRecipe = false;
                     let nametype = "";
                     if (instructionData.name !== "") {
@@ -928,120 +1071,186 @@ async function loadRecipesIntoDatabase(transformedData) {
                         nametype = "main recipe";
                     }
 
-                    // Insert instructions
-                    const createdInstruction = await Instructions.create({
-                        step_number: instructionData.number,
-                        name: nametype,
-                        step: instructionData.step,
-                        recipe_id: createdRecipe.recipe_id,
-                        is_secondary_recipe: isSecondaryRecipe
-                    }, { validate: true });
-                    console.log(`Instruction with ID ${createdInstruction.instruction_id} inserted successfully.`);
-
-                    // Insert instruction length
-                    if (instructionData.length_data && Object.keys(instructionData.length_data).length > 0) { 
-                        await InstructionLength.create({
-                            instruction_id: createdInstruction.instruction_id,
-                            length_number: instructionData.length_data.number,
-                            length_unit: instructionData.length_data.unit,
-                        }, { validate: true });
-                        // console.log(`Instruction length for instruction ID ${createdInstruction.instruction_id} inserted successfully.`);
+                    let createdInstruction = await Instructions.findOne({ where: { recipe_id: recipeData.recipe_id,  step_number: instructionData.number, name: nametype } });
+                    try{
+                        if(!createdInstruction){
+                            createdInstruction = await Instructions.create({
+                                step_number: instructionData.number,
+                                name: nametype,
+                                step: instructionData.step,
+                                recipe_id: createdRecipe.recipe_id,
+                                is_secondary_recipe: isSecondaryRecipe
+                            }, { validate: true });
+                        }
+                    } catch (error) {
+                        console.error(`Error loading Instruction name: "${nametype}", step number ${instructionData.number}, and recipe with ID ${recipeData.recipe_id} into Instructions. An error occurred: ${error.message}`);
                     }
-                    // Insert instruction ingredients
+                    /* INSTRUCTION LENGTH */
+                    try{
+                        if(createdInstruction){
+                            if (instructionData.length_data && Object.keys(instructionData.length_data).length > 0) { 
+                                let createdInstructionLength = await InstructionLength.findOne({ where: { instruction_id: createdInstruction.instruction_id,  step_number: instructionData.number, name: nametype } });
+                                if(!createdInstructionLength){
+                                    createdInstructionLength = await InstructionLength.create({
+                                        instruction_id: createdInstruction.instruction_id,
+                                        length_number: instructionData.length_data.number,
+                                        length_unit: instructionData.length_data.unit,
+                                    }, { validate: true });
+                                }
+                            }
+                        }
+                        else{
+                            console.log(`Skipped loading Instruction Length for Instruction name: "${nametype}", step number ${instructionData.number}, and recipe with ID ${recipeData.recipe_id} into InstructionLength. An error occurred: instrution wasn't created in the instrucation table first`);
+                        }
+                    } catch (error){
+                        console.error(`Error loading Instruction Length for Intruction ID ${createdInstruction.instruction_id}, step number ${instructionData.number}, and recipe with ID ${recipeData.recipe_id} into InstructionLength. An error occurred: ${error.message}`);
+                    }
+
+                    /*INGREDIENTS*/
                     for (const instructionIngredientsData of instructionData.ingredients) {
                         if (instructionIngredientsData.id !== 0) { //ignore if Id is 0
-                            // Check if the ingredient already exists in the Ingredients table
                             let createdInstructionIngredients =  await Ingredients.findOne({ where: { ingredient_id: instructionIngredientsData.id } });
-                            
-                            if(!createdInstructionIngredients){
-                                createdInstructionIngredients = await Ingredients.create({
+                            try{
+                                if(!createdInstructionIngredients){
+                                    createdInstructionIngredients = await Ingredients.create({
                                     ingredient_id: instructionIngredientsData.id,
                                     standard_name:  instructionIngredientsData.name,
                                     image:  instructionIngredientsData.image,
                                 }, { validate: true });
-                                console.log(`Ingredient with ID ${createdInstructionIngredients.ingredient_id} inserted successfully.`);
                             }
-                            await InstructionsIngredients.create({
-                                ingredient_id: createdInstructionIngredients.ingredient_id,
-                                instruction_id: createdInstruction.instruction_id,
-                            }, { validate: true });
-                            console.log(`Ingredient ${instructionIngredientsData.name} linked to Instruction with ID ${createdInstructionIngredients.instruction_id}.`);
+                            } catch (error){
+                                console.error(`Error loading Ingredient "${instructionIngredientsData.name}", ID: ${instructionIngredientsData.id} for Recipe ID ${recipeData.recipe_id}: ${error.message}`);
+                            }
+                            /*INSTRUCTION - INGREDIENTS*/    
+                            try{
+                                if(createdInstruction){
+                                    let createdInstructionsIngredients =  await InstructionsIngredients.findOne({ where: { instruction_id: createdInstruction.instruction_id, ingredient_id: instructionIngredientsData.id } });
+                                    if(!createdInstructionsIngredients){
+                                        await InstructionsIngredients.create({
+                                            ingredient_id: createdInstructionIngredients.ingredient_id,
+                                            instruction_id: createdInstruction.instruction_id,
+                                        }, { validate: true });
+                                    }
+                                }
+                                else{
+                                    console.log(`Skipped loading Instruction - ingredients for Instruction name: "${nametype}" - step number: ${instructionData.number}, Ingredient name: "${instructionIngredientsData.name}" - ID: ${instructionIngredientsData.id}, and recipe with ID ${recipeData.recipe_id} into InstructionsIngredients. An error occurred: instrution wasn't created in the instrucation table`);
+                                }
+                            } catch(error){
+                                console.log(`Error loading Instruction - ingredients for Instruction name: "${nametype}" - step number: ${instructionData.number}, Ingredient name: "${instructionIngredientsData.name}" - ID:"${instructionIngredientsData.id}", and recipe with ID ${recipeData.recipe_id} into InstructionsIngredients. An error occurred: ${error.message}`);
+                            }
                         }
                     }
-                    // Insert instruction equipment
+                    
+                    /* EQUIPMENT */
                     for (const equipmentData of instructionData.equipments) {
                         let createdEquipment = await Equipment.findOne({ where: { equipment_id: equipmentData.id } });
-                        if (!createdEquipment) {
-                            createdEquipment = await Equipment.create({
-                                equipment_id: equipmentData.id,
-                                name: equipmentData.name,
-                                image: equipmentData.image
-                            }, { validate: true });
-                            console.log(`Equipment with ID ${createdEquipment.equipment_id} inserted into Equipment table.`);
+                        try{
+                            if (!createdEquipment) {
+                                createdEquipment = await Equipment.create({
+                                    equipment_id: equipmentData.id,
+                                    name: equipmentData.name,
+                                    image: equipmentData.image
+                                }, { validate: true });
+                            }
+                        } catch (error){
+                             console.log(`Error loading Equipment with ID ${equipmentData.id}. An error occurred: ${error.message}`);
+                         }
+                        if(createdInstruction){
+                            try{
+                                let createdInstructionsEquipment = InstructionsEquipment.findOne({ where: { equipment_id: equipmentData.id, instruction_id: createdInstruction.instruction_id} });
+                                if(!createdInstructionsEquipment){
+                                    await InstructionsEquipment.create({
+                                        equipment_id: createdEquipment.equipment_id,
+                                        instruction_id: createdInstruction.instruction_id
+                                    }, { validate: true });
+                                }
+                            } catch (error){
+                                console.log(`Error loading InstructionEquipment for Instruction name: "${nametype}" - step number: ${instructionData.number}, Equipment name: "${equipmentData.name}" - ID: "${equipmentData.id}", and recipe with ID ${recipeData.recipe_id} into InstructionsIngredients. An error occurred: ${error.message}`);
+                            }
                         }
-                        await InstructionsEquipment.create({
-                            equipment_id: createdEquipment.equipment_id,
-                            instruction_id: createdInstruction.instruction_id
-                        }, { validate: true });
-                        console.log(`Equipment with ID ${createdEquipment.equipment_id} linked to instruction with ID ${createdInstruction.instruction_id}.`);
-
-                        await RecipeEquipment.create({
-                            equipment_id: createdEquipment.equipment_id,
-                            recipe_id: createdRecipe.recipe_id,
-                        }, { validate: true });
-                        console.log(`Equipment with ID ${createdEquipment.equipment_id} linked to recipe with ID ${createdRecipe.recipe_id}.`);
+                        else{
+                            console.log(`Skipped loading InstructionEquipment for Instruction name: "${nametype}" - step number: ${instructionData.number}, Equipment name: "${equipmentData.name}" - ID: "${equipmentData.id}", and recipe with ID ${recipeData.recipe_id} into InstructionsIngredients. An error occurred: instrution wasn't created in the instrucation table`);
+                        }
+                        try{
+                            let createdRecipeEquipment = RecipeEquipment.findOne({ where: { equipment_id: equipmentData.id, recipe_id: createdRecipe.recipe_id} });
+                            if(!createdRecipeEquipment){
+                                await RecipeEquipment.create({
+                                    equipment_id: createdEquipment.equipment_id,
+                                    recipe_id: createdRecipe.recipe_id,
+                                }, { validate: true });
+                            }
+                        } catch (error){
+                            console.log(`Error loading RecipeEquipment for Equipment name: "${equipmentData.name}" - ID: "${equipmentData.id}" and recipe with ID ${recipeData.recipe_id} into RecipeEquipment. An error occurred: ${error.message}`);
+                        }
                     }
-
                 }
             }
-            // Iterate over ingredients NUTRITION -  RECIPE INGREDIENTS NUTRIENTS
+            /* NUTRITION */
+            // RECIPE INGREDIENTS NUTRIENTS
             for(const ingredientNutrientsResponse of recipeResponse.recipeIngredientsNutrients){
-
                 for (const nutrientData of ingredientNutrientsResponse.nutrients) {
                     let creatednutrient = await Nutrients.findOne({ where: { name: nutrientData.name } });
-                    if(!creatednutrient){
-                        creatednutrient = await  Nutrients.create({
-                            name: nutrientData.name,
-                            unit: nutrientData.unit,
-                        })
-                        console.log(`Nutrient "${creatednutrient.name}" inserted into Nutrients table.`);
+                    try{
+                        if(!creatednutrient){
+                            creatednutrient = await  Nutrients.create({
+                                name: nutrientData.name,
+                                unit: nutrientData.unit,
+                            })
+                        }
+                    } catch (error){
+                        console.error(`Error loading nutrient "${nutrientData.name}" and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
+
                     }
-                    const recipeingredientsNutrientsExists = await RecipeIngredientsNutrients.findOne({ where: {recipe_id: createdRecipe.recipe_id, nutrient_id: creatednutrient.nutrient_id,
-                        ingredient_id: ingredientNutrientsResponse.id,} });
-                    if(!recipeingredientsNutrientsExists){
-                        await RecipeIngredientsNutrients.create({
-                            recipe_id: createdRecipe.recipe_id,
-                            nutrient_id: creatednutrient.nutrient_id,
-                            ingredient_id: ingredientNutrientsResponse.id,
-                            ingredient_amount: ingredientNutrientsResponse.amount,
-                            nutrient_amount: nutrientData.amount,
-                            ingredient_unit: ingredientNutrientsResponse.unit,
-                            percent_of_daily_needs: nutrientData.percentOfDailyNeeds,
-                        })
-                        console.log(`Nutrient "${creatednutrient.name}" linked to Recipe with ID ${createdRecipe.recipe_id}, Ingredient with ID ${ingredientNutrientsResponse.id}.`);
+                    try{
+                        let existingIngredient =  await Ingredients.findOne({where: {ingredient_id: ingredientNutrientsResponse.id}});;
+                        if(creatednutrient && createdRecipe && existingIngredient){
+                            const recipeingredientsNutrientsExists = await RecipeIngredientsNutrients.findOne({ where: {recipe_id: createdRecipe.recipe_id, nutrient_id: creatednutrient.nutrient_id,
+                                ingredient_id: ingredientNutrientsResponse.id,} });
+                            if(!recipeingredientsNutrientsExists){
+                                await RecipeIngredientsNutrients.create({
+                                    recipe_id: createdRecipe.recipe_id,
+                                    nutrient_id: creatednutrient.nutrient_id,
+                                    ingredient_id: ingredientNutrientsResponse.id,
+                                    ingredient_amount: ingredientNutrientsResponse.amount,
+                                    nutrient_amount: nutrientData.amount,
+                                    ingredient_unit: ingredientNutrientsResponse.unit,
+                                    percent_of_daily_needs: nutrientData.percentOfDailyNeeds,
+                                })
+                            }
+                        }
+                        else{
+                            console.log(`Skipped loading RecipeIngredientsNutrients for Nutrients name: "${ nutrientData.name}", Ingredient name: "${ingredientNutrientsResponse.name}" - ID: ${ingredientNutrientsResponse.id}, and recipe with ID ${recipeData.recipe_id} into RecipeIngredientsNutrients. An error occurred: recipe, ingredient, or nutrient wasn't loaded in thier table`);
+                        }
+                    } catch (error){
+                        console.error(`Error loading nutrient "${nutrientData.name}", ingredient "${ingredientNutrientsResponse.name}" - ID: ${ingredientNutrientsResponse.id} , and recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
                     }
                 }
-
             }
 
             for (const tipData of recipeResponse.tips) {
-                const createdTip = await Tips.create({
-                    type: tipData.type,
-                    tip: tipData.tip,
-                    recipe_id: createdRecipe.recipe_id, // Include the recipe_id when creating the tip
-                }, { validate: true });
-            
-                // console.log(`Tip with ID ${createdTip.tip_id}, type "${createdTip.type}" loaded successfully.`);
-            
-                // Associate the tip with the recipe using Sequelize's built-in and automatically generated association methods.
-                await createdRecipe.addTip(createdTip);
-                // console.log(`Tip with ID ${createdTip.tip_id}, type "${createdTip.type}" is associated with Recipe ID ${createdTip.recipe_id} successfully.`); 
+                try{
+                    if(createdRecipe){
+                        let createdTip = await Tips.findOne({ where: { recipe_id: recipeData.recipe_id, tip: tipData.tip}});
+                        if(!createdTip){
+                            createdTip = await Tips.create({
+                                type: tipData.type,
+                                tip: tipData.tip,
+                                recipe_id: createdRecipe.recipe_id, // Include the recipe_id when creating the tip
+                            }, { validate: true });
+                            await createdRecipe.addTip(createdTip);
+                        }
+                    }
+                    else{
+                        console.log(`Skipped loading Tip: "${tipData.tip}" for recipe with ID ${recipeData.recipe_id}. An error occurred: recipe was not added into its table`);
+                    }
+                } catch(error){
+                    console.error(`Error loading Tip: "${tipData.tip}" for recipe with ID ${recipeData.recipe_id}. An error occurred: ${error.message}`);
+                }
             }
-
-            console.log('Recipe ingredients loaded successfully.');
-        }        
-        console.log('Data loaded successfully.');
-    } catch (error) {
+            console.log('Data loaded successfully.');
+        }
+    }
+    catch (error) {
         console.error('Failed to load data:', error);
     }
 }
