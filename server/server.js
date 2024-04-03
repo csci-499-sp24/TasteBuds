@@ -9,7 +9,6 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 
-//const sequelize = new Sequelize(process.env.DB_HOST + "/" + process.env.DB_NAME)
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
     username: process.env.DB_USER,
@@ -26,9 +25,12 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
             rejectUnauthorized: false, // for dev only
         }
     },
+    define: {
+        // Define the schema to be used by default
+        schema: 'public'
+    }
 });
 
-// const postgres_db = new Sequelize(process.env.DB_HOST);
 async function syncDB() {
     try {
         console.log("beginning sequelize authenticate");
@@ -190,3 +192,5 @@ const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
+
+module.exports = {dbPool: sequelize};
