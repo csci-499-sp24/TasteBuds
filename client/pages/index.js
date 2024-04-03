@@ -28,7 +28,8 @@ function Index() {
         <header>TasteBuds</header>
         <ul>
           <li><Link href="/"><i className="fas fa-home"></i>Home</Link></li>  
-          <li><Link href="/search"><i className="fas fa-search"></i>Search</Link></li> 
+          <li><Link href="/search"><i className="fas fa-search"></i>Search</Link></li>
+          <li><Link href="/recipeprofile"><i class="fal fa-apple-alt"></i>Recipe Profiles(Temp)</Link></li>  
           <li><a href="#"><i className="fas fa-star"></i>Saved Recipes</a></li>
           <li><a href="#"><i className="fas fa-cog"></i>User Settings</a></li>
           <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
