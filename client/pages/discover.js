@@ -105,7 +105,7 @@ function Discover() {
 
       <section>
         <div id="div-center" className="search-wrapper">
-          <header>Discovery</header>
+        <label htmlFor="search">Discovery</label>
           <div className="scrollable-content">
           <div className="posts-container max-w-[900px] gap-2 grid grid-cols-3 grid-rows-2 px-8">
             {/* Map through your searchResults to render posts */}
