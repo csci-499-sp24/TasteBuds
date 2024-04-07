@@ -42,25 +42,8 @@ async function syncDB() {
 };
 syncDB();
 
-// Demonstration of how to define a foreign key (see fk_id).
-// const test = sequelize.define("EXAMPLE", {
-//     pk_id: {
-//         type: DataTypes.INTEGER,
-//         allowNull: false,
-//         primaryKey: true,
-//     },
-//     fk_id: {
-//         type: DataTypes.INTEGER,
-//         allowNull: false,
-//         primaryKey: true,
-//         references: {
-//             model: recipes_table,
-//             key: "hi",
-//         }
-//     },
-// })
 
-const database = require("./tables/old_model.js")(sequelize, DataTypes);
+const database = require("./tables/recipes.js")(sequelize, DataTypes);
 
 async function sync_table() {
     try {
@@ -73,75 +56,66 @@ async function sync_table() {
 };
 sync_table();
 
-// Calling up all the table objects,
-// They don't work right now, Sequelize insists that the db relations don't exist
-// I will add them here and figure that out later.
 const {
-    recipes_table,
-    weight_per_serving,
-    calories_table,
-    secondary_recipes_table,
-    recipes_flavors
+    Recipe,
+    Cuisines,
+    RecipeCuisines,
+    Diet,
+    RecipeDiet,
+    DishType,
+    RecipeDishType,
+    Occasions,
+    RecipeOccasions,
+    Tips,
+    Ingredients,
+    RecipeIngredients,
+    Instructions,
+    InstructionsIngredients,
+    Equipment,
+    RecipeEquipment,
+    InstructionsEquipment,
+    InstructionLength,
+    Nutrients,
+    RecipeNutrients,
+    RecipeIngredientsNutrients,
+    Flavonoids,
+    RecipeFlavonoids,
+    Properties,
+    RecipeProperties,
+    WeightPerServing,
+    CaloricBreakdown, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
-const {
-    recipe_to_equip,
-    instr_to_ingr,
-    instr_to_equip,
-    recipe_to_cusine,
-    recipe_to_diet,
-    recipe_to_occasions,
-    recipe_to_properties,
-    recipe_to_dishtype,
-} = require("./tables/table_connectors.js")(sequelize, DataTypes)
-const {
-    tips_table,
-    equipment_table,
-    instructions_id,
-    instr_length,
-    ingredients_table,
-    recipe_ingredients,
-    recipe_nutrients,
-    recipe_ingredient_nutrient,
-    cuisine_table,
-    diet_table,
-    flavonoid_table,
-    nutrients_table,
-    properties_table,
-    occasions_table,
-    dish_type,
-} = require("./tables/other_tables.js")(sequelize, DataTypes)
 
 
+// app.get("/", async (req,res)=>{
+//     try {
+//         const first_ten = await database.findAll({
+//             subQuery: false,
+//             limit: 10,
+//             raw: true,
+//         });
+//         res.status(200).json({recipeData: first_ten});
+//         console.log("app.get / call successful");
+//     }
+//     catch(error){
+//         console.log("encountered error: ", error)
+//     }
+// })
 
-app.get("/", async (req,res)=>{
-    try {
-        const first_ten = await database.findAll({
-            subQuery: false,
-            limit: 10,
-            raw: true,
-        });
-        res.status(200).json({recipeData: first_ten});
-        console.log("app.get / call successful");
-    }
-    catch(error){
-        console.log("encountered error: ", error)
-    }
-})
-
-app.get("/mytest", async (req,res)=>{
-    try {
-        const first_ten = await recipes_table.findAll({
-            subQuery: false,
-            limit: 10,
-            raw: true,
-        });
-        res.status(200).json({recipeData: first_ten});
-        console.log("app.get / call successful");
-    }
-    catch(error){
-        console.log("encountered error: ", error)
-    }
-})
+// app.get("/mytest", async (req,res)=>{
+//     try {
+//         const first_ten = await Recipe.findAll({
+//             subQuery: false,
+//             limit: 10,
+//             raw: true,
+//         });
+//         res.status(200).json({recipeData: first_ten});
+//         console.log("app.get / call successful");
+//     }
+//     catch(error){
+//         console.log("encountered error: ", error)
+//     }
+// })
 
 app.get('/search', async (req, res) => {
     try {
@@ -153,7 +127,7 @@ app.get('/search', async (req, res) => {
         }
 
         // Fetch recipes from the database
-        const recipes = await recipes_table.findAll({
+        const recipes = await Recipe.findAll({
             subQuery: false,
             raw: true,
         });
@@ -168,6 +142,109 @@ app.get('/search', async (req, res) => {
         // Send filtered results as JSON response
         console.log("Filtered Results:", filteredResults);
         res.json(filteredResults);
+        
+    } catch (error) {
+        console.error("Error searching recipes:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/searchV2', async (req, res) => {
+    try {
+        const { query, cuisine, diet, dishType, occasion, includeTips } = req.query;
+
+        // Construct base query to fetch recipes
+        let baseQuery = {
+            include: [],
+        };
+
+        // Check if search query is provided and is a valid string
+        if (query) {
+            baseQuery.where = {
+                title: { [Sequelize.Op.iLike]: `%${query}%` }
+            };
+        }
+
+        if (cuisine) {
+            // Add join with cuisines table only if cuisine parameter is provided
+            baseQuery.include.unshift({
+                model: Cuisines,
+                through: {
+                    model: RecipeCuisines,
+                    attributes: [] // To exclude join table attributes
+                },
+                where: {
+                    cuisine_name: { [Sequelize.Op.iLike]: `%${cuisine}%` }
+                }
+            });
+        }
+
+        if (diet) {
+            baseQuery.include.push({
+                model: Diet,
+                through: {
+                    model: RecipeDiet,
+                    attributes: [] 
+                },
+                where: {
+                    diet_name: { [Sequelize.Op.iLike]: `%${diet}%` }
+                }
+            });
+        }
+
+        if (dishType) {
+            baseQuery.include.push({
+                model: DishType,
+                through: {
+                    model: RecipeDishType,
+                    attributes: [] 
+                },
+                where: {
+                    dish_type_name: { [Sequelize.Op.iLike]: `%${dishType}%` }
+                }
+            });
+        }
+
+        if (occasion) {
+            baseQuery.include.push({
+                model: Occasions,
+                through: {
+                    model: RecipeOccasions,
+                    attributes: [] 
+                },
+                where: {
+                    occasion_name: { [Sequelize.Op.iLike]: `%${occasion}%` }
+                }
+            });
+        }
+
+        if (includeTips !== undefined) {
+            if (includeTips === 'true') {
+                // Include recipes with tips
+                baseQuery.include.push({
+                    model: Tips,
+                    attributes: ['type', 'tip'] // Include tip attributes
+                });
+            } else {
+                // Exclude recipes with tips
+                baseQuery.include.push({
+                    model: Tips,
+                    attributes: ['type', 'tip'], // Include tip attributes
+                    where: {
+                        tip_id: null // Ensure no tips are included
+                    },
+                    required: false // Use a left join to include recipes without tips
+                });
+            }
+        }
+        
+        
+        // console.log("Executing query:", baseQuery);
+
+        // Fetch recipes from the database
+        const recipes = await Recipe.findAll(baseQuery);
+        // Send filtered results as JSON response
+        res.json(recipes);
         
     } catch (error) {
         console.error("Error searching recipes:", error);

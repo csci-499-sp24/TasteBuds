@@ -23,7 +23,7 @@ function Search() {
       //  .map(([key, value]) => `${key}=${value}`)
       //  .join("&");
 
-      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/search?query=${searchQuery}&filter=${filters}`); //updated to include filter at endpoint
+      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/searchV2?query=${searchQuery}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
