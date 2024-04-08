@@ -62,6 +62,15 @@ function recipeInfo2(){
                     </p>
                     </details>
                 </div>
+                <div className="text-container">
+                    <h2>Related Recipes: </h2>
+                </div>
+                <div className="related-recipe-grid">
+                    <div><a href="https://spoonacular.com/recipes/cajun-lobster-pasta-1614055"><img src="https://img.spoonacular.com/recipes/636732-556x370.jpg"/></a>Cajun Lobster Pasta</div>
+                    <div><a href="https://spoonacular.com/recipes/pasta-casserole-with-zucchini-and-chicken-1210669"><img src="https://img.spoonacular.com/recipes/686582-556x370.jpg"/></a>Pasta casserole with zucchini and chicken</div>  
+                    <div><a href="https://spoonacular.com/recipes/pasta-with-yogurt-pesto-138803"><img src="https://img.spoonacular.com/recipes/655806-556x370.jpg"/></a>Pesto & Yogurt Pasta</div>
+                    <div><a href="https://spoonacular.com/recipes/ratatouille-pasta-760844"><img src="https://img.spoonacular.com/recipes/657933-556x370.jpg"/></a>Ratatouille Pasta</div>
+                </div>
                 <div className="previous-page">
                     <button><Link href='/recipeInfo'>Previous Page</Link></button>
                 </div>

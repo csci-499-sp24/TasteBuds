@@ -26,6 +26,42 @@ function RecipeProfiles(){
         />
         </div>
         <section>
+        <div className="filter">
+            <select value="Cuisine Type">
+              <option value="">All Cuisines</option>
+              <option value="mexican">Mexican</option>
+              <option value="italian">Italian</option>
+              <option value="vietnamese">Vietnamese</option>
+              {/* Look into more cuisine options from doc or data*/}
+            </select>
+            <select value="Difficulty">
+              <option value="">All Difficulties</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+            <select value="Cooking Time">
+              <option value="">Cooking Time</option>
+              <option value="short_time">Short</option>
+              <option value="average_time">Average</option>
+              <option value="long_time">Long</option>
+            </select>
+            <select value="Diet Type">
+              <option value="">Diet Type</option>
+              <option value="low_carb">Low Carb</option>
+              <option value="keto">Keto</option>
+              <option value="fasting">Fasting</option>
+              <option value="mediterranean">Mediterranean</option>
+            </select>
+            <select value="Price">
+              <option value="">Price</option>
+              <option value="below_ten">Under $10</option>
+              <option value="ten_twenty">$10-$20</option>
+              <option value="20_50">$20-$50</option>
+              <option value="above_fifty">Above $50</option>
+            </select>
+            {/* Add more filter options */}
+          </div>          
           <div class="grid-container">
             <div><a href="/recipeInfo" target="_blank" rel="noopener noreferrer"><img src="https://img.spoonacular.com/recipes/1096053-556x370.jpg"/></a>GF Vegan Creamy Broccoli Pasta</div>
             <div><a href="https://spoonacular.com/recipes/cajun-lobster-pasta-1614055"><img src="https://img.spoonacular.com/recipes/636732-556x370.jpg"/></a>Cajun Lobster Pasta</div>

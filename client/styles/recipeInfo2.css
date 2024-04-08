@@ -30,3 +30,19 @@
     border-radius: 25px;
     padding:10px;
 }
+.related-recipe-grid{
+    position:absolute;
+    top:90%;
+    left: 20%;
+    display: grid;
+    grid-template-columns:250px 250px 250px 250px;
+    gap: 100px;
+    background-color: rgb(29, 27, 27,0);
+    padding: 10px; 
+}
+.text-container {
+    position:absolute;
+    top:80%;
+    left: 20%;
+    font-size:x-large;
+}
