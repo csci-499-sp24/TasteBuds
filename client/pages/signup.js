@@ -10,7 +10,7 @@ function Signup(){
         e.preventDefault();
         
         try {
-            const response = await fetch('/signup', {
+            const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,7 +25,6 @@ function Signup(){
             }
 
             console.log(data);
-            // Optionally handle successful signup here
         } catch (error) {
             console.error('Error signing up:', error.message);
             // Optionally handle error here
