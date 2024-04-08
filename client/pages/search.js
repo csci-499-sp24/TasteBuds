@@ -65,6 +65,7 @@ function Search() {
       ...prevFilters, // spread operator (...) copies all key-value pairs from the previous state of the filters object.
       [filterType]: filterVal // updates the specific filter type (filterType) with the new value (filterVal).
     }));
+
   };
 
   const CheckboxDrop = ({ label, items }) => {
@@ -194,6 +195,7 @@ function Search() {
             {/* Add more filter dropdowns for other criteria*/}
           </div>
         </div>
+
         {/* Cuisine filter dropdownCheckbox */}
         <div id= "filter1" style={{ marginLeft: '20px' }}>
           <CheckboxDrop label="Cuisine" items={['Mexican', 'Italian', 'Vietnamese', 'African', 'Asian', 'American',
@@ -206,7 +208,6 @@ function Search() {
         'Ketogenic', 'Vegan', 'Paleo', 'Primal', 'Low RODMAP', 'Whole30', 'GAPs', 'Fodmap Friendly', 'Pescatarian',
         'Dairy Free', 'Lacto-Ovo Vegetarian', 'Paleolithic']} />
         </div>
-        
         {/* Display search results */}
         <div id="div-center" className="user-recipes" data-user-cards-container>
           {isLoading && <p>Loading...</p>}

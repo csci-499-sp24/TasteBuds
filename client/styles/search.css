@@ -1,132 +1,133 @@
 *{
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    text-decoration: none;
-  }
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-decoration: none;
+}
+.sidebar {
+  position: fixed;
+  width: 250px;
+  height: 100%;
+  left:-250px;
+  background: #161616;
+  transition: all .5s ease;
+}
+.sidebar header{
+  font-size: 22px;
+  text-align: center;
+  line-height: 70px;
+  color:white;
+  background: #0dbbf0;
+  user-select: none;
+}
+.sidebar ul a{
+  font-size: 20px;
+  line-height: 65px;
+  display:block;
+  height: 100%;
+  width: 100%;
+  color: white;
+  padding-left: 40px;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(255,255,255,.1);
+  border-bottom: 1px solid black;
+  transition: .4s;
+}
+ul li:hover a{
+  padding-left: 50px;
+}
+#check{
+  display: none;
+}
+label #btn,label #cancel{
+  position: absolute;
+  background: #042331;
+  border-radius: 3px;
+  cursor: pointer;
+}
+label #btn{
+  left: 40px;
+  top: 25px;
+  font-size: 35px;
+  color: white;
+  padding: 6px 12px;
+  transition: all .5s;
+}
+label #cancel{
+  z-index: 1111;
+  left: -195px;
+  top: 17px;
+  font-size: 30px;
+  color: #0a5275;
+  padding: 4px 9px;
+  transition: all .5s ease;
+}
+#check:checked ~ .sidebar{
+  left: 0;
+}
+#check:checked ~ label #btn{
+  left: 250px;
+  opacity: 0;
+  pointer-events: none;
+}
+#check:checked ~ label #cancel{
+  left: 195px;
+}
+#check:checked ~ section{
+  margin-left: 250px;
+}
+section{
+  background: url("../public/bg.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  transition: all .5s;
+}
+.sidebar ul a i{
+  margin-right: 16px;
+}
 
-  .sidebar {
-    position: fixed;
-    width: 250px;
-    height: 100%;
-    left:-250px;
-    background: #161616;
-    transition: all .5s ease;
-  }
-  .sidebar header{
-    font-size: 22px;
-    text-align: center;
-    line-height: 70px;
-    color:white;
-    background: #0dbbf0;
-    user-select: none;
-  }
-  .sidebar ul a{
-    font-size: 20px;
-    line-height: 65px;
-    display:block;
-    height: 100%;
-    width: 100%;
-    color: white;
-    padding-left: 40px;
-    box-sizing: border-box;
-    border-top: 1px solid rgba(255,255,255,.1);
-    border-bottom: 1px solid black;
-    transition: .4s;
-  }
-  ul li:hover a{
-    padding-left: 50px;
-  }
-  #check{
-    display: none;
-  }
-  label #btn,label #cancel{
-    position: absolute;
-    background: #042331;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  label #btn{
-    left: 40px;
-    top: 25px;
-    font-size: 35px;
-    color: white;
-    padding: 6px 12px;
-    transition: all .5s;
-  }
-  label #cancel{
-    z-index: 1111;
-    left: -195px;
-    top: 17px;
-    font-size: 30px;
-    color: #0a5275;
-    padding: 4px 9px;
-    transition: all .5s ease;
-  }
 
-  
-  #check:checked ~ .sidebar{
-    left: 0;
-  }
-  #check:checked ~ label #btn{
-    left: 250px;
-    opacity: 0;
-    pointer-events: none;
-  }
-  #check:checked ~ label #cancel{
-    left: 195px;
-  }
-  #check:checked ~ section{
-    margin-left: 250px;
-  }
-  section{
-    background: url("../public/bg.jpg") no-repeat;
-    background-position: center;
-    background-size: cover;
-    height: 100vh;
-    transition: all .5s;
-  }
- 
-  .sidebar ul a i{
-    margin-right: 16px;
-  }
+.search-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+}
 
-  .search-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: .25rem;
-  }
+.input {
+  font-size: 1rem;
+  width: calc(100% - 20px); /* Adjust the width to fit within the sidebar */
+  padding: 8px; /* Add padding for better visual appearance */
+  margin: 0 auto; /* Center the input horizontally */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
 
-  .input {
-    font-size: 1rem;
-  }
+.user-recipes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,
+  minmax(150px, 1fr));
+  gap: .25rem;
+  margin-top: 1rem;
+}
 
-  .user-recipes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,
-    minmax(150px, 1fr));
-    gap: .25rem;
-    margin-top: 1rem;
-  }
+.card {
+  border: 1px solid black;
+  background-color: white;
+  padding: .5rem;
+}
 
-  .card {
-    border: 1px solid black;
-    background-color: white;
-    padding: .5rem;
-  }
+.card > .header {
+  margin-bottom: .25rem;
+}
 
-  .card > .header {
-    margin-bottom: .25rem;
-  }
+.card > .body {
+  font-size: .8rem;
+  color: black;
+}
 
-  .card > .body {
-    font-size: .8rem;
-    color: black;
-  }
-
-  .hide {
-    display: none;
-  }
+.hide {
+  display: none;
+}
 
   #div-center {
     width: 665px;
@@ -185,3 +186,7 @@
   .checkbox-label {
     align-items: center;
   }
+
+
+
+

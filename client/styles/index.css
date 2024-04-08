@@ -75,3 +75,32 @@ body {
   gap: .25rem;
   color: white;
 }
+
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+}
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/your-background-image.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+
+.scrollable-content {
+  position: relative;
+  z-index: 1; /* Ensure it's above the background image */
+  overflow-y: auto;
+  height: 100vh; /* Adjust based on your layout */
+}
+
+.posts-container {
+  /* Your styles for the posts container */
+}
