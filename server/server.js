@@ -184,41 +184,44 @@ app.post('/login', async (req, res) => {
 //     }
 // })
 
-app.get('/search', async (req, res) => {
-    try {
-        const { query } = req.query; // search query is passed as a query parameter
+// app.get('/search', async (req, res) => {
+//     try {
+//         const { query } = req.query; // search query is passed as a query parameter
 
-        // Check if search query is provided and is a valid string
-        if (!query) {
-            return res.status(400).json({ error: "Invalid search query" });
-        }
+//         // Check if search query is provided and is a valid string
+//         if (!query) {
+//             return res.status(400).json({ error: "Invalid search query" });
+//         }
 
-        // Fetch recipes from the database
-        const recipes = await Recipe.findAll({
-            subQuery: false,
-            raw: true,
-        });
+//         // Fetch recipes from the database
+//         const recipes = await Recipe.findAll({
+//             subQuery: false,
+//             raw: true,
+//         });
 
-        // Filter recipes based on the search query
+//         // Filter recipes based on the search query
         
 
-        const filteredResults = recipes.filter(recipe =>
-            recipe.title.toLowerCase().includes(query.toLowerCase())
-        );
+//         const filteredResults = recipes.filter(recipe =>
+//             recipe.title.toLowerCase().includes(query.toLowerCase())
+//         );
 
-        // Send filtered results as JSON response
-        console.log("Filtered Results:", filteredResults);
-        res.json(filteredResults);
+//         // Send filtered results as JSON response
+//         console.log("Filtered Results:", filteredResults);
+//         res.json(filteredResults);
         
-    } catch (error) {
-        console.error("Error searching recipes:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
+//     } catch (error) {
+//         console.error("Error searching recipes:", error);
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// });
 
 app.get('/searchV2', async (req, res) => {
     try {
-        const { query, cuisine, diet, dishType, occasion, includeTips } = req.query;
+        const { query, cuisine, diet, dishType, occasion, includeTips, servings, smartPoints, cheap, 
+            healthy, sustainable, smartPointsMin, smartPointsMax, readyInMinutesMin, readyInMinutesMax, 
+            readyInMinutes, pricePerServingMin, pricePerServingMax, pricePerServing, minTotalPrice , 
+            maxTotalPrice, totalPrice } = req.query;
 
         // Construct base query to fetch recipes
         let baseQuery = {
@@ -304,8 +307,173 @@ app.get('/searchV2', async (req, res) => {
                 });
             }
         }
+        if (servings) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                servings: servings
+            };
+        }
+
+
+        if (cheap !== undefined) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                cheap: cheap
+            };
+        }
+
+        if (healthy !== undefined) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                very_healthy: cheap
+            };
+        }
+
+        if (sustainable !== undefined) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                sustainable: cheap
+            };
+        }
+
+        if (smartPointsMin && smartPointsMax) {
+            // Filter by a range of smart points
+            baseQuery.where = {
+                ...baseQuery.where,
+                weight_watcher_smart_points: {
+                    [Sequelize.Op.between]: [smartPointsMin, smartPointsMax]
+                }
+            };
+        } else if (smartPointsMin) {
+            // Filter by minimum smart points
+            baseQuery.where = {
+                ...baseQuery.where,
+                weight_watcher_smart_points: {
+                    [Sequelize.Op.gte]: smartPointsMin
+                }
+            };
+        } else if (smartPointsMax) {
+            // Filter by maximum smart points
+            baseQuery.where = {
+                ...baseQuery.where,
+                weight_watcher_smart_points: {
+                    [Sequelize.Op.lte]: smartPointsMax
+                }
+            };
+        } else if (smartPoints !== undefined) {
+            // Filter by exact smart points if provided
+            baseQuery.where = {
+                ...baseQuery.where,
+                weight_watcher_smart_points: smartPoints
+            };
+        }
+
+        if (readyInMinutesMin && readyInMinutesMax) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                ready_in_minutes: {
+                    [Sequelize.Op.between]: [readyInMinutesMin, readyInMinutesMax]
+                }
+            };
+        } else if (readyInMinutesMin) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                ready_in_minutes: {
+                    [Sequelize.Op.gte]: readyInMinutesMin
+                }
+            };
+        } else if (readyInMinutesMax) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                ready_in_minutes: {
+                    [Sequelize.Op.lte]: readyInMinutesMax
+                }
+            };
+        } else if (readyInMinutes !== undefined) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                ready_in_minutes: readyInMinutes
+            };
+        }
+
+        if (pricePerServingMin && pricePerServingMax) {
+            // price per serving is in pennys in the db
+            const minPricePennies = pricePerServingMin * 100;
+            const maxPricePennies = pricePerServingMax * 100;
+
+            baseQuery.where = {
+                ...baseQuery.where,
+                price_per_serving: {
+                    [Sequelize.Op.between]: [minPricePennies, maxPricePennies]
+                }
+            };
+        } else if (pricePerServingMin) {
+            const minPricePennies = pricePerServingMin * 100;
+            baseQuery.where = {
+                ...baseQuery.where,
+                price_per_serving: {
+                    [Sequelize.Op.gte]: minPricePennies
+                }
+            };
+        } else if (pricePerServingMax) {
+            const maxPricePennies = pricePerServingMax * 100;
+            baseQuery.where = {
+                ...baseQuery.where,
+                price_per_serving: {
+                    [Sequelize.Op.lte]: maxPricePennies
+                }
+            };
+        } else if (pricePerServing !== undefined) {
+            const pricePennies = pricePerServingMax * 100;
+            baseQuery.where = {
+                ...baseQuery.where,
+                price_per_serving: pricePennies
+            };
+        }
+
+        // error need resolving
+        // if (minTotalPrice || maxTotalPrice) {
+        //     baseQuery.attributes = baseQuery.attributes || []; // Initialize baseQuery.attributes as an array if it's not already
+            
+        //     baseQuery.attributes.push([
+        //         sequelize.col('price_per_serving'), // Include price_per_serving column
+        //         sequelize.col('servings'), // Include servings column
+        //         ['*', 'total_cost'] // Multiply the columns and alias the result as 'total_cost'
+        //     ]);
+            
+        //     baseQuery.having = {};
+        //     if (minTotalPrice && maxTotalPrice) {
+        //         const minTotalPricePennies = minTotalPrice * 100;
+        //         const maxTotalPricePennies = maxTotalPrice * 100;
+            
+        //         baseQuery.having.total_cost = {
+        //             [Sequelize.Op.between]: [minTotalPricePennies, maxTotalPricePennies]
+        //         };
+        //     } else if (minTotalPrice) {
+        //         const minTotalPricePennies = minTotalPrice * 100;
+        //         baseQuery.having.total_cost = {
+        //             [Sequelize.Op.gte]: minTotalPricePennies
+        //         };
+        //     } else if (maxTotalPrice) {
+        //         const maxTotalPricePennies = maxTotalPrice * 100;
+        //         baseQuery.having.total_cost = {
+        //             [Sequelize.Op.lte]: maxTotalPricePennies
+        //         };
+        //     } else if (totalPrice !== undefined) {
+        //         const totalPricePennies = totalPrice * 100;
+        //         baseQuery.having.total_cost = {
+        //             [Sequelize.Op.eq]: totalPricePennies
+        //         };
+        //     }
+        // }
         
         
+        
+        
+        
+         
+    
+  
         // console.log("Executing query:", baseQuery);
 
         // Fetch recipes from the database
