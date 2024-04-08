@@ -6,13 +6,53 @@ function Search() {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({
-    cuisine: "",
-    difficulty: "",
-    cooking_time: "",
-    diet: "",
-    price: "",
+    cuisine: [], // contain arrays for each filter category
+    difficulty: [],
+    cooking_time: [],
+    diet: [],
+    price: [],
     // more filter criterias, look into doc
   }); // filter criteria state
+
+  const CheckboxDrop = ({ label, items }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [selectedItems, setSelectedItems] = useState([]);
+
+    const toggleDropdown = () => {
+      setIsOpen(!isOpen);
+    };
+
+    const handleCheckboxChange = (item) => {
+      if (selectedItems.includes(item)) {
+        setSelectedItems(selectedItems.filter((selectedItem) => selectedItem !== item));
+      } else {
+        setSelectedItems([...selectedItems, item]);
+      }
+    };
+
+    return (
+      <div className="dropdown">
+        <button className="dropdown-toggle" onClick={toggleDropdown}>
+          {label}
+        </button>
+        {isOpen && (
+          <div className="dropdown-menu">
+            {items.map((item) => (
+              <label key={item} className="dropdown-item">
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item)}
+                  onChange={() => handleCheckboxChange(item)}
+                />
+                {item}
+              </label>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
+  
 
   const fetchRecipes = async (searchQuery, filters) => { // passes filter to fetchrecipes
     setIsLoading(true);
@@ -49,14 +89,23 @@ function Search() {
   };
 
   const handleFilterChange = (event, filterType) => { 
-    const filterVal = event.target.value; //event is triggered when dropdown param is pressed, changes type of filter
-    setFilters(prevFilters => ({ //filter state is updated, which returns a new state obj
-      ...prevFilters, // spreadOperator(...), copies prev state, updates to new filter
-      [filterType]: filterVal
+    const { value, checked } = event.target;
+    setFilters(prevFilters => ({ 
+      ...prevFilters, 
+      [filterType]: checked ? [...prevFilters[filterType], value] : prevFilters[filterType].filter(val => val !== value)
     }));
-    fetchRecipes(searchQuery, { ...filters, 
-      [filterType]: filterVal})// Call fetchRecipes with updated filter
+    fetchRecipes(searchQuery, { ...filters, [filterType]: checked ? [...filters[filterType], value] : filters[filterType].filter(val => val !== value) });
   };
+
+  //const handleFilterChange = (event, filterType) => { 
+  //  const filterVal = event.target.value; //event is triggered when dropdown param is pressed, changes type of filter
+  //  setFilters(prevFilters => ({ //filter state is updated, which returns a new state obj
+  //    ...prevFilters, // spreadOperator(...), copies prev state, updates to new filter
+  //    [filterType]: filterVal
+  //  }));
+  //  fetchRecipes(searchQuery, { ...filters, 
+  //    [filterType]: filterVal})// Call fetchRecipes with updated filter
+  //};
 
   return (
     
@@ -76,53 +125,23 @@ function Search() {
           <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
         </ul>
       </div>
-      <section>
+         
+      
+        <div id= "top-left">
+          <CheckboxDrop label="Cuisine" items={['Mexican', 'Italian', 'Vietnamese']} />  
+          <CheckboxDrop label="Cuisine" items={['Mexican', 'Italian', 'Vietnamese']} /> 
+        </div>
         <div id="div-center" className="search-wrapper">
-          <label htmlFor="search">Search Recipes</label>
-          <input
-            type="search" 
-            id="search"
-            value={searchQuery}
-            onChange={handleSearch} 
-            onKeyDown={handleEnterKeyPress} // Call handleEnterKeyPress on key down event
-            placeholder="Search recipes..."
-          />
-          <div className="filter-wrapper">
-            <select value={filters.cuisine} onChange={(e) => handleFilterChange(e, 'cuisine')}>
-              <option value="">All Cuisines</option>
-              <option value="mexican">Mexican</option>
-              <option value="italian">Italian</option>
-              <option value="vietnamese">Vietnamese</option>
-              {/* Look into more cuisine options from doc or data*/}
-            </select>
-            <select value={filters.difficulty} onChange={(e) => handleFilterChange(e, 'difficulty')}>
-              <option value="">All Difficulties</option>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
-            <select value={filters.cooking_time} onChange={(e) => handleFilterChange(e, 'cooking_time')}>
-              <option value="">Cooking Time</option>
-              <option value="short_time">Short</option>
-              <option value="average_time">Average</option>
-              <option value="long_time">Long</option>
-            </select>
-            <select value={filters.diet} onChange={(e) => handleFilterChange(e, 'diet')}>
-              <option value="">Diet Type</option>
-              <option value="low_carb">Low Carb</option>
-              <option value="keto">Keto</option>
-              <option value="fasting">Fasting</option>
-              <option value="mediterranean">Mediterranean</option>
-            </select>
-            <select value={filters.price} onChange={(e) => handleFilterChange(e, 'price')}>
-              <option value="">Price</option>
-              <option value="below_ten">Under $10</option>
-              <option value="ten_twenty">$10-$20</option>
-              <option value="20_50">$20-$50</option>
-              <option value="above_fifty">Above $50</option>
-            </select>
-            {/* Add more filter options */}
-          </div>
+        <label htmlFor="search" className="search-label">Search Recipes</label>
+        <input
+          type="search" 
+          id="search"
+          value={searchQuery}
+          onChange={handleSearch} 
+          onKeyDown={handleEnterKeyPress} // Call handleEnterKeyPress on key down event
+          placeholder="Search recipes..."
+          className="search-input" // Added class for styling
+        />
         </div>
         <div id="div-center" className="user-recipes" data-user-cards-container>
           {isLoading && <p>Loading...</p>}
@@ -136,7 +155,7 @@ function Search() {
           ))}
           {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
         </div>
-      </section>
+        
     </div>
   );
 }

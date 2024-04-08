@@ -4,6 +4,7 @@
     list-style: none;
     text-decoration: none;
   }
+
   .sidebar {
     position: fixed;
     width: 250px;
@@ -62,6 +63,8 @@
     padding: 4px 9px;
     transition: all .5s ease;
   }
+
+  
   #check:checked ~ .sidebar{
     left: 0;
   }
@@ -76,13 +79,7 @@
   #check:checked ~ section{
     margin-left: 250px;
   }
-  section{
-    background: url("../public/bg.jpg") no-repeat;
-    background-position: center;
-    background-size: cover;
-    height: 100vh;
-    transition: all .5s;
-  }
+ 
   .sidebar ul a i{
     margin-right: 16px;
   }
@@ -127,4 +124,49 @@
   #div-center {
     width: 665px;
     margin: auto;
+  }
+
+  #top-left {
+    position: fixed;
+    top: 80px;
+    left: 0;
+  }
+
+  .dropdown {
+    position: absolute;
+    top: 50px; /* Adjust this value to move the dropdown down */
+    border-radius: 4px;
+    box-shadow: 0 20px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dropdown-toggle {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .dropdown-toggle:hover {
+    background-color: #480d0d;
+  }
+  
+  .dropdown-item {
+    display: block;
+    padding: 10px;
+    cursor: pointer;
+    color: #000000; /* Darker text color */
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+  }
+  
+  .checkbox-input {
+    margin-right: 8px;
   }
