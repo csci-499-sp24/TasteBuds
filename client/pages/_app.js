@@ -5,7 +5,12 @@ import "/styles/login.css";
 
 
 import "@/styles/index.css"
+import { NextUIProvider } from "@nextui-org/react";
 
 export default function App({ Component, pageProps }) {
-  return <Component {...pageProps} />;
+  return (
+    <NextUIProvider>
+      <Component {...pageProps} />
+    </NextUIProvider>
+  );
 }

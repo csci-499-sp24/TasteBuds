@@ -8,6 +8,7 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors());
+app.use(express.json({ limit: '50mb'}));
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
@@ -417,6 +418,54 @@ app.get('/searchV2', async (req, res) => {
     } catch (error) {
         console.error("Error searching recipes:", error);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.get('/getAllIngredients', async (req, res) => {
+    try{
+        const listOfIngredients = await Ingredients.findAll();
+        res.status(200).json(listOfIngredients);
+    } catch (error){
+        console.error("Error searching recipes:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.post('/searchByIngredients', async (req, res) => {
+    try{
+        const { ingredientIds } = req.body;
+        let listOfRecipes = []; // The returned array of recipes
+        let listOfRecipeIds = []; // Array for keeping track of recipes added
+        //For each ingredient in the passed array of Ids, find all recipes
+        for(const ingredientId of ingredientIds){
+            const recipesWithIngredient = await RecipeIngredients.findAll({ 
+                where: {ingredient_id: ingredientId},
+                include: Recipe,
+                attributes: [
+                    [Sequelize.literal('ARRAY(SELECT ingredient_id FROM public.recipe_ingredient WHERE ingredient_id = ' + ingredientId + ' LIMIT 1)'), 'ingredient_ids'], 
+                    [Sequelize.literal('ARRAY(SELECT standard_name FROM public.ingredients WHERE ingredient_id = ' + ingredientId + ' LIMIT 1)'), 'ingredients'], 
+                    'recipe_id',
+                ]
+            });
+            //For each recipe which contains the ingredient, 
+            //check if a previous ingredient already added the recipe to the return array
+            for (const recipeWithIngredient of recipesWithIngredient){
+                if (!listOfRecipeIds.includes(recipeWithIngredient.recipe_id)){//If it doesnt already exist, add it to the array
+                    listOfRecipeIds.push(recipeWithIngredient.recipe_id);
+                    listOfRecipes.push(recipeWithIngredient);
+                } else { //Add current ingredient to that recipe's ingredients if true
+                    const includedRecipeIndex = listOfRecipes.findIndex(recipe => recipe.recipe_id === recipeWithIngredient.recipe_id);
+                    if (!listOfRecipes[includedRecipeIndex].dataValues.ingredients.includes(recipeWithIngredient.dataValues.ingredients[0])){
+                        listOfRecipes[includedRecipeIndex].dataValues.ingredients.push(recipeWithIngredient.dataValues.ingredients[0]);
+                        listOfRecipes[includedRecipeIndex].dataValues.ingredient_ids.push(recipeWithIngredient.dataValues.ingredient_ids[0]);
+                    }
+                }
+            }
+        }
+        res.status(200).json(listOfRecipes.flat()); //Flat because seperating by ingredient wasn't necessary.
+    } catch (error) {
+        console.error('Error fetching recipes by ingredients:', error);
+        res.status(500).json({ error: 'Error fetching recipes by ingredients' });
     }
 });
 
