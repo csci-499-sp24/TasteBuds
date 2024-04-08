@@ -95,7 +95,12 @@
 
   .input {
     font-size: 1rem;
+    width: calc(100% - 20px); /* Adjust the width to fit within the sidebar */
+    padding: 8px; /* Add padding for better visual appearance */
+    margin: 0 auto; /* Center the input horizontally */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
   }
+  
 
   .user-recipes {
     display: grid;
