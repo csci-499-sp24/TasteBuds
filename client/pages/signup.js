@@ -10,6 +10,7 @@ function Signup(){
         e.preventDefault();
         
         try {
+            //send username and password to database
             const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/signup', {
                 method: 'POST',
                 headers: {
@@ -27,7 +28,6 @@ function Signup(){
             console.log(data);
         } catch (error) {
             console.error('Error signing up:', error.message);
-            // Optionally handle error here
         }
     }
 

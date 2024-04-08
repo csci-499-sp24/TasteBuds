@@ -10,6 +10,7 @@ function Login(){
         e.preventDefault();
         
         try {
+            //send username and password to database
             const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/login', {
                 method: 'POST',
                 headers: {
