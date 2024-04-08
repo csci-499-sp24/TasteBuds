@@ -1,0 +1,29 @@
+.grid-container {
+    position:relative;
+    top:25%;
+    left: 25%;
+    display: grid;
+    grid-template-columns:250px 250px 250px 250px;
+    gap: 100px;
+    background-color: rgb(29, 27, 27,0);
+    padding: 10px;
+  }
+  
+  .grid-container > div {
+    background-color: rgb(0, 0, 0,0);
+    padding: 20px 0;
+  }
+  .grid-container > div a{
+    margin-right: 0px;
+  }
+
+  .searchbar input[type=text]{
+    position:absolute;
+    display: inline-block;
+    top:30px;
+    right:100px;
+    left:50px;
+    margin-right: auto;
+    margin-left: auto;
+    width:700px;
+  }

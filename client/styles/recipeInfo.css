@@ -1,0 +1,78 @@
+.favorite-button > button i{
+    position: absolute;
+    display:inline-block;
+    align-items: center;
+    justify-content: center;
+    left:47%;
+    background-color: rgb(74, 233, 25);
+    border-radius: 15px;
+    padding:5px;
+}
+.image-container {
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    right:35%;
+    top:10%;
+}
+.stats{
+    position:absolute;
+    display: grid;
+    grid-template-columns:250px 250px 250px 250px;
+    gap: 10px;
+    left:25%;
+    top:52%;
+    background-color: white;
+    border-radius: 25px;
+    padding:10px;
+}
+.description{
+    position:absolute;
+    left:15%;
+    top:62%;
+    background-color: rgb(155, 152, 152);
+    border-radius: 25px;
+    padding:10px;
+
+}
+.description p{
+    background-color: rgb(155, 152, 152);
+    border-radius: 25px;
+    padding:10px;
+}
+.review{
+    position:absolute;
+    left:15%;
+    top:79%;
+    background-color: rgb(182, 73, 73);
+    border-radius: 25px;
+    padding:10px;
+}
+.review p{
+    background-color: rgb(182, 73, 73);
+    border-radius: 25px;
+    padding:10px;
+}
+.ingredients{
+    position:absolute;
+    left:15%;
+    top:94%;
+    background-color: orange;
+    border-radius: 25px;
+    padding:10px;
+}
+.equipment{
+    position:absolute;
+    left:35%;
+    top:94%;
+    background-color: orange;
+    border-radius: 25px;
+    padding:10px;
+}
+.next-page{
+    position:absolute;
+    right:10%;
+    background-color: coral;
+    border-radius: 25px;
+    padding:10px;
+}

@@ -13,7 +13,7 @@ function Signup(){
         <ul>
             <li><Link href="/"><i class="fas fa-home"></i>Home</Link></li> 
             <li><Link href="/search"><i className="fas fa-search"></i>Search</Link></li>
-            <li><Link href="/recipeprofile"><i class="fal fa-apple-alt"></i>Recipe Profiles(Temp)</Link></li>  
+            <li><Link href="/recipeprofile"><i class="fal fa-apple-alt"></i>Recipe Profiles</Link></li>  
             <li><a href="#"><i class="fas fa-star"></i>Saved Recipes</a></li>
             <li><a href="#"><i class="fas fa-cog"></i>User Settings</a></li>
             <li><Link href="/login"><i class="fas fa-sign-in-alt"></i>Login</Link></li>

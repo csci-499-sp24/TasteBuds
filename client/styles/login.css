@@ -126,7 +126,7 @@ input {
     border-radius: 5px;
 }
 
-button {
+.wrap > button {
     padding: 15px;
     border-radius: 10px;
     margin-top: 15px;

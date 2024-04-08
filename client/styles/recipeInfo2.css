@@ -1,0 +1,32 @@
+.favorite-button > button i{
+    position: absolute;
+    display:inline-block;
+    align-items: center;
+    justify-content: center;
+    left:47%;
+    background-color: rgb(74, 233, 25);
+    border-radius: 15px;
+    padding:5px;
+}
+.image-container {
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    right:35%;
+    top:10%;
+}
+.instructions{
+    position:absolute;
+    left:10%;
+    top:55%;
+    background-color: rgb(42, 168, 151);
+    border-radius: 25px;
+    padding:10px;
+}
+.previous-page{
+    position:absolute;
+    right:10%;
+    background-color: coral;
+    border-radius: 25px;
+    padding:10px;
+}
