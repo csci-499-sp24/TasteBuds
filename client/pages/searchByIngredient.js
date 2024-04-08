@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
-import { Autocomplete, AutocompleteItem, Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider } from "@nextui-org/react";
+import { Autocomplete, AutocompleteItem, Chip, Divider } from "@nextui-org/react";
 
 function SearchByIngredient() {
-  const [searchQuery, setSearchQuery] = useState(""); 
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [ingredientList, setIngredientList] = useState([]);
@@ -20,12 +19,13 @@ function SearchByIngredient() {
   const fetchRecipes = async () => { // passes filter to fetchrecipes
     setIsLoading(true);
     try {
+      const ingredientIds = ingredientList.map(ingredient => ingredient.ingredient_id);
       const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/searchByIngredients`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ingredientList})
+        body: JSON.stringify({ingredientIds})
         });
 
       if (!response.ok) {
@@ -34,13 +34,13 @@ function SearchByIngredient() {
       const data = await response.json();
       setSearchResults(data);
     } catch (error) {
-      console.error("Error fetching ingredients:", error);
+      console.error("Error fetching recipes:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const fetchIngredients = async () => { // passes filter to fetchrecipes
+  const fetchIngredients = async () => {
     setIsLoading(true);
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/getAllIngredients`, {
@@ -56,17 +56,10 @@ function SearchByIngredient() {
       console.log(data);
       setFetchedIngredients(data);
     } catch (error) {
-      console.error("Error fetching recipes:", error);
+      console.error("Error fetching ingredients:", error);
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleSearch = (event) => {
-    const query = event.target.value.toLowerCase();
-
-    setSearchQuery(query);
-    //fetchRecipes(query); // Call fetchRecipes with updated searchQuery and filter
   };
 
   const handleRemoveIngredient = (index) => {
@@ -84,14 +77,13 @@ function SearchByIngredient() {
   const handleIngredientSelect = async (ingredientId) => {
     const ingredient = fetchedIngredients.find(ingredient => ingredient.ingredient_id === parseInt(ingredientId));
     if (ingredient){
-      const ingredientName = ingredient.standard_name;
-      setIngredientList([...ingredientList, ingredientName]);
+      setIngredientList([...ingredientList, ingredient]);
     } else {
       return;
     }
   };
 
-  //This is meant to be a temporary card component
+  //temporary card component
   const recipeCard = (recipe) => {
     return (
     <div key={recipe.Recipe.recipe_id} className="card flex-none w-[200px] h-[200px] justify-center items-center rounded">
@@ -104,9 +96,7 @@ function SearchByIngredient() {
   }
 
   return (
-    
     <div>
-      
       <input type="checkbox" id="check" />
       <label htmlFor="check">
         <i className="fas fa-bars" id="btn"></i>
@@ -123,10 +113,8 @@ function SearchByIngredient() {
           <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
         </ul>
       </div>
-
       <section>
           <div id="div-center" className="">
-
             <label htmlFor="search">Search Recipes</label>
             <Autocomplete
               label="Select an Ingredient"
@@ -135,11 +123,10 @@ function SearchByIngredient() {
               {fetchedIngredients.map((ingredient) => (<AutocompleteItem key={ingredient.ingredient_id}>{ingredient.standard_name}</AutocompleteItem>))}
             </Autocomplete>
             <div className="flex gap-4 h-[20px]">
-            {ingredientList &&
+              {ingredientList &&
                 ingredientList.map((ingredient, index) => (
-                  <Chip key={index} onClose={() => handleRemoveIngredient(index)}>{ingredient}</Chip>
-                ))}
-              
+                  <Chip key={index} onClose={() => handleRemoveIngredient(index)}>{ingredient.standard_name}</Chip>
+              ))}
             </div>
             <Divider className="my-4"/>
             <div>
