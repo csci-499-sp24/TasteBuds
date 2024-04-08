@@ -127,8 +127,16 @@ function Search() {
       </div>
          
       <section>
-        <div id= "top-left" style={{ marginLeft: '20px' }}>
-          <CheckboxDrop label="Cuisine" items={['Mexican', 'Italian', 'Vietnamese']} />  
+        <div id= "filter1" style={{ marginLeft: '20px' }}>
+          <CheckboxDrop label="Cuisine" items={['Mexican', 'Italian', 'Vietnamese', 'African', 'Asian', 'American',
+        'British', 'Cajun', 'Carribean', 'Chinese', 'European', 'Eaastern European', 'French'
+        , 'German', 'Greek', 'Indian', 'Irish', 'Japanese', 'Jewish', 'Korean', 'Latin American',
+        'Mediterreanean', 'Middle Eastern', 'Nordic', 'Thai' ,'Spanish']} />  
+        </div>
+        <div id= "filter2" style={{ marginLeft: '20px' }}>
+          <CheckboxDrop label="Diet" items={['Gluten Free', 'Vegetarian', 'Lacto-Vegetarian', 'Ovo-Vegetarian',
+        'Ketogenic', 'Vegan', 'Paleo', 'Primal', 'Low RODMAP', 'Whole30', 'GAPs', 'Fodmap Friendly', 'Pescatarian',
+        'Dairy Free', 'Lacto-Ovo Vegetarian', 'Paleolithic']} />  
         </div>
         <div id="div-center" className="search-wrapper">
         <label htmlFor="search" className="search-label">Search Recipes</label>
