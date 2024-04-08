@@ -2,6 +2,8 @@
 
 const express = require("express");
 const cors = require('cors');
+const bodyParser = require("body-parser");
+const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 const { Sequelize, DataTypes } = require('sequelize');
 require('dotenv').config();
@@ -9,6 +11,8 @@ require('dotenv').config();
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '50mb'}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
@@ -86,6 +90,68 @@ const {
     WeightPerServing,
     CaloricBreakdown, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
+
+//create user model
+const User = sequelize.define('User', {
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
+
+//create user in database (sign up)
+app.post('/signup', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        //check for existing user
+        const existingUser = await User.findOne({ where: { username } });
+        if (existingUser) {
+            return res.status(400).json({ error: "Username already exists" });
+        }
+
+        //hash password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        //create new user
+        const newUser = await User.create({ username, password: hashedPassword });
+        res.status(201).json({ message: "User signed up successfully", user: newUser });
+    } catch (error) {
+        console.error("Error signing up user:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+//log in existing user
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        //check for existing user
+        const existingUser = await User.findOne({ where: { username } });
+        if (!existingUser) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        //check if password input matches the existing password in the database
+        const passwordMatch = await bcrypt.compare(password, existingUser.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ error: "Incorrect password" });
+        }
+
+        //successful login
+        res.status(200).json({ message: "Login successful", user: existingUser });
+
+    } catch (error) {
+        console.error("Error logging in user:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
 
 
 // app.get("/", async (req,res)=>{
