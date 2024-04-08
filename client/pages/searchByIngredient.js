@@ -1,25 +1,25 @@
 import { useEffect, useState } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
+import { Autocomplete, AutocompleteItem, Button, Card, CardBody, CardFooter, CardHeader, Chip, Divider } from "@nextui-org/react";
 
 function SearchByIngredient() {
   const [searchQuery, setSearchQuery] = useState(""); 
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [ingredientList, setIngredientList] = useState([]);
+  const [fetchedIngredients, setFetchedIngredients ] = useState([]);
+
+  useEffect(() => {
+    fetchIngredients();
+  },[]);
 
   useEffect(() => {
     fetchRecipes();
-  }, [ingredientList])
+  }, [ingredientList]);
 
   const fetchRecipes = async () => { // passes filter to fetchrecipes
     setIsLoading(true);
     try {
-      // Construct query parameters from filters object, right now does not fetch filter data
-      //const queryParams = Object.entries(filters) //would use queryParams instead of filters at endpoint for const response
-      //  .filter(([key, value]) => value !== "") // Exclude empty filters
-      //  .map(([key, value]) => `${key}=${value}`)
-      //  .join("&");
-
       const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/searchByIngredients`, {
         method: 'POST',
         headers: {
@@ -32,10 +32,9 @@ function SearchByIngredient() {
         throw new Error('Failed to fetch data');
       }
       const data = await response.json();
-      console.log(data);
       setSearchResults(data);
     } catch (error) {
-      console.error("Error fetching recipes:", error);
+      console.error("Error fetching ingredients:", error);
     } finally {
       setIsLoading(false);
     }
@@ -44,26 +43,18 @@ function SearchByIngredient() {
   const fetchIngredients = async () => { // passes filter to fetchrecipes
     setIsLoading(true);
     try {
-      // Construct query parameters from filters object, right now does not fetch filter data
-      //const queryParams = Object.entries(filters) //would use queryParams instead of filters at endpoint for const response
-      //  .filter(([key, value]) => value !== "") // Exclude empty filters
-      //  .map(([key, value]) => `${key}=${value}`)
-      //  .join("&");
-
-      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/searchByIngredients`, {
-        method: 'POST',
+      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/getAllIngredients`, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ingredientList})
+        }
         });
-
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
       const data = await response.json();
       console.log(data);
-      setSearchResults(data);
+      setFetchedIngredients(data);
     } catch (error) {
       console.error("Error fetching recipes:", error);
     } finally {
@@ -79,19 +70,24 @@ function SearchByIngredient() {
   };
 
   const handleRemoveIngredient = (index) => {
+    console.log("REMOVE");
     if(ingredientList.length === 1){
       setIngredientList([]);
       return;
     }
-    const newList = ingredientList.splice(index, 1);
-    setIngredientList([...newList]);
+    console.log(ingredientList[index]);
+    const newList = [...ingredientList.slice(0, index), ...ingredientList.slice(index + 1)];
+    setIngredientList(newList);
     return;
   }
 
-  const handleEnterKeyPress = (event) => {
-    //Check if ingredient exist in database, if not, inform the user
-    if (event.key === "Enter") {
-      setIngredientList([...ingredientList, searchQuery]);
+  const handleIngredientSelect = async (ingredientId) => {
+    const ingredient = fetchedIngredients.find(ingredient => ingredient.ingredient_id === parseInt(ingredientId));
+    if (ingredient){
+      const ingredientName = ingredient.standard_name;
+      setIngredientList([...ingredientList, ingredientName]);
+    } else {
+      return;
     }
   };
 
@@ -107,18 +103,10 @@ function SearchByIngredient() {
   );
   }
 
-  const ingredientTag = (ingredient, index) => {
-    return (
-      <div className="max-w-xs mx-auto bg-white shadow-md rounded min-w-32 my-4 flex justify-between items-center">
-        <div className="text-lg font-semibold flex-grow text-center">{ingredient}</div>
-        <button className="flex items-center justify-center hover:bg-red-700 h-6 w-6" onClick={() => handleRemoveIngredient(index)}>X</button>
-      </div>
-    );
-  }
-
   return (
     
     <div>
+      
       <input type="checkbox" id="check" />
       <label htmlFor="check">
         <i className="fas fa-bars" id="btn"></i>
@@ -137,46 +125,42 @@ function SearchByIngredient() {
       </div>
 
       <section>
-      <div className="w-1/3 relative">
-          <div className="absolute top-28 right-16">
-            <div className="center">
-              {ingredientList &&
-                ingredientList.map((ingredient, index) => (
-                  ingredientTag(ingredient, index-1)
-                ))}
-            </div>
-          </div>
-        </div>
-          <div id="div-center" className="center search-wrapper">
+          <div id="div-center" className="">
+
             <label htmlFor="search">Search Recipes</label>
-            <input
-              type="search" 
-              id="search"
-              value={searchQuery}
-              onChange={(e) => handleSearch(e)} 
-              onKeyDown={handleEnterKeyPress} // Call handleEnterKeyPress on key down event
-              placeholder="Add Ingredients"
-            />
-          
+            <Autocomplete
+              label="Select an Ingredient"
+              onSelectionChange={handleIngredientSelect}
+            >
+              {fetchedIngredients.map((ingredient) => (<AutocompleteItem key={ingredient.ingredient_id}>{ingredient.standard_name}</AutocompleteItem>))}
+            </Autocomplete>
+            <div className="flex gap-4 h-[20px]">
+            {ingredientList &&
+                ingredientList.map((ingredient, index) => (
+                  <Chip key={index} onClose={() => handleRemoveIngredient(index)}>{ingredient}</Chip>
+                ))}
+              
+            </div>
+            <Divider className="my-4"/>
             <div>
-              <div id="div-center" className="bg-white rounded p-2">Recipes that include all ingredients</div>
-              <div className="flex flex-nowrap overflow-x-auto gap-5">
+              <div id="div-center" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include all ingredients</div>
+              <div className="flex flex-nowrap overflow-x-auto gap-5 h-[220px]">
                 {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                   recipe.ingredients.length === ingredientList.length && (
                     recipeCard(recipe)
                   )
                 ))}
               </div>
-              <div id="div-center" className="bg-white rounded p-2">Recipes that include most ingredients</div>
-              <div className="flex flex-nowrap overflow-x-auto gap-5">
+              <div id="div-center" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include most ingredients</div>
+              <div className="flex flex-nowrap overflow-x-auto gap-5 h-[220px]">
                 {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                   (recipe.ingredients.length < ingredientList.length && recipe.ingredients.length >= ingredientList.length/2) && (
                     recipeCard(recipe)
                   )
                 ))}
               </div>
-              <div id="div-center" className="bg-white rounded p-2">Recipes that include some ingredients</div>
-              <div className="flex flex-nowrap overflow-x-auto gap-5">
+              <div id="div-center" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include some ingredients</div>
+              <div className="flex flex-nowrap overflow-x-auto gap-5 h-[220px]">
                 {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                   (recipe.ingredients.length < ingredientList.length/2) && (
                       recipeCard(recipe)
