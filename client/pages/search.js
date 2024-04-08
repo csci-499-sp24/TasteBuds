@@ -1,4 +1,4 @@
-import { useState } from "react"; // React Hooks - for managing states of components
+import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 
 function Search() {
@@ -7,23 +7,35 @@ function Search() {
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({
     cuisine: "",
-    difficulty: "",
-    cooking_time: "",
     diet: "",
+    cooking_time: "",
     price: "",
     // more filter criterias, look into doc
   }); // filter criteria state
 
+  useEffect(() => {
+    const handleEnterKeyPress = (event) => {
+      if (event.key === "Enter") {
+        fetchRecipes(searchQuery, filters); // Call fetchRecipes when Enter key is pressed
+      }
+    };
+
+    document.addEventListener("keydown", handleEnterKeyPress);
+
+    return () => {
+      document.removeEventListener("keydown", handleEnterKeyPress);
+    };
+  }, [searchQuery, filters]);
+
   const fetchRecipes = async (searchQuery, filters) => { // passes filter to fetchrecipes
     setIsLoading(true);
     try {
-      // Construct query parameters from filters object, right now does not fetch filter data
-      //const queryParams = Object.entries(filters) //would use queryParams instead of filters at endpoint for const response
-      //  .filter(([key, value]) => value !== "") // Exclude empty filters
-      //  .map(([key, value]) => `${key}=${value}`)
-      //  .join("&");
+      const queryParams = Object.entries(filters)
+        .filter(([key, value]) => value !== "") // Exclude empty filters
+        .map(([key, value]) => `${key}=${value}`)
+        .join("&");
 
-      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/searchV2?query=${searchQuery}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/searchV2?query=${searchQuery}&${queryParams}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -39,13 +51,6 @@ function Search() {
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
-    fetchRecipes(query, filters); // Call fetchRecipes with updated searchQuery and filter
-  };
-
-  const handleEnterKeyPress = (event) => {
-    if (event.key === "Enter") {
-      fetchRecipes(searchQuery,filters); // Call fetchRecipes when Enter key is pressed
-    }
   };
 
   const handleFilterChange = (event, filterType) => { 
@@ -54,8 +59,6 @@ function Search() {
       ...prevFilters, // spreadOperator(...), copies prev state, updates to new filter
       [filterType]: filterVal
     }));
-    fetchRecipes(searchQuery, { ...filters, 
-      [filterType]: filterVal})// Call fetchRecipes with updated filter
   };
 
   return (
@@ -84,7 +87,6 @@ function Search() {
             id="search"
             value={searchQuery}
             onChange={handleSearch} 
-            onKeyDown={handleEnterKeyPress} // Call handleEnterKeyPress on key down event
             placeholder="Search recipes..."
           />
           <div className="filter-wrapper">
@@ -93,33 +95,29 @@ function Search() {
               <option value="mexican">Mexican</option>
               <option value="italian">Italian</option>
               <option value="vietnamese">Vietnamese</option>
-              {/* Look into more cuisine options from doc or data*/}
-            </select>
-            <select value={filters.difficulty} onChange={(e) => handleFilterChange(e, 'difficulty')}>
-              <option value="">All Difficulties</option>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
-            <select value={filters.cooking_time} onChange={(e) => handleFilterChange(e, 'cooking_time')}>
-              <option value="">Cooking Time</option>
-              <option value="short_time">Short</option>
-              <option value="average_time">Average</option>
-              <option value="long_time">Long</option>
-            </select>
-            <select value={filters.diet} onChange={(e) => handleFilterChange(e, 'diet')}>
-              <option value="">Diet Type</option>
-              <option value="low_carb">Low Carb</option>
-              <option value="keto">Keto</option>
-              <option value="fasting">Fasting</option>
+              <option value="african">African</option>
+              <option value="asian">Asian</option>
+              <option value="american">American</option>
+              <option value="british">British</option>
+              <option value="cajun">Cajun</option>
+              <option value="caribbean">Caribbean</option>
+              <option value="chinese">Chinese</option>
+              <option value="european">European</option>
+              <option value="eastern European">Eastern European</option>
+              <option value="french">French</option>
+              <option value="german">German</option>
+              <option value="greek">Greek</option>
+              <option value="indian">Indian</option>
+              <option value="irish">Irish</option>
+              <option value="japanese">Japanese</option>
+              <option value="jewish">Jewish</option>
+              <option value="korean">Korean</option>
+              <option value="latin american">Latin American</option>
               <option value="mediterranean">Mediterranean</option>
-            </select>
-            <select value={filters.price} onChange={(e) => handleFilterChange(e, 'price')}>
-              <option value="">Price</option>
-              <option value="below_ten">Under $10</option>
-              <option value="ten_twenty">$10-$20</option>
-              <option value="20_50">$20-$50</option>
-              <option value="above_fifty">Above $50</option>
+              <option value="middle eastern">Middle Eastern</option>
+              <option value="nordic">Nordic</option>
+              <option value="spanish">Spanish</option>
+              <option value="thai">Thai</option>
             </select>
             {/* Add more filter options */}
           </div>
@@ -142,3 +140,6 @@ function Search() {
 }
 
 export default Search;
+
+
+
