@@ -79,6 +79,13 @@
   #check:checked ~ section{
     margin-left: 250px;
   }
+  section{
+    background: url("../public/bg.jpg") no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    transition: all .5s;
+  }
  
   .sidebar ul a i{
     margin-right: 16px;
@@ -134,39 +141,37 @@
 
   .dropdown {
     position: absolute;
+    min-width: 200px; /* Adjust the width as needed */
     top: 50px; /* Adjust this value to move the dropdown down */
     border-radius: 4px;
-    box-shadow: 0 20px 15px rgba(0, 0, 0, 0.1);
+    display: inline-block;
   }
-  
+
   .dropdown-toggle {
-    background-color: #f0f0f0;
+    background-color: #FF9600;
     border: none;
     padding: 10px 15px;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 24px;
   }
-  
+
   .dropdown-toggle:hover {
-    background-color: #480d0d;
+    background-color: #F57C00;
   }
   
   .dropdown-item {
-    display: block;
+    display: flex;
     padding: 10px;
     cursor: pointer;
+    align-items: center; /* Center vertically */
+    justify-content: center;
     color: #000000; /* Darker text color */
-  }
-  
-  .dropdown-item:hover {
-    background-color: #f0f0f0;
+    background-color: #FFFFFF;
+    font-size: 16px;
   }
   
   .checkbox-label {
     display: flex;
     align-items: center;
-  }
-  
-  .checkbox-input {
-    margin-right: 8px;
   }

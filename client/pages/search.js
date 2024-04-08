@@ -126,10 +126,9 @@ function Search() {
         </ul>
       </div>
          
-      
-        <div id= "top-left">
+      <section>
+        <div id= "top-left" style={{ marginLeft: '20px' }}>
           <CheckboxDrop label="Cuisine" items={['Mexican', 'Italian', 'Vietnamese']} />  
-          <CheckboxDrop label="Cuisine" items={['Mexican', 'Italian', 'Vietnamese']} /> 
         </div>
         <div id="div-center" className="search-wrapper">
         <label htmlFor="search" className="search-label">Search Recipes</label>
@@ -155,7 +154,7 @@ function Search() {
           ))}
           {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
         </div>
-        
+      </section>
     </div>
   );
 }
