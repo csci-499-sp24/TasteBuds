@@ -171,7 +171,7 @@
   }
   
   .dropdown-item {
-    display: absolute;
+    display: block; /* Changed from 'absolute' to 'block' */
     padding: 10px;
     cursor: pointer;
     align-items: center; /* Center vertically */
@@ -179,6 +179,7 @@
     color: #000000; /* Darker text color */
     background-color: #FFFFFF;
     font-size: 16px;
+    border: 1px solid #000000; /* Border color */
   }
   
   .checkbox-label {
