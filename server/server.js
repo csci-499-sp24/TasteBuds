@@ -253,6 +253,16 @@ app.get('/searchV2', async (req, res) => {
     }
 });
 
+app.get('/getAllIngredients', async (req, res) => {
+    try{
+        const listOfIngredients = await Ingredients.findAll();
+        res.status(200).json(listOfIngredients);
+    } catch (error){
+        console.error("Error searching recipes:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 app.post('/searchByIngredients', async (req, res) => {
     try{
         const { ingredientList } = req.body;
