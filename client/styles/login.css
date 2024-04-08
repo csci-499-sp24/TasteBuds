@@ -84,6 +84,7 @@ section{
   height: 100vh;
   transition: all .5s;
 }
+
 .sidebar ul a i{
   margin-right: 16px;
 }
@@ -115,8 +116,7 @@ label {
     color: #555;
 }
 
-
-input {
+.user_credential_field {
     display: block;
     width: 100%;
     margin-bottom: 15px;
@@ -126,7 +126,7 @@ input {
     border-radius: 5px;
 }
 
-button {
+.login_button {
     padding: 15px;
     border-radius: 10px;
     margin-top: 15px;

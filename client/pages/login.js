@@ -26,15 +26,17 @@ function Login(){
           <label for="user"><b>Username: </b></label>
           <input type="text"
               id="user"
+              className="user_credential_field"
               name="user"
               placeholder="Enter your Username" required />
           <label for="password"><b>Password: </b></label>
           <input type="password"
               id="password"
+              className="user_credential_field"
               name="password"
               placeholder="Enter your Password" required />
           <div className="wrap">
-              <button className="submit" type="submit"onclick="solve()">Submit</button>
+              <button className="submit login_button" type="submit"onclick="solve()">Submit</button>
             </div>
         </form>
         <p>Not registered? Create an account <Link href="/signup" className="sign-up">here</Link></p>
