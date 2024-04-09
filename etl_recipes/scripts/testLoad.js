@@ -5,7 +5,12 @@ const { loadRecipesIntoDatabase } = require('./load');
 const { fetchRecipesFromSource } = require('./extract');
 
 async function main() {
-    const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=African,Asian,American,British,Cajun,Caribbean,Chinese,,Eastern European,European,French,German,Greek,Indian,Irish,Italian,Japanese,Jewish,Korean,Latin American,Mediterranean,Mexican,Middle Eastern,Nordic,Souther,Spanish,Thai,Vietnamese&number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+     const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+    // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=African,Asian,American,British,Cajun,Caribbean,Chinese,Eastern European,European,French,German,Greek,Indian,Irish,Italian,Japanese,Jewish,Korean,Latin American,Mediterranean,Mexican,Middle Eastern,Nordic,Souther,Spanish,Thai,Vietnamese&number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+    // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=Asian, Chinese, Indian, Japanese,Korean,Thai, Vietnamese&number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
 
     try {
         let listResponse = await axios.get(listApiUrl);
