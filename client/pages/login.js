@@ -10,7 +10,8 @@ function Login(){
         e.preventDefault();
         
         try {
-            const response = await fetch('/login', {
+            //send username and password to database
+            const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,10 +26,8 @@ function Login(){
             }
 
             console.log(data);
-            // Optionally handle successful signup here
         } catch (error) {
             console.error('Error signing up:', error.message);
-            // Optionally handle error here
         }
     }
 

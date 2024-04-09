@@ -47,12 +47,25 @@ async function syncDB() {
 };
 syncDB();
 
+//create user model
+const User = sequelize.define('User', {
+    username: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
 
 const database = require("./tables/recipes.js")(sequelize, DataTypes);
 
 async function sync_table() {
     try {
         await database.sync();
+        await User.sync();
         console.log("The table for the db has been (re)created.");
     }
     catch (error) {
@@ -90,19 +103,6 @@ const {
     WeightPerServing,
     CaloricBreakdown, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
-
-//create user model
-const User = sequelize.define('User', {
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-});
 
 //create user in database (sign up)
 app.post('/signup', async (req, res) => {
