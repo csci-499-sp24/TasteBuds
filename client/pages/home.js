@@ -1,6 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 
+import Sidebar from "./sidebar";
+
+
 function Homepage() {
   return (
     <div>
@@ -9,6 +12,10 @@ function Homepage() {
         <i className="fas fa-bars" id="btn"></i>
         <i className="fas fa-times" id="cancel"></i>
       </label>
+
+      {/* Sidebar component */}
+      <Sidebar />
+
       <div className="sidebar">
         <header>TasteBuds</header>
         <ul>
@@ -31,5 +38,3 @@ function Homepage() {
 }
 
 export default Homepage;
-
-

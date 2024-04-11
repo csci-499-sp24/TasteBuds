@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
+// import { Grid, Select, Spacer } from "@nextui-org/react";
 import Link from "next/link";
+import Sidebar from "./sidebar";
+
+// Import NextUI theme CSS
+// import "@nextui-org/theme/dist/nextui.css";
+// import 'next/dist/next.css';
+
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
@@ -76,18 +83,9 @@ function Search() {
         <i className="fas fa-bars" id="btn"></i>
         <i className="fas fa-times" id="cancel"></i>
       </label>
-      <div className="sidebar">
-        <header>TasteBuds</header>
-        <ul>
-          <li><Link href="/"><i className="fas fa-home"></i>Home</Link></li>  
-          <li><Link href="/search"><i className="fas fa-search"></i>Search</Link></li> 
-          <li><Link href="/discover"><i className="fas fa-search"></i>Discover</Link></li> 
-          <li><Link href="/searchByIngredient"><i className="fas fa-search"></i>Ingredient Search</Link></li> 
-          <li><a href="#"><i className="fas fa-star"></i>Saved Recipes</a></li>
-          <li><a href="#"><i className="fas fa-cog"></i>User Settings</a></li>
-          <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
-        </ul>
-      </div>
+
+      {/* Sidebar component */}
+      <Sidebar />
 
       {/* Main content section */}
       <section>
@@ -105,7 +103,7 @@ function Search() {
           <div className="filter-wrapper">
             <select value={filters.cuisine} onChange={(e) => handleFilterChange(e, 'cuisine')}>
               <option value="">Cuisines</option>
-              <option value="mexican">Mexican</option>
+              <option value="Mexican">Mexican</option>
               <option value="italian">Italian</option>
               <option value="vietnamese">Vietnamese</option>
               <option value="african">African</option>
@@ -143,14 +141,14 @@ function Search() {
               <option value="vegan">Vegan</option>
               <option value="paleo">Paleo</option>
               <option value="primal">Primal</option>
-              <option value="Low Fodmap">Low FODMAP</option>
+              <option value="Low Fodmap">LOW FODMAP</option>
               <option value="whole 30">Whole30</option>
-              <option value="GAPS_FULL">GAPs</option>
+              <option value="GAPS_FULL">GAP FULL</option>
               <option value="fodmap friendly">Fodmap Friendly</option>
-              <option value="pescatarian">pescatarian</option>
-              <option value="dairy free">dairy free</option>
+              <option value="pescatarian">Pescatarian</option>
+              <option value="dairy free">Dairy free</option>
               <option value="lacto ovo vegetarian">Lacto-Ovo Vegetarian</option>
-              <option value="paleolithic">paleolithic</option>
+              <option value="paleolithic">Paleolithic</option>
             </select>
             {/* Add more filter dropdowns for other criteria*/}
           </div>
@@ -168,6 +166,23 @@ function Search() {
           {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
         </div>
       </section>
+      {/* <section>
+      <Grid.Container gap={2}>
+        <Grid xs={12} sm={6}>
+          <Select
+            label="Cuisine"
+            placeholder="Select cuisine"
+          />
+        </Grid>
+      <Spacer x={2} />
+      <Grid xs={12} sm={6}>
+        <Select
+          label="Diet"
+          placeholder="Select diet"
+        />
+      </Grid>
+    </Grid.Container>
+      </section> */}
     </div>
   );
 }

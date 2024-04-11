@@ -153,69 +153,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-// app.get("/", async (req,res)=>{
-//     try {
-//         const first_ten = await database.findAll({
-//             subQuery: false,
-//             limit: 10,
-//             raw: true,
-//         });
-//         res.status(200).json({recipeData: first_ten});
-//         console.log("app.get / call successful");
-//     }
-//     catch(error){
-//         console.log("encountered error: ", error)
-//     }
-// })
-
-// app.get("/mytest", async (req,res)=>{
-//     try {
-//         const first_ten = await Recipe.findAll({
-//             subQuery: false,
-//             limit: 10,
-//             raw: true,
-//         });
-//         res.status(200).json({recipeData: first_ten});
-//         console.log("app.get / call successful");
-//     }
-//     catch(error){
-//         console.log("encountered error: ", error)
-//     }
-// })
-
-// app.get('/search', async (req, res) => {
-//     try {
-//         const { query } = req.query; // search query is passed as a query parameter
-
-//         // Check if search query is provided and is a valid string
-//         if (!query) {
-//             return res.status(400).json({ error: "Invalid search query" });
-//         }
-
-//         // Fetch recipes from the database
-//         const recipes = await Recipe.findAll({
-//             subQuery: false,
-//             raw: true,
-//         });
-
-//         // Filter recipes based on the search query
-        
-
-//         const filteredResults = recipes.filter(recipe =>
-//             recipe.title.toLowerCase().includes(query.toLowerCase())
-//         );
-
-//         // Send filtered results as JSON response
-//         console.log("Filtered Results:", filteredResults);
-//         res.json(filteredResults);
-        
-//     } catch (error) {
-//         console.error("Error searching recipes:", error);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-// });
-
+// search + filter 
 app.get('/searchV2', async (req, res) => {
     try {
         const { query, cuisine, diet, dishType, occasion, includeTips, servings, smartPoints, cheap, 
@@ -236,33 +174,37 @@ app.get('/searchV2', async (req, res) => {
         }
 
         if (cuisine) {
+            const cuisinesArray = cuisine.split(',').map(c => c.trim()); // Split the cuisines string by comma and trim whitespace
             // Add join with cuisines table only if cuisine parameter is provided
-            baseQuery.include.unshift({
+            baseQuery.include.push({
                 model: Cuisines,
                 through: {
                     model: RecipeCuisines,
                     attributes: [] // To exclude join table attributes
                 },
                 where: {
-                    cuisine_name: { [Sequelize.Op.iLike]: `%${cuisine}%` }
+                    cuisine_name: { [Sequelize.Op.in]: cuisinesArray } // Use Sequelize.Op.in to match multiple cuisines, i.e, OR
                 }
             });
         }
 
         if (diet) {
+            const dietArray = diet.split(',').map(c => c.trim()); 
             baseQuery.include.push({
                 model: Diet,
                 through: {
                     model: RecipeDiet,
-                    attributes: [] 
+                    attributes: []
                 },
                 where: {
-                    diet_name: { [Sequelize.Op.iLike]: `%${diet}%` }
-                }
+                    diet_name: { [Sequelize.Op.in]: dietArray }
+                },
             });
         }
+        
 
         if (dishType) {
+            const dishTypeArray = dishType.split(',').map(c => c.trim()); 
             baseQuery.include.push({
                 model: DishType,
                 through: {
@@ -270,12 +212,13 @@ app.get('/searchV2', async (req, res) => {
                     attributes: [] 
                 },
                 where: {
-                    dish_type_name: { [Sequelize.Op.iLike]: `%${dishType}%` }
+                    dish_type_name: { [Sequelize.Op.in]: dishTypeArray }
                 }
             });
         }
 
         if (occasion) {
+            const occasionArray = occasion.split(',').map(c => c.trim()); 
             baseQuery.include.push({
                 model: Occasions,
                 through: {
@@ -283,7 +226,7 @@ app.get('/searchV2', async (req, res) => {
                     attributes: [] 
                 },
                 where: {
-                    occasion_name: { [Sequelize.Op.iLike]: `%${occasion}%` }
+                    occasion_name: { [Sequelize.Op.iLike]: occasionArray }
                 }
             });
         }

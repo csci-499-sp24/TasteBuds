@@ -745,9 +745,9 @@ CaloricBreakdown.belongsTo(Recipe, { foreignKey: 'recipe_id' });
 async function loadRecipesIntoDatabase(transformedData) {
     try {
         // Authenticate the sequelize connection
-        await sequelize.authenticate();
-        console.log('Connection has been established successfully.');
-        await sequelize.sync();
+        // await sequelize.authenticate();
+        // console.log('Connection has been established successfully.');
+        // await sequelize.sync();
 
         // Iterate over each recipe response object in transformedData
         let createdRecipe; 
@@ -803,8 +803,8 @@ async function loadRecipesIntoDatabase(transformedData) {
             }
             /* DIET */
             for (const dietData of recipeResponse.diet) {
+                let createdDiet = await Diet.findOne({ where: { diet_name: dietData} });
                 try{
-                    let createdDiet = await Diet.findOne({ where: { diet_name: dietData} });
                     if (!createdDiet) {
                         createdDiet = await Diet.create({
                             diet_name: dietData
@@ -1260,6 +1260,7 @@ module.exports = {
     Diet,
     RecipeDiet,
     Cuisines,
+    sequelize,
     RecipeCuisines,
     DishType,
     RecipeDishType,

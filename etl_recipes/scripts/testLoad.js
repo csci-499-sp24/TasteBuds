@@ -1,40 +1,80 @@
 // test whole pipeline
+const { sequelize } = require('./load');
+const { QueryTypes } = require('sequelize');
+
 const { transformRecipeData } = require('./transform');
 const axios = require('axios');
 const { loadRecipesIntoDatabase } = require('./load');
 const { fetchRecipesFromSource } = require('./extract');
 
-async function main() {
 
-     const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
 
-    // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=African,Asian,American,British,Cajun,Caribbean,Chinese,Eastern European,European,French,German,Greek,Indian,Irish,Italian,Japanese,Jewish,Korean,Latin American,Mediterranean,Mexican,Middle Eastern,Nordic,Souther,Spanish,Thai,Vietnamese&number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
-
-    // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=Asian, Chinese, Indian, Japanese,Korean,Thai, Vietnamese&number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
-
+async function syncDB() {
     try {
-        let listResponse = await axios.get(listApiUrl);
-        let recipeList = listResponse.data.results; 
+        console.log("beginning sequelize authenticate");
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+};
+syncDB();
 
-        let randomRecipes = selectRandomRecipes(recipeList, 10); 
 
-        for (const recipe of randomRecipes) {
-            const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+async function main() {
+    try {
+        // Fetch the 10 cuisines with the lowest count
+        const lowestCountCuisines = await getCuisinesWithLowestCount(3);
 
-            const extractedRecipe = await fetchRecipesFromSource(detailApiUrl);
-            const transformedRecipes = transformRecipeData(extractedRecipe);
-            await loadRecipesIntoDatabase(transformedRecipes);
+        for (const cuisine of lowestCountCuisines) {
+            const os = await getOffsetForCuisine(cuisine.cuisine_name);
+            // console.log(os)
+            const offset = parseInt(os, 10);
+            // console.log(offset)
+            const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine.cuisine_name}&number=1&offset=${offset}&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+            // console.log(listApiUrl)
+            let listResponse = await axios.get(listApiUrl);
+            let recipeList = listResponse.data.results;
+            // console.log(`Number of recipes fetched: ${recipeList.length}`);
+            // console.log(`id: ${recipeList[0].id}`);
+            // recipeList = [];
+            for (const recipe of recipeList) {
+                const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+                const extractedRecipe = await fetchRecipesFromSource(detailApiUrl);
+                const transformedRecipes = transformRecipeData(extractedRecipe);
+                await loadRecipesIntoDatabase(transformedRecipes);
+            }
         }
 
-        console.log('Data loaded successfully!');
     } catch (error) {
-        console.error('Error loading data:', error);
+        console.error('Error in main execution:', error);
     }
 }
 
-function selectRandomRecipes(recipeList, count) {
-    let shuffled = recipeList.sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+async function getCuisinesWithLowestCount(count) {
+    return await sequelize.query(
+        `SELECT cuisine_name, COUNT(recipes.recipe_id) AS recipe_count
+        FROM public.cuisines
+        LEFT JOIN public.recipe_cuisine ON cuisines.cuisine_id = recipe_cuisine.cuisine_id
+        LEFT JOIN public.recipes ON recipe_cuisine.recipe_id = recipes.recipe_id
+        GROUP BY cuisine_name
+        ORDER BY recipe_count
+        LIMIT ${count};`,
+        { type: QueryTypes.SELECT }
+    );
+}
+
+async function getOffsetForCuisine(cuisineName) {
+    const count = await sequelize.query(
+        `SELECT COUNT(recipe_cuisine.recipe_id) AS count
+        FROM public.recipe_cuisine
+        LEFT JOIN public.cuisines ON recipe_cuisine.cuisine_id = cuisines.cuisine_id
+        WHERE cuisines.cuisine_name = '${cuisineName}';`,
+        { type: QueryTypes.SELECT }
+    );
+
+    return count[0].count || 0; // Return the count or 0 if not found
 }
 
 main()
@@ -42,4 +82,54 @@ main()
     .catch((error) => {
         console.error('Error in main execution:', error);
         process.exit(1);
-    });
+});
+
+
+
+// async function main() {
+
+//      const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+//     // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=African,Asian,American,British,Cajun,Caribbean,Chinese,Eastern European,European,French,German,Greek,Indian,Irish,Italian,Japanese,Jewish,Korean,Latin American,Mediterranean,Mexican,Middle Eastern,Nordic,Southern,Spanish,Thai,Vietnamese&number=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+//     // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=Asian, Chinese, Indian, Japanese,Korean,Thai, Vietnamese&number=20&offset=100&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+//     // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=African,Cajun,Caribbean, Latin American,Mediterranean,Mexican,Middle Eastern,Spanish,&number=1&offset=101&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+//     // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=American,British,European,French,German,Greek,Irish,Italian,Southern&number=30&offset=13&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+//     // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=Creole,Eastern European,Jewish,Nordic&number=20&offset=10&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+//     // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?&cuisine=Jewish&number=20&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+//     try {
+//         let listResponse = await axios.get(listApiUrl);
+//         let recipeList = listResponse.data.results; 
+
+//         let randomRecipes = selectRandomRecipes(recipeList, 10); 
+
+//         for (const recipe of recipeList) {
+//             const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+
+//             const extractedRecipe = await fetchRecipesFromSource(detailApiUrl);
+//             const transformedRecipes = transformRecipeData(extractedRecipe);
+//             await loadRecipesIntoDatabase(transformedRecipes);
+//         }
+
+//         console.log('Data loaded successfully!');
+//     } catch (error) {
+//         console.error('Error loading data:', error);
+//     }
+// }
+
+// function selectRandomRecipes(recipeList, count) {
+//     let shuffled = recipeList.sort(() => 0.5 - Math.random());
+//     return shuffled.slice(0, count);
+// }
+
+// main()
+//     .then(() => process.exit(0))
+//     .catch((error) => {
+//         console.error('Error in main execution:', error);
+//         process.exit(1);
+//     });    
