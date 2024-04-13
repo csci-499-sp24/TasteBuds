@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Sidebar from "./sidebar";
 
 function Homepage() {
   const [randomRecipe, setRandomRecipe] = useState(null);
@@ -87,7 +88,7 @@ function Homepage() {
         <i className="fas fa-bars" id="btn"></i>
         <i className="fas fa-times" id="cancel"></i>
       </label>
-      <div className="sidebar">
+      {/* <div className="sidebar">
         <header>TasteBuds</header>
         <ul>
           <li><Link href="/home"><i className="fas fa-home"></i>Home</Link></li>  
@@ -98,7 +99,8 @@ function Homepage() {
           <li><a href="#"><i className="fas fa-cog"></i>User Settings</a></li>
           <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
         </ul>
-      </div>
+      </div> */}
+      <Sidebar />
       <section className='bg'>
         <div id="div-center" className="head">
           Recipe of the Day:
