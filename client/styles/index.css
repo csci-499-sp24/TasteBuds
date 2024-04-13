@@ -72,13 +72,17 @@ body {
 .head{
   display: flex;
   flex-direction: column;
-  gap: .25rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
   color: white;
   font-size: 2em;
   text-align: center;
-  color: white;
   font-weight: bolder;
+  text-shadow: 2px 2px black;
+  height: 100vh; /* Optional: This will make it take up the full height of the viewport */
 }
+
 
 .app-container {
   position: relative;
