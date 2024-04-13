@@ -5,7 +5,7 @@ const cors = require('cors');
 const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
 require('dotenv').config();
 
 const app = express();
@@ -477,6 +477,25 @@ app.post('/searchByIngredients', async (req, res) => {
         res.status(500).json({ error: 'Error fetching recipes by ingredients' });
     }
 });
+
+app.get('/getRandomRecipe', async (req, res) => {
+    try {
+      // Fetch all recipes
+      const listOfRecipes = await Recipe.findAll();
+  
+      // Generate a random index
+      const randomIndex = Math.floor(Math.random() * listOfRecipes.length);
+  
+      // Get the random recipe using the random index
+      const randomRecipe = listOfRecipes[randomIndex];
+  
+      // Send the random recipe as JSON response
+      res.json(randomRecipe);
+    } catch (error) {
+      console.error('Error fetching random recipe:', error);
+      res.status(500).json({ error: 'Error fetching random recipe' });
+    }
+  });
 
 // Log requests
 app.use((req, res, next) => {

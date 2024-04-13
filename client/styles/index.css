@@ -74,6 +74,10 @@ body {
   flex-direction: column;
   gap: .25rem;
   color: white;
+  font-size: 2em;
+  text-align: center;
+  color: white;
+  font-weight: bolder;
 }
 
 .app-container {
