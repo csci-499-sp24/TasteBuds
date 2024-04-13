@@ -480,18 +480,17 @@ app.post('/searchByIngredients', async (req, res) => {
 
 app.get('/getRandomRecipe', async (req, res) => {
     try {
-      // Fetch a random recipe from the database using raw SQL query
-      const randomRecipe = await sequelize.query(
-        'SELECT * FROM Recipes ORDER BY RANDOM() LIMIT 1;',
-        { type: QueryTypes.SELECT }
-      );
+      // Fetch all recipes
+      const listOfRecipes = await Recipe.findAll();
   
-      if (!randomRecipe || randomRecipe.length === 0) {
-        throw new Error('No random recipe found');
-      }
+      // Generate a random index
+      const randomIndex = Math.floor(Math.random() * listOfRecipes.length);
+  
+      // Get the random recipe using the random index
+      const randomRecipe = listOfRecipes[randomIndex];
   
       // Send the random recipe as JSON response
-      res.json(randomRecipe[0]);
+      res.json(randomRecipe);
     } catch (error) {
       console.error('Error fetching random recipe:', error);
       res.status(500).json({ error: 'Error fetching random recipe' });
