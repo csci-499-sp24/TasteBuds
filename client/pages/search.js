@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 import Sidebar from "./sidebar";
-import {Listbox, ListboxItem, ListboxSection, Chip, ScrollShadow, Avatar} from "@nextui-org/react";
+import {Listbox, ListboxItem, ListboxSection, Chip, ScrollShadow} from "@nextui-org/react";
 import {ListboxWrapper} from "./ListboxWrapper";
 
 function Search() {
@@ -115,6 +115,7 @@ const handleListboxChange = (selectedItems, filterType) => {
         <div className="container">
           <div className="listbox-container">
             <ListboxWrapper>
+
               <Listbox
                 label="Select an option"
                 classNames={{
@@ -145,17 +146,17 @@ const handleListboxChange = (selectedItems, filterType) => {
               </Listbox>
 
               <Listbox
-              label="Select an option"
-              classNames={{
-                base: "max-w-xs",
-                list: "max-h-[300px] overflow-scroll",
-              }}
-              selectionMode="multiple"
-              variant="flat"
-              onSelectionChange={(selectedItems) =>
-                handleListboxChange(selectedItems, "diet")
-              }>
-              <ListboxSection title="Diets" showDivider>
+                label="Select an option"
+                classNames={{
+                  base: "max-w-xs",
+                  list: "max-h-[300px] overflow-scroll",
+                }}
+                selectionMode="multiple"
+                variant="flat"
+                onSelectionChange={(selectedItems) =>
+                  handleListboxChange(selectedItems, "diet")
+                }>
+                <ListboxSection title="Diets" showDivider>
                   {[
                     { key: "dairy free",  name: "Dairy Free" },
                     { key: "gluten free", name: "Gluten Free" },
@@ -185,6 +186,61 @@ const handleListboxChange = (selectedItems, filterType) => {
                   ))}
                 </ListboxSection>
               </Listbox>
+              <Listbox
+                label="Select an option"
+                classNames={{
+                  base: "max-w-xs",
+                  list: "max-h-[300px] overflow-scroll",
+                }}
+                selectionMode="multiple"
+                variant="flat"
+                onSelectionChange={(selectedItems) =>
+                  handleListboxChange(selectedItems, "diet")
+                }>
+                <ListboxSection title="Dish Types" showDivider>
+                  {[
+                    { key: "antipasti",  name: "Antipasti" },
+                    { key: "antipasto", name: "Antipasto" },
+                    { key: "appetizer",  name: "Appetizer" },
+                    { key: "beverage", name: "Beverage" },
+                    { key: "bread", name: "Bread" }, // might removed it 
+                    { key: "breakfast", name: "Breakfast" },
+                    { key: "brunch",  name: "Brunch" },
+                    { key: "condiment", name: "Condiment" },
+                    { key: "dessert", name: "Dessert" },
+                    { key: "dinner", name: "Dinner" },
+                    { key: "dip", name: "Dip" },
+                    { key: "drink" , name: "Drink" },
+                    { key: "fingerfood", name: "Fingerfood"},
+                    { key: "hor d'oeuvre", name: "Hor d'oeuvre"},
+                    { key: "lunch", name: "Lunch"},
+                    { key: "main course", name: "Main Course"},
+                    { key: "main dish", name: "Main Dish"},
+                    { key: "marinade", name: "Marinade"},
+                    { key: "morning meal", name: "Morning Meal"},
+                    { key: "salad", name: "Salad"},
+                    { key: "sauce", name: "Sauce"},
+                    { key: "seasoning", name: "Seasoning"},
+                    { key: "side dish", name: "Side Sish"},
+                    { key: "snack", name: "Snack"},
+                    { key: "soup", name: "Soup"},
+                    { key: "spread", name: "Spread"},
+                    { key: "starter", name: "Starter"},
+                  ].map((item) => (
+                    <ListboxItem
+                      key={item.key}
+                      textValue={item.key}
+                      onAction={() => handleListboxChange(item.key, "dishType")}
+                    >
+                      <div className="flex gap-2 items-center">
+                        <div className="flex flex-col">
+                          <span className="text-small">{item.name}</span>
+                        </div>
+                      </div>
+                    </ListboxItem>
+                  ))}
+                </ListboxSection>
+              </Listbox>
             </ListboxWrapper>
           </div>
           <div className="recipe-container">   
@@ -203,7 +259,7 @@ const handleListboxChange = (selectedItems, filterType) => {
           </div>
         </div>  
       </section>
-      
+
     </div>
   );
 }
