@@ -2,18 +2,23 @@
 
 const express = require("express");
 const cors = require('cors');
+const bodyParser = require("body-parser");
+const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
-const { Sequelize, DataTypes, Op } = require('sequelize');
+const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
+const userRoutes = require('./firebase/user.js')
 require('dotenv').config();
+
 
 const app = express();
 app.use(cors());
+app.use(express.json({ limit: '50mb'}));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(userRoutes)
 
-//const sequelize = new Sequelize(process.env.DB_HOST + "/" + process.env.DB_NAME)
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres', 
@@ -26,9 +31,12 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
             rejectUnauthorized: false, // for dev only
         }
     },
+    define: {
+        // Define the schema to be used by default
+        schema: 'public'
+    }
 });
 
-// const postgres_db = new Sequelize(process.env.DB_HOST);
 async function syncDB() {
     try {
         console.log("beginning sequelize authenticate");
@@ -40,29 +48,13 @@ async function syncDB() {
 };
 syncDB();
 
-// Demonstration of how to define a foreign key (see fk_id).
-// const test = sequelize.define("EXAMPLE", {
-//     pk_id: {
-//         type: DataTypes.INTEGER,
-//         allowNull: false,
-//         primaryKey: true,
-//     },
-//     fk_id: {
-//         type: DataTypes.INTEGER,
-//         allowNull: false,
-//         primaryKey: true,
-//         references: {
-//             model: recipes_table,
-//             key: "hi",
-//         }
-//     },
-// })
 
-const database = require("./tables/old_model.js")(sequelize, DataTypes);
+const database = require("./tables/recipes.js")(sequelize, DataTypes);
 
 async function sync_table() {
     try {
         await database.sync();
+        await User.sync();
         console.log("The table for the db has been (re)created.");
     }
     catch (error) {
@@ -71,132 +63,306 @@ async function sync_table() {
 };
 sync_table();
 
-// Calling up all the table objects,
-// They don't work right now, Sequelize insists that the db relations don't exist
-// I will add them here and figure that out later.
 const {
-    recipes_table,
-    weight_per_serving,
-    calories_table,
-    secondary_recipes_table,
-    recipes_flavors
+    Recipe,
+    Cuisines,
+    RecipeCuisines,
+    Diet,
+    RecipeDiet,
+    DishType,
+    RecipeDishType,
+    Occasions,
+    RecipeOccasions,
+    Tips,
+    Ingredients,
+    RecipeIngredients,
+    Instructions,
+    InstructionsIngredients,
+    Equipment,
+    RecipeEquipment,
+    InstructionsEquipment,
+    InstructionLength,
+    Nutrients,
+    RecipeNutrients,
+    RecipeIngredientsNutrients,
+    Flavonoids,
+    RecipeFlavonoids,
+    Properties,
+    RecipeProperties,
+    WeightPerServing,
+    CaloricBreakdown, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
-const {
-    recipe_to_equip,
-    instr_to_ingr,
-    instr_to_equip,
-    recipe_to_cusine,
-    recipe_to_diet,
-    recipe_to_occasions,
-    recipe_to_properties,
-    recipe_to_dishtype,
-} = require("./tables/table_connectors.js")(sequelize, DataTypes)
-const {
-    tips_table,
-    equipment_table,
-    instructions_id,
-    instr_length,
-    ingredients_table,
-    recipe_ingredients,
-    recipe_nutrients,
-    recipe_ingredient_nutrient,
-    cuisine_table,
-    diet_table,
-    flavonoid_table,
-    nutrients_table,
-    properties_table,
-    occasions_table,
-    dish_type,
-} = require("./tables/other_tables.js")(sequelize, DataTypes)
-const {
-    users
-} = require("./tables/users.js")(sequelize, DataTypes)
 
-
-app.get("/", async (req,res)=>{
+// search + filter 
+app.get('/searchV2', async (req, res) => {
     try {
-        const first_ten = await database.findAll({
-            subQuery: false,
-            limit: 10,
-            raw: true,
-        });
-        res.status(200).json({recipeData: first_ten});
-        console.log("app.get / call successful");
-    }
-    catch(error){
-        console.log("encountered error: ", error)
-    }
-})
+        const { query, cuisine, diet, dishType, occasion, includeTips, servings, smartPoints, cheap, 
+            healthy, sustainable, smartPointsMin, smartPointsMax, readyInMinutesMin, readyInMinutesMax, 
+            readyInMinutes, pricePerServingMin, pricePerServingMax, pricePerServing, minTotalPrice , 
+            maxTotalPrice, totalPrice } = req.query;
 
-app.get("/mytest", async (req,res)=>{
-    try {
-        const first_ten = await recipes_table.findAll({
-            subQuery: false,
-            limit: 10,
-            raw: true,
-        });
-        res.status(200).json({recipeData: first_ten});
-        console.log("app.get / call successful");
-    }
-    catch(error){
-        console.log("encountered error: ", error)
-    }
-})
-
-app.get('/search', async (req, res) => {
-    try {
-        console.log(req)
-        const { query, filter } = req.query // search query is passed as a query parameter
-        console.log(query)
-        console.log(filter)
-        //const {filters} = query.filters
+        // Construct base query to fetch recipes
+        let baseQuery = {
+            include: [],
+        };
 
         // Check if search query is provided and is a valid string
-        if (!query) {
-            return res.status(400).json({ error: "Invalid search query" });
+        if (query) {
+            baseQuery.where = {
+                title: { [Sequelize.Op.iLike]: `%${query}%` }
+            };
         }
+
+        if (cuisine) {
+            const cuisinesArray = cuisine.split(',').map(c => c.trim()); // Split the cuisines string by comma and trim whitespace
+            // Add join with cuisines table only if cuisine parameter is provided
+            baseQuery.include.push({
+                model: Cuisines,
+                through: {
+                    model: RecipeCuisines,
+                    attributes: [] // To exclude join table attributes
+                },
+                where: {
+                    cuisine_name: { [Sequelize.Op.in]: cuisinesArray } // Use Sequelize.Op.in to match multiple cuisines, i.e, OR
+                }
+            });
+        }
+
+        if (diet) {
+            const dietArray = diet.split(',').map(c => c.trim()); 
+            baseQuery.include.push({
+                model: Diet,
+                through: {
+                    model: RecipeDiet,
+                    attributes: []
+                },
+                where: {
+                    diet_name: { [Sequelize.Op.in]: dietArray }
+                },
+            });
+        }
+        
+
+        if (dishType) {
+            const dishTypeArray = dishType.split(',').map(c => c.trim()); 
+            baseQuery.include.push({
+                model: DishType,
+                through: {
+                    model: RecipeDishType,
+                    attributes: [] 
+                },
+                where: {
+                    dish_type_name: { [Sequelize.Op.in]: dishTypeArray }
+                }
+            });
+        }
+
+        if (occasion) {
+            const occasionArray = occasion.split(',').map(c => c.trim()); 
+            baseQuery.include.push({
+                model: Occasions,
+                through: {
+                    model: RecipeOccasions,
+                    attributes: [] 
+                },
+                where: {
+                    occasion_name: { [Sequelize.Op.iLike]: occasionArray }
+                }
+            });
+        }
+
+        if (includeTips !== undefined) {
+            if (includeTips === 'true') {
+                // Include recipes with tips
+                baseQuery.include.push({
+                    model: Tips,
+                    attributes: ['type', 'tip'] // Include tip attributes
+                });
+            } else {
+                // Exclude recipes with tips
+                baseQuery.include.push({
+                    model: Tips,
+                    attributes: ['type', 'tip'], // Include tip attributes
+                    where: {
+                        tip_id: null // Ensure no tips are included
+                    },
+                    required: false // Use a left join to include recipes without tips
+                });
+            }
+        }
+        if (servings) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                servings: servings
+            };
+        }
+
+
+        if (cheap !== undefined) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                cheap: cheap
+            };
+        }
+
+        if (healthy !== undefined) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                very_healthy: cheap
+            };
+        }
+
+        if (sustainable !== undefined) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                sustainable: cheap
+            };
+        }
+
+        if (smartPointsMin && smartPointsMax) {
+            // Filter by a range of smart points
+            baseQuery.where = {
+                ...baseQuery.where,
+                weight_watcher_smart_points: {
+                    [Sequelize.Op.between]: [smartPointsMin, smartPointsMax]
+                }
+            };
+        } else if (smartPointsMin) {
+            // Filter by minimum smart points
+            baseQuery.where = {
+                ...baseQuery.where,
+                weight_watcher_smart_points: {
+                    [Sequelize.Op.gte]: smartPointsMin
+                }
+            };
+        } else if (smartPointsMax) {
+            // Filter by maximum smart points
+            baseQuery.where = {
+                ...baseQuery.where,
+                weight_watcher_smart_points: {
+                    [Sequelize.Op.lte]: smartPointsMax
+                }
+            };
+        } else if (smartPoints !== undefined) {
+            // Filter by exact smart points if provided
+            baseQuery.where = {
+                ...baseQuery.where,
+                weight_watcher_smart_points: smartPoints
+            };
+        }
+
+        if (readyInMinutesMin && readyInMinutesMax) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                ready_in_minutes: {
+                    [Sequelize.Op.between]: [readyInMinutesMin, readyInMinutesMax]
+                }
+            };
+        } else if (readyInMinutesMin) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                ready_in_minutes: {
+                    [Sequelize.Op.gte]: readyInMinutesMin
+                }
+            };
+        } else if (readyInMinutesMax) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                ready_in_minutes: {
+                    [Sequelize.Op.lte]: readyInMinutesMax
+                }
+            };
+        } else if (readyInMinutes !== undefined) {
+            baseQuery.where = {
+                ...baseQuery.where,
+                ready_in_minutes: readyInMinutes
+            };
+        }
+
+        if (pricePerServingMin && pricePerServingMax) {
+            // price per serving is in pennys in the db
+            const minPricePennies = pricePerServingMin * 100;
+            const maxPricePennies = pricePerServingMax * 100;
+
+            baseQuery.where = {
+                ...baseQuery.where,
+                price_per_serving: {
+                    [Sequelize.Op.between]: [minPricePennies, maxPricePennies]
+                }
+            };
+        } else if (pricePerServingMin) {
+            const minPricePennies = pricePerServingMin * 100;
+            baseQuery.where = {
+                ...baseQuery.where,
+                price_per_serving: {
+                    [Sequelize.Op.gte]: minPricePennies
+                }
+            };
+        } else if (pricePerServingMax) {
+            const maxPricePennies = pricePerServingMax * 100;
+            baseQuery.where = {
+                ...baseQuery.where,
+                price_per_serving: {
+                    [Sequelize.Op.lte]: maxPricePennies
+                }
+            };
+        } else if (pricePerServing !== undefined) {
+            const pricePennies = pricePerServingMax * 100;
+            baseQuery.where = {
+                ...baseQuery.where,
+                price_per_serving: pricePennies
+            };
+        }
+
+        // error need resolving
+        // if (minTotalPrice || maxTotalPrice) {
+        //     baseQuery.attributes = baseQuery.attributes || []; // Initialize baseQuery.attributes as an array if it's not already
+            
+        //     baseQuery.attributes.push([
+        //         sequelize.col('price_per_serving'), // Include price_per_serving column
+        //         sequelize.col('servings'), // Include servings column
+        //         ['*', 'total_cost'] // Multiply the columns and alias the result as 'total_cost'
+        //     ]);
+            
+        //     baseQuery.having = {};
+        //     if (minTotalPrice && maxTotalPrice) {
+        //         const minTotalPricePennies = minTotalPrice * 100;
+        //         const maxTotalPricePennies = maxTotalPrice * 100;
+            
+        //         baseQuery.having.total_cost = {
+        //             [Sequelize.Op.between]: [minTotalPricePennies, maxTotalPricePennies]
+        //         };
+        //     } else if (minTotalPrice) {
+        //         const minTotalPricePennies = minTotalPrice * 100;
+        //         baseQuery.having.total_cost = {
+        //             [Sequelize.Op.gte]: minTotalPricePennies
+        //         };
+        //     } else if (maxTotalPrice) {
+        //         const maxTotalPricePennies = maxTotalPrice * 100;
+        //         baseQuery.having.total_cost = {
+        //             [Sequelize.Op.lte]: maxTotalPricePennies
+        //         };
+        //     } else if (totalPrice !== undefined) {
+        //         const totalPricePennies = totalPrice * 100;
+        //         baseQuery.having.total_cost = {
+        //             [Sequelize.Op.eq]: totalPricePennies
+        //         };
+        //     }
+        // }
+        
+        
+        
+        
+        
+         
+    
+  
+        // console.log("Executing query:", baseQuery);
 
         // Fetch recipes from the database
-        // Attempted to refactor it by directly filtering the SQL query
-        // instead of doing it in a separate step below.
-        if (!filter) {
-            console.log("Filters DNE")
-            const recipes = await recipes_table.findAll({
-                subQuery: false,
-                raw: true,
-                where: {
-                    title: {
-                        [Op.iLike]: `%${query}%` // case-insensitive matching
-                    }
-                }
-            });
-            console.log("Filtered Results:", recipes);
-            res.json(recipes);
-        }
-        else {
-            // https://stackoverflow.com/questions/46553128/how-to-filter-data-with-sequelize
-            console.log("We got this cuisine value:", filter.cuisine)
-            const recipes = await recipes_table.findAll({
-                subQuery: false,
-                raw: true,
-                where: {
-                    title: {
-                        [Op.iLike]: `%${query}%` // case-insensitive matching
-                    }
-                }
-            });
-            console.log("Filtered Results:", recipes);
-            res.json(recipes);
-        }
-
-        // Filter recipes based on the search query
-        // const filteredResults = recipes.filter(recipe =>
-        //     recipe.title.toLowerCase().includes(query.toLowerCase())
-        // );
-
+        const recipes = await Recipe.findAll(baseQuery);
         // Send filtered results as JSON response
-        // console.log("Filtered Results:", recipes);
-        // res.json(recipes);
+        res.json(recipes);
         
     } catch (error) {
         console.error("Error searching recipes:", error);
@@ -204,36 +370,73 @@ app.get('/search', async (req, res) => {
     }
 });
 
-app.get('/login', async (req, res) => {
-    try {
-        // get username and password (presumably salted and hashed)
-        // from the login query
-        const { username, password } = (req.username, req.password);
-        // if either one is missing, return an error
-        if (!username || !password) {
-            return res.status(400).json({ error: "Username or password is missing" });
-        }
-        // query the login table to see if this user-pass combo exists
-        const user_pass = await users.findOne({
-            subQuery: false,
-            raw: true,
-            where: {
-                username: username,
-                password: password,
-            }
-        });
-        if (!user_pass) {// no user-pass combo found
-            return res.status(400).json({ error: "No username-password combo found" });
-        }
-        else {// registered user exists
-            // what do I put here?
-            //return res.json("Placeholder text");
-        }
-    } catch(error) {
-        console.error("Error logging in:", error);
+
+app.get('/getAllIngredients', async (req, res) => {
+    try{
+        const listOfIngredients = await Ingredients.findAll();
+        res.status(200).json(listOfIngredients);
+    } catch (error){
+        console.error("Error searching recipes:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
+app.post('/searchByIngredients', async (req, res) => {
+    try{
+        const { ingredientIds } = req.body;
+        let listOfRecipes = []; // The returned array of recipes
+        let listOfRecipeIds = []; // Array for keeping track of recipes added
+        //For each ingredient in the passed array of Ids, find all recipes
+        for(const ingredientId of ingredientIds){
+            const recipesWithIngredient = await RecipeIngredients.findAll({ 
+                where: {ingredient_id: ingredientId},
+                include: Recipe,
+                attributes: [
+                    [Sequelize.literal('ARRAY(SELECT ingredient_id FROM public.recipe_ingredient WHERE ingredient_id = ' + ingredientId + ' LIMIT 1)'), 'ingredient_ids'], 
+                    [Sequelize.literal('ARRAY(SELECT standard_name FROM public.ingredients WHERE ingredient_id = ' + ingredientId + ' LIMIT 1)'), 'ingredients'], 
+                    'recipe_id',
+                ]
+            });
+            //For each recipe which contains the ingredient, 
+            //check if a previous ingredient already added the recipe to the return array
+            for (const recipeWithIngredient of recipesWithIngredient){
+                if (!listOfRecipeIds.includes(recipeWithIngredient.recipe_id)){//If it doesnt already exist, add it to the array
+                    listOfRecipeIds.push(recipeWithIngredient.recipe_id);
+                    listOfRecipes.push(recipeWithIngredient);
+                } else { //Add current ingredient to that recipe's ingredients if true
+                    const includedRecipeIndex = listOfRecipes.findIndex(recipe => recipe.recipe_id === recipeWithIngredient.recipe_id);
+                    if (!listOfRecipes[includedRecipeIndex].dataValues.ingredients.includes(recipeWithIngredient.dataValues.ingredients[0])){
+                        listOfRecipes[includedRecipeIndex].dataValues.ingredients.push(recipeWithIngredient.dataValues.ingredients[0]);
+                        listOfRecipes[includedRecipeIndex].dataValues.ingredient_ids.push(recipeWithIngredient.dataValues.ingredient_ids[0]);
+                    }
+                }
+            }
+        }
+        res.status(200).json(listOfRecipes.flat()); //Flat because seperating by ingredient wasn't necessary.
+    } catch (error) {
+        console.error('Error fetching recipes by ingredients:', error);
+        res.status(500).json({ error: 'Error fetching recipes by ingredients' });
+    }
+});
+
+app.get('/getRandomRecipe', async (req, res) => {
+    try {
+      // Fetch all recipes
+      const listOfRecipes = await Recipe.findAll();
+  
+      // Generate a random index
+      const randomIndex = Math.floor(Math.random() * listOfRecipes.length);
+  
+      // Get the random recipe using the random index
+      const randomRecipe = listOfRecipes[randomIndex];
+  
+      // Send the random recipe as JSON response
+      res.json(randomRecipe);
+    } catch (error) {
+      console.error('Error fetching random recipe:', error);
+      res.status(500).json({ error: 'Error fetching random recipe' });
+    }
+  });
 
 // Log requests
 app.use((req, res, next) => {
@@ -248,7 +451,10 @@ app.use((err, req, res, next) => {
 });
 
 
+
 const port = process.env.PORT || 8080;
 app.listen(port, () => {
     console.log(`Server started on port ${port}`);
 });
+
+module.exports = {dbPool: sequelize};
