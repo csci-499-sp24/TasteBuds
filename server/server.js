@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
-const userFetch = require('./firebase/user.js')
+const userRoutes = require('./firebase/user.js')
 require('dotenv').config();
 
 
@@ -15,12 +15,10 @@ app.use(cors());
 app.use(express.json({ limit: '50mb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(userFetch)
+app.use(userRoutes)
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASS, {
     database: process.env.DB_NAME,
-    username: process.env.DB_USER,
-    password: process.env.DB_PASS,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     dialect: 'postgres', 
@@ -50,18 +48,6 @@ async function syncDB() {
 };
 syncDB();
 
-//create user model
-const User = sequelize.define('User', {
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    password: {
-        type: DataTypes.STRING,
-        allowNull: false
-    }
-});
 
 const database = require("./tables/recipes.js")(sequelize, DataTypes);
 
@@ -106,55 +92,6 @@ const {
     WeightPerServing,
     CaloricBreakdown, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
-
-//create user in database (sign up)
-app.post('/signup', async (req, res) => {
-    const { username, password } = req.body;
-
-    try {
-        //check for existing user
-        const existingUser = await User.findOne({ where: { username } });
-        if (existingUser) {
-            return res.status(400).json({ error: "Username already exists" });
-        }
-
-        //hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        //create new user
-        const newUser = await User.create({ username, password: hashedPassword });
-        res.status(201).json({ message: "User signed up successfully", user: newUser });
-    } catch (error) {
-        console.error("Error signing up user:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
-
-//log in existing user
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-
-    try {
-        //check for existing user
-        const existingUser = await User.findOne({ where: { username } });
-        if (!existingUser) {
-            return res.status(404).json({ error: "User not found" });
-        }
-
-        //check if password input matches the existing password in the database
-        const passwordMatch = await bcrypt.compare(password, existingUser.password);
-        if (!passwordMatch) {
-            return res.status(401).json({ error: "Incorrect password" });
-        }
-
-        //successful login
-        res.status(200).json({ message: "Login successful", user: existingUser });
-
-    } catch (error) {
-        console.error("Error logging in user:", error);
-        res.status(500).json({ error: "Internal server error" });
-    }
-});
 
 // search + filter 
 app.get('/searchV2', async (req, res) => {
@@ -433,6 +370,7 @@ app.get('/searchV2', async (req, res) => {
     }
 });
 
+
 app.get('/getAllIngredients', async (req, res) => {
     try{
         const listOfIngredients = await Ingredients.findAll();
@@ -512,7 +450,6 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
-app.use('/api/users', userFetch); 
 
 
 const port = process.env.PORT || 8080;

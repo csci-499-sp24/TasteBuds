@@ -27,11 +27,8 @@ const getUserDetails = async (userId) => {
   }
 };
 
-router.get('/:userId', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const { userId } = req.params;
-    console.log('User ID:', userId);
-
     const authorizationHeader = req.headers.authorization;
     console.log('Authorization Header:', authorizationHeader);
 
@@ -47,13 +44,9 @@ router.get('/:userId', async (req, res) => {
     }
 
     const uid = await verifyUserToken(token);
-    console.log('Verified UID:', uid); 
+    console.log('Verified UID:', uid);
 
-    if (uid !== userId) {
-      return res.status(403).json({ error: 'Unauthorized access' });
-    }
-
-    const userDetails = await getUserDetails(userId);
+    const userDetails = await getUserDetails(uid);
     console.log('User Details:', userDetails);
 
     res.json(userDetails);

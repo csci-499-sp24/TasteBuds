@@ -1,24 +1,23 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { auth } from './firebaseConfig';
+import { auth } from './firebaseConfig'; 
 
 const useUserDetails = () => {
   const [userDetails, setUserDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const currentUser = auth.currentUser;
-        if (!currentUser) {
+        if (!auth.currentUser) {
           throw new Error('No user is currently signed in.');
         }
+        const token = await auth.currentUser.getIdToken();
+        const userId = auth.currentUser.uid;
 
-        const token = await currentUser.getIdToken();
-        const userId = currentUser.uid;
+        console.log('Bearer token:', `Bearer ${token}`);
 
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/users/${userId}`, {
+        const response = await axios.get(process.env.NEXT_PUBLIC_SERVER_URL + `/api/users/`, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },
@@ -30,15 +29,13 @@ const useUserDetails = () => {
         console.error('Error fetching user details:', error);
         setError(error.message);
         setUserDetails(null);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchUserDetails();
-  }, []);
+  }, [auth.currentUser]);
 
-  return { userDetails, loading, error }; //import useUserDetails hook, then call the object userDetails.username or userDetails.email to show the details on profile page to render details 
+  return { userDetails, error };
 };
 
 export default useUserDetails;
