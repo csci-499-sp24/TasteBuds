@@ -32,12 +32,13 @@ async function main() {
         for (const cuisineType of lowestCountCuisines) {
             const os = await getOffsetForCuisine(cuisineType.cuisine_name);
             // console.log(os)
-            const offset = parseInt(os, 10)+ 145;
+            const offset = parseInt(os, 10)+ 350;
+            // 145 paleolithic
             // 130 keto
             // 320
 
             // console.log(offset)
-            const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?$cuisine=${cuisineType.cuisine_name}&number=10&offset=${offset}&diet=paleolithic&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+            const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?$cuisine=${cuisineType.cuisine_name}&number=10&offset=${offset}&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
             // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine.cuisine_name}&diet=${lowestCountDiets[i].diet_name}&number=10&offset=${offset}&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
             // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine.cuisine_name}&diet=${lowestCountDiets[i].cuisine_name}&intolerances=${lowestCountintolerances[i].intolerance_name}&number=10&offset=${offset}&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
 
@@ -60,9 +61,15 @@ async function main() {
             //     console.log(`ID:${recipe.id}`);
             // }
 
-            // let recipeList = [];
+            let recipeLt2 = [];
+            for(const recipe of recipeList){
+                let exitsRecipe = await Recipe.findOne({ where: { recipe_id: recipe.id} });
+                if(!exitsRecipe){
+                    recipeLt2.push(recipe);
+                }
+            }
 
-            for (const recipe of recipeList) {
+            for (const recipe of recipeLt2) {
                 const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
 
                 const extractedRecipe = await fetchRecipesFromSource(detailApiUrl);
@@ -74,7 +81,7 @@ async function main() {
                 //   });
                 await loadRecipesIntoDatabase(transformedRecipes);
             }
-            // i += 1;
+            console.log(`Size: ${recipeLt2.length}`);
         }
 
     } catch (error) {
@@ -101,7 +108,7 @@ async function getCuisinesWithLowestCount(count) {
         LEFT JOIN public.recipes ON recipe_cuisine.recipe_id = recipes.recipe_id
         GROUP BY cuisine_name
         ORDER BY recipe_count
-        OFFSET 1 
+        OFFSET 2
         LIMIT ${count};`, // ignore the lowest cuisine thier is no more of it  // OFFSET 1  -- Skip the first result
 
         { type: QueryTypes.SELECT }

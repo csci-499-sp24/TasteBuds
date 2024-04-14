@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 import Sidebar from "./sidebar";
-import {Listbox, ListboxItem, ListboxSection, Chip, ScrollShadow} from "@nextui-org/react";
+import {Listbox, ListboxItem, ListboxSection, Input, Chip, ScrollShadow} from "@nextui-org/react";
 import {ListboxWrapper} from "./ListboxWrapper";
 
 function Search() {
@@ -11,6 +11,10 @@ function Search() {
   const [filters, setFilters] = useState({  // State variable to hold filter criteria
     cuisine: "",
     diet: "",
+    dishType: "",
+    servings: "",
+    includeTips: undefined ,
+
     // more filter criterias, look into doc
   }); 
 
@@ -38,10 +42,10 @@ function Search() {
     try {
       // Construct query parameters from filters
       const queryParams = Object.entries(filters) //  converts the filters object into an array of key-value pairs,
-      .filter(([key, value]) => value !== "") // filters out any key-value pairs where the value is an empty string. 
+      .filter(([key, value]) => value !== "" && value !==undefined) // filters out any key-value pairs where the value is an empty string. 
       .map(([key, value]) => `${key}=${value}`) // maps each key-value pair to a string in the format "key=value",This prepares the key-value pairs to be part of the query parameters in the URL.
       .join("&");
-
+      console.log(`Query: ${process.env.NEXT_PUBLIC_SERVER_URL}/searchV2?query=${searchQuery}&${queryParams}`);
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/searchV2?query=${searchQuery}&${queryParams}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
@@ -83,6 +87,15 @@ const handleListboxChange = (selectedItems, filterType) => {
   });
 }
 
+// Function to handle changes in the servings input
+const handleServingsInputChange = (event) => {
+  const servingsValue = event.target.value;
+  setFilters((prevFilters) => ({
+    ...prevFilters,
+    servings: servingsValue,
+  }));
+};
+
   
 
   return (
@@ -99,23 +112,13 @@ const handleListboxChange = (selectedItems, filterType) => {
       <Sidebar />
 
       {/* Main content section */}
-      <section>
+      <section> 
         <div id="div-center" className="search-wrapper">
-          <label htmlFor="search">Search Recipes</label>
-          <input
-            type="search" 
-            id="search"
-            value={searchQuery}
-            onChange={handleSearch} 
-            placeholder="Search recipes..."
-            className="input"
-          />
+          <Input type="search" label="Search" onChange={handleSearch} />
         </div>
-
-        <div className="container">
+        <div className="container" >
           <div className="listbox-container">
             <ListboxWrapper>
-
               <Listbox
                 label="Select an option"
                 classNames={{
@@ -186,6 +189,7 @@ const handleListboxChange = (selectedItems, filterType) => {
                   ))}
                 </ListboxSection>
               </Listbox>
+
               <Listbox
                 label="Select an option"
                 classNames={{
@@ -195,7 +199,7 @@ const handleListboxChange = (selectedItems, filterType) => {
                 selectionMode="multiple"
                 variant="flat"
                 onSelectionChange={(selectedItems) =>
-                  handleListboxChange(selectedItems, "diet")
+                  handleListboxChange(selectedItems, "dishType")
                 }>
                 <ListboxSection title="Dish Types" showDivider>
                   {[
@@ -241,8 +245,23 @@ const handleListboxChange = (selectedItems, filterType) => {
                   ))}
                 </ListboxSection>
               </Listbox>
+       
+              <div className="flex flex-col gap-2">
+                <h1 className="text-default-500 text-small">Serving</h1>
+                <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
+                    <Input
+                      key={"outside"}
+                      type="number"
+                      labelPlacement={"outside"}
+                      onChange={handleServingsInputChange}
+                      placeholder="Enter servings"
+                      className="input"
+                    />
+                </div>
+              </div> 
             </ListboxWrapper>
           </div>
+
           <div className="recipe-container">   
           {/* Display search results */}
             <div id="div-center" className="user-recipes" data-user-cards-container>
@@ -263,5 +282,4 @@ const handleListboxChange = (selectedItems, filterType) => {
     </div>
   );
 }
-
 export default Search;

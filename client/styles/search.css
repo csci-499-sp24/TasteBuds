@@ -5,6 +5,7 @@
   text-decoration: none;
 }
 
+
 .sidebar {
   position: fixed;
   width: 250px;
@@ -51,6 +52,7 @@ label #cancel {
   background: #042331;
   border-radius: 3px;
   cursor: pointer;
+  
 }
 
 label #btn {
@@ -60,6 +62,7 @@ label #btn {
   color: white;
   padding: 6px 12px;
   transition: all 0.5s;
+  
 }
 
 label #cancel {
@@ -74,6 +77,7 @@ label #cancel {
 
 #check:checked ~ .sidebar {
   left: 0;
+  
 }
 
 #check:checked ~ label #btn {
@@ -140,10 +144,6 @@ section {
   color: black;
 }
 
-.hide {
-  display: none;
-}
-
 #div-center {
   width: 665px;
   margin: auto;
@@ -151,19 +151,29 @@ section {
 
 .container {
   display: flex;
+  margin-top: 20px; 
   justify-content: center; /* Center the children horizontally */
   align-items: flex-start; /* Align items to the top */
+}
+
+/* Adjust the spacing between inner and outer scrollbars */
+.listbox-wrapper {
+  height: 500px; /* Set the height as needed */
+  overflow-y: auto; /* Enable vertical scrollbar when content overflows */
+  padding-right: 20px; /* Add some padding to the right side to separate the inner and outer scrollbars */
+}
+
+.listbox-container {
+  margin-right: -20px; /* Compensate for the padding on the right side of the .listbox-wrapper */
 }
 
 .listbox-container {
   flex: 1;
   margin-right: 20px; /* Add margin between the listbox and the recipe container */
+  /* overflow-y: auto; Enable vertical scrollbar when content overflows */
 }
 
 .recipe-container {
+  margin-right: 70px; 
   flex: 1;
-}
-
-.listbox-container:last-child {
-  margin-right: 0; /* Remove margin from the last listbox container */
 }
