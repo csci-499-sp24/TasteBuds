@@ -31,10 +31,10 @@ const Registration = () => {
       setError("Password does not match");
       return;
     }
-    // Call the signup function from useAuth hook here
+    
     try {
       await signup(email, password, username);
-      router.push("/authHome"); // Redirect to home page after successful registration
+      router.push("/"); 
     } catch (error) {
       setError(error.message);
     }

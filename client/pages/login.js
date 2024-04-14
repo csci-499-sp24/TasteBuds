@@ -17,7 +17,7 @@ const Login = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log(userCredential);
-      router.replace("/authHome");
+      router.replace("/");
     } catch (error) {
       if (error.code === "auth/user-not-found") {
         setError("No user found with the provided email.");
