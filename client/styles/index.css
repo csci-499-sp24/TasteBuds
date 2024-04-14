@@ -72,6 +72,43 @@ body {
 .head{
   display: flex;
   flex-direction: column;
-  gap: .25rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.25rem;
   color: white;
+  font-size: 2em;
+  text-align: center;
+  font-weight: bolder;
+  text-shadow: 2px 2px black;
+  height: 100vh; /* Optional: This will make it take up the full height of the viewport */
+}
+
+
+.app-container {
+  position: relative;
+  width: 100%;
+  height: 90vh;
+}
+
+.background-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/your-background-image.jpg');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+
+.scrollable-content {
+  position: relative;
+  z-index: 1; /* Ensure it's above the background image */
+  overflow-y: auto;
+  height: 100vh; /* Adjust based on your layout */
+}
+
+.posts-container {
+  /* Your styles for the posts container */
 }
