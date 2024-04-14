@@ -10,11 +10,8 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.2.10",
-<<<<<<< Updated upstream
     "@nextui-org/theme": "^2.1.18",
-=======
     "axios": "^1.6.8",
->>>>>>> Stashed changes
     "dotenv": "^16.4.5",
     "firebase": "^10.11.0",
     "firestore": "^1.1.6",
