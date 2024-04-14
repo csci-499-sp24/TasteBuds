@@ -5,11 +5,14 @@ import "/styles/login.css";
 import "/styles/index.css"
 
 import { NextUIProvider } from "@nextui-org/react";
+import UserAuthContext from "@/firebase/userAuthContext";
 
 export default function App({ Component, pageProps }) {
   return (
-    <NextUIProvider>
-      <Component {...pageProps} />
-    </NextUIProvider>
+    <UserAuthContext>
+      <NextUIProvider>
+        <Component {...pageProps} />
+      </NextUIProvider>
+    </UserAuthContext>
   );
 }

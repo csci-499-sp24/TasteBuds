@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 
 import Link from "next/link";
+<<<<<<< HEAD
 import Sidebar from "./sidebar";
 
 function Search() {
@@ -12,15 +13,30 @@ function Search() {
     diet: "",
     // more filter criterias, look into doc
   }); 
+=======
+import { Autocomplete, AutocompleteItem, Chip, Divider, Card, CardHeader, CardBody, CardFooter, Image, Button } from "@nextui-org/react";
+import Sidebar from "./sidebar";
+
+function SearchByIngredient() {
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [ingredientList, setIngredientList] = useState([]);
+  const [fetchedIngredients, setFetchedIngredients] = useState([]);
+>>>>>>> 4ef6c7947043a941a213f6c7b8d2d492b80aa849
 
   // useEffect hook to handle key press events (specifically Enter key) and trigger search
   useEffect(() => {
+<<<<<<< HEAD
     // Event handler function to handle Enter key press
     const handleEnterKeyPress = (event) => {
       if (event.key === "Enter") { // Check if the pressed key is Enter
         fetchRecipes(searchQuery, filters); // Call fetchRecipes when Enter key is pressed
       }
     };
+=======
+    fetchIngredients();
+  }, []);
+>>>>>>> 4ef6c7947043a941a213f6c7b8d2d492b80aa849
 
 
     document.addEventListener("keydown", handleEnterKeyPress);  // When any key is pressed, the handleEnterKeyPress function will be called.n
@@ -35,11 +51,22 @@ function Search() {
   const fetchRecipes = async (searchQuery, filters) => { // passes search query and filter to fetchrecipes
     setIsLoading(true); // Set loading state to true
     try {
+<<<<<<< HEAD
       // Construct query parameters from filters
       const queryParams = Object.entries(filters) //  converts the filters object into an array of key-value pairs,
       .filter(([key, value]) => value !== "") // filters out any key-value pairs where the value is an empty string. 
       .map(([key, value]) => `${key}=${value}`) // maps each key-value pair to a string in the format "key=value",This prepares the key-value pairs to be part of the query parameters in the URL.
       .join("&");
+=======
+      const ingredientIds = ingredientList.map(ingredient => ingredient.ingredient_id);
+      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/searchByIngredients`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ingredientIds })
+      });
+>>>>>>> 4ef6c7947043a941a213f6c7b8d2d492b80aa849
 
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/searchV2?query=${searchQuery}&${queryParams}`);
       if (!response.ok) {
@@ -54,6 +81,7 @@ function Search() {
     }
   };
 
+<<<<<<< HEAD
   // Event handler to update search query as user types in the search input
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase(); // Get search query from input and convert to lowercase
@@ -69,6 +97,69 @@ function Search() {
     }));
   };
 
+=======
+  const fetchIngredients = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + `/getAllIngredients`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch data');
+      }
+      const data = await response.json();
+      console.log(data);
+      setFetchedIngredients(data);
+    } catch (error) {
+      console.error("Error fetching ingredients:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRemoveIngredient = (index) => {
+    console.log("REMOVE");
+    if (ingredientList.length === 1) {
+      setIngredientList([]);
+      return;
+    }
+    console.log(ingredientList[index]);
+    const newList = [...ingredientList.slice(0, index), ...ingredientList.slice(index + 1)];
+    setIngredientList(newList);
+    return;
+  }
+
+  const handleIngredientSelect = async (ingredientId) => {
+    const ingredient = fetchedIngredients.find(ingredient => ingredient.ingredient_id === parseInt(ingredientId));
+    if (ingredient) {
+      setIngredientList([...ingredientList, ingredient]);
+    } else {
+      return;
+    }
+  };
+
+  //temporary card component
+  const recipeCard = (recipe) => {
+    console.log(recipe)
+    return (
+      <Card className="col-span-12 sm:col-span-4 h-[300px] ">
+        <CardHeader className="absolute z-10 top-1 flex-col !items-start">
+          <h4 className="text-white font-medium text-large absolute z-10" style={{ backgroundColor: 'rgba(0, 0, 0, 0.05)' }}> {recipe.Recipe.title}</h4>
+        </CardHeader>
+        <Image
+          removeWrapper
+          alt="Card background"
+          className="z-0 w-full h-full object-cover"
+          src={recipe.Recipe.image}
+        />
+      </Card>
+    );
+  }
+
+>>>>>>> 4ef6c7947043a941a213f6c7b8d2d492b80aa849
   return (
     
     <div>
@@ -78,12 +169,16 @@ function Search() {
         <i className="fas fa-bars" id="btn"></i>
         <i className="fas fa-times" id="cancel"></i>
       </label>
+<<<<<<< HEAD
 
       {/* Sidebar component */}
+=======
+>>>>>>> 4ef6c7947043a941a213f6c7b8d2d492b80aa849
       <Sidebar />
 
       {/* Main content section */}
       <section>
+<<<<<<< HEAD
         <div id="div-center" className="search-wrapper">
           <label htmlFor="search">Search Recipes</label>
           <input
@@ -159,6 +254,83 @@ function Search() {
           ))}
           {/* Too results */}
           {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
+=======
+        <div className="flex justify-center mx-atuo">
+          <div id="" className=" mt-20">
+            <label htmlFor="search">Search Recipes</label>
+            <Autocomplete
+              label="Select an Ingredient"
+              onSelectionChange={handleIngredientSelect}
+            >
+              {fetchedIngredients.map((ingredient) => (<AutocompleteItem key={ingredient.ingredient_id}>{ingredient.standard_name}</AutocompleteItem>))}
+            </Autocomplete>
+            <div className="flex gap-4 h-[20px] mt-3">
+              {ingredientList &&
+                ingredientList.map((ingredient, index) => (
+                  <Chip key={index} onClose={() => handleRemoveIngredient(index)}>{ingredient.standard_name}</Chip>
+                ))}
+            </div>
+            <Divider className="my-4" />
+            <div className="justify-center flex mx-atuo" id="">
+              <div className="mx-atuo">
+                {searchResults.some(recipe => recipe.ingredients.length === ingredientList.length) && (
+                  <div>
+                    <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include all ingredients</div>
+                    <div style={{ maxHeight: '600px', overflowY: 'auto' }} className=" ">
+                      <div className="grid lg:grid-cols-3 gap-5 h-auto ">
+                        {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
+                          recipe.ingredients.length === ingredientList.length && (
+                            <div key={recipe.id} className="col-span-1">
+                              {recipeCard(recipe)}
+                            </div>
+                          )
+                        ))}
+                      </div>
+                    </div>
+
+                  </div>
+                )}
+              </div>
+
+
+
+              {searchResults.some(recipe => recipe.ingredients.length < ingredientList.length && recipe.ingredients.length >= ingredientList.length / 2) && (
+                <div className="">
+                  <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include Most ingredients</div>
+                  <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="">
+                    <div className="grid lg:grid-cols-3 gap-5 h-auto ">
+                      {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
+                        (recipe.ingredients.length < ingredientList.length && recipe.ingredients.length >= ingredientList.length / 2) && (
+                          <div key={recipe.id} className="col-span-1">
+                            {recipeCard(recipe)}
+                          </div>
+                        )
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div className="">
+                {searchResults.some(recipe => recipe.ingredients.length < ingredientList.length / 2) && (
+                  <div>
+                    <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white ">Recipes that include Some ingredients</div>
+                    <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="">
+                      <div className="grid lg:grid-cols-3 gap-5 h-auto ">
+                        {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
+                          (recipe.ingredients.length < ingredientList.length / 2) && (
+                            <div key={recipe.id} className="col-span-1">
+                              {recipeCard(recipe)}
+                            </div>
+                          )
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+>>>>>>> 4ef6c7947043a941a213f6c7b8d2d492b80aa849
         </div>
       </section>
     </div>
