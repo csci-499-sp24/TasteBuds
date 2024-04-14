@@ -133,3 +133,17 @@ section{
   width: 665px;
   margin: auto;
 }
+
+.container {
+  display: flex;
+  justify-content: space-between; /* Adjust as needed */
+}
+
+.listbox-container {
+  flex: 1; /* Take up remaining space */
+}
+
+.recipe-container {
+  flex: 1; /* Take up remaining space */
+  margin-left: 20px; /* Adjust margin as needed */
+}

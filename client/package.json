@@ -12,7 +12,7 @@
     "@nextui-org/react": "^2.2.10",
     "@nextui-org/theme": "^2.1.18",
     "dotenv": "^16.4.5",
-    "framer-motion": "^11.0.25",
+    "framer-motion": "^11.0.28",
     "i": "^0.3.7",
     "next": "14.1.0",
     "pg": "^8.11.3",
