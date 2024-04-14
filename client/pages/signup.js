@@ -2,36 +2,41 @@ import React, { useState } from "react";
 import { useAuth } from "../firebase/userAuthContext";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { useState } from "react";
 
-function Signup(){
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+const Registration = () => {
+  const { signup, error } = useAuth();
+  const [errors, setError] = useState("");
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+  const router = useRouter();
 
-    //handle signing up
-    async function signUp(e) {
-        e.preventDefault();
-        
-        try {
-            //send username and password to database
-            const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
+  const userhandler = (event) => {
+    const { name, value } = event.target;
+    console.log(name + ":::::::::::" + value);
+    setUser((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.error || 'Error signing up');
-            }
-
-            console.log(data);
-        } catch (error) {
-            console.error('Error signing up:', error.message);
-        }
+  const RegistrationHandler = async (e) => {
+    e.preventDefault();
+    setError(null);
+    const { username, email, password, confirmPassword } = user;
+    if (password !== confirmPassword) {
+      setError("Password does not match");
+      return;
+    }
+    // Call the signup function from useAuth hook here
+    try {
+      await signup(email, password, username);
+      router.push("/authHome"); // Redirect to home page after successful registration
+    } catch (error) {
+      setError(error.message);
     }
   };
 
@@ -45,15 +50,43 @@ function Signup(){
       <div className="sidebar">
         <header>TasteBuds</header>
         <ul>
-          <li><Link href="/"><i className="fas fa-home"></i>Home</Link></li>  
-          <li><Link href="/search"><i className="fas fa-search"></i>Search</Link></li> 
-          <li><Link href="/discover"><i className="fas fa-search"></i>Discover</Link></li> 
-          <li><Link href="/searchByIngredient"><i className="fas fa-search"></i>Ingredient Search</Link></li> 
-          <li><a href="#"><i className="fas fa-star"></i>Saved Recipes</a></li>
-          <li><a href="#"><i className="fas fa-cog"></i>User Settings</a></li>
-          <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
+          <li>
+            <Link href="/">
+              <i className="fas fa-home"></i>Home
+            </Link>
+          </li>
+          <li>
+            <Link href="/search">
+              <i className="fas fa-search"></i>Search
+            </Link>
+          </li>
+          <li>
+            <Link href="/discover">
+              <i className="fas fa-search"></i>Discover
+            </Link>
+          </li>
+          <li>
+            <Link href="/searchByIngredient">
+              <i className="fas fa-search"></i>Ingredient Search
+            </Link>
+          </li>
+          <li>
+            <a href="#">
+              <i className="fas fa-star"></i>Saved Recipes
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <i className="fas fa-cog"></i>User Settings
+            </a>
+          </li>
+          <li>
+            <Link href="/login">
+              <i className="fas fa-sign-in-alt"></i>Login
+            </Link>
+          </li>
         </ul>
-       </div>
+      </div>
       <section></section>
       <div className="main">
         <h3>Sign Up</h3>
