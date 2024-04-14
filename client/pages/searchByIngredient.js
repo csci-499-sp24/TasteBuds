@@ -111,7 +111,7 @@ function SearchByIngredient() {
       </label>
       <Sidebar />
       <section>
-        <div className="flex justify-center  w-auto mx-96">
+        <div className="flex justify-center mx-atuo">
           <div id="" className=" mt-20">
             <label htmlFor="search">Search Recipes</label>
             <Autocomplete
@@ -127,13 +127,13 @@ function SearchByIngredient() {
                 ))}
             </div>
             <Divider className="my-4" />
-            <div className=" flex justify-center w-fit space-x-3 ">
-              <div className="">
+            <div className="justify-center flex mx-atuo" id="">
+              <div className="mx-atuo">
                 {searchResults.some(recipe => recipe.ingredients.length === ingredientList.length) && (
                   <div>
-                    <div id="div-center" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include all ingredients</div>
+                    <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include all ingredients</div>
                     <div style={{ maxHeight: '600px', overflowY: 'auto' }} className=" ">
-                      <div className="grid grid-cols-3 gap-5 h-auto ">
+                      <div className="grid lg:grid-cols-3 gap-5 h-auto ">
                         {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                           recipe.ingredients.length === ingredientList.length && (
                             <div key={recipe.id} className="col-span-1">
@@ -152,9 +152,9 @@ function SearchByIngredient() {
 
               {searchResults.some(recipe => recipe.ingredients.length < ingredientList.length && recipe.ingredients.length >= ingredientList.length / 2) && (
                 <div className="">
-                  <div id="div-center" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include Most ingredients</div>
+                  <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include Most ingredients</div>
                   <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="">
-                    <div className="grid grid-cols-3 gap-5 h-auto ">
+                    <div className="grid lg:grid-cols-3 gap-5 h-auto ">
                       {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                         (recipe.ingredients.length < ingredientList.length && recipe.ingredients.length >= ingredientList.length / 2) && (
                           <div key={recipe.id} className="col-span-1">
@@ -169,9 +169,9 @@ function SearchByIngredient() {
               <div className="">
                 {searchResults.some(recipe => recipe.ingredients.length < ingredientList.length / 2) && (
                   <div>
-                    <div id="div-center" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white ">Recipes that include Some ingredients</div>
+                    <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white ">Recipes that include Some ingredients</div>
                     <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="">
-                      <div className="grid grid-cols-3 gap-5 h-auto ">
+                      <div className="grid lg:grid-cols-3 gap-5 h-auto ">
                         {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                           (recipe.ingredients.length < ingredientList.length / 2) && (
                             <div key={recipe.id} className="col-span-1">
