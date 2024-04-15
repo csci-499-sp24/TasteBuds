@@ -102,10 +102,6 @@ section{
     text-align: center;
 }
 
-h1 {
-    color: #4CAF50;
-}
-
 label {
     display: block;
     width: 100%;
@@ -114,7 +110,6 @@ label {
     text-align: left;
     color: #555;
 }
-
 
 input {
     display: block;
@@ -126,25 +121,8 @@ input {
     border-radius: 5px;
 }
 
-button {
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-    border: none;
-    color: white;
-    cursor: pointer;
-    background-color: #4CAF50;
-    width: 100%;
-    font-size: 16px;
-}
-
 .wrap {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.submit{
-  background-color: #4CAF50;
 }

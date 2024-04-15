@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
-// import { Grid, Select, Spacer } from "@nextui-org/react";
 import Link from "next/link";
 import Sidebar from "./sidebar";
-
-// Import NextUI theme CSS
-// import "@nextui-org/theme/dist/nextui.css";
-// import 'next/dist/next.css';
-
+import {Listbox, ListboxItem, ListboxSection, Input, Chip, ScrollShadow} from "@nextui-org/react";
+import {ListboxWrapper} from "./ListboxWrapper";
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
@@ -15,6 +11,10 @@ function Search() {
   const [filters, setFilters] = useState({  // State variable to hold filter criteria
     cuisine: "",
     diet: "",
+    dishType: "",
+    servings: "",
+    includeTips: undefined ,
+
     // more filter criterias, look into doc
   }); 
 
@@ -42,10 +42,10 @@ function Search() {
     try {
       // Construct query parameters from filters
       const queryParams = Object.entries(filters) //  converts the filters object into an array of key-value pairs,
-      .filter(([key, value]) => value !== "") // filters out any key-value pairs where the value is an empty string. 
+      .filter(([key, value]) => value !== "" && value !==undefined) // filters out any key-value pairs where the value is an empty string. 
       .map(([key, value]) => `${key}=${value}`) // maps each key-value pair to a string in the format "key=value",This prepares the key-value pairs to be part of the query parameters in the URL.
       .join("&");
-
+      console.log(`Query: ${process.env.NEXT_PUBLIC_SERVER_URL}/searchV2?query=${searchQuery}&${queryParams}`);
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/searchV2?query=${searchQuery}&${queryParams}`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
@@ -65,14 +65,38 @@ function Search() {
     setSearchQuery(query); // Update search query state
   };
 
-  // Event handler to update filter criteria when user selects an option from dropdown
-  const handleFilterChange = (event, filterType) => { 
-    const filterVal = event.target.value; //event is triggered when dropdown param is pressed, changes type of filter
-    setFilters(prevFilters => ({ //filter state is updated, which returns a new state obj
-      ...prevFilters, // spread operator (...) copies all key-value pairs from the previous state of the filters object.
-      [filterType]: filterVal // updates the specific filter type (filterType) with the new value (filterVal).
-    }));
-  };
+  
+ 
+
+// Event handler to update filter criteria when user selects an option from Listbox
+const handleListboxChange = (selectedItems, filterType) => {
+  console.log("Selected Items:", selectedItems); // Log selectedItems to the console
+  setFilters((prevFilters) => { // //filter state is updated, which returns a new state obj
+    let filterVal = []; // Extract values of selected items
+    if(Object.keys(selectedItems).length > 0 ){
+      console.log("(Object.keys(selectedItems).length > 0:, true"); 
+      filterVal = Array.from(selectedItems);
+    }
+    console.log("filterVal:", filterVal); 
+    console.log("prevFilters:", prevFilters);
+    console.log("Filters:", filters);
+    return {
+      ...prevFilters, // // spread operator (...) copies all key-value pairs from the previous state of the filters object.
+      [filterType]: filterVal.join(","), // updates the specific filter type (filterType) with the new value (filterVal), separated by commas
+    };
+  });
+}
+
+// Function to handle changes in the servings input
+const handleServingsInputChange = (event) => {
+  const servingsValue = event.target.value;
+  setFilters((prevFilters) => ({
+    ...prevFilters,
+    servings: servingsValue,
+  }));
+};
+
+  
 
   return (
     
@@ -88,103 +112,174 @@ function Search() {
       <Sidebar />
 
       {/* Main content section */}
-      <section>
+      <section> 
         <div id="div-center" className="search-wrapper">
-          <label htmlFor="search">Search Recipes</label>
-          <input
-            type="search" 
-            id="search"
-            value={searchQuery}
-            onChange={handleSearch} 
-            placeholder="Search recipes..."
-            className="input"
-          />
-           {/* Cuisine filter dropdown */}
-          <div className="filter-wrapper">
-            <select value={filters.cuisine} onChange={(e) => handleFilterChange(e, 'cuisine')}>
-              <option value="">Cuisines</option>
-              <option value="Mexican">Mexican</option>
-              <option value="italian">Italian</option>
-              <option value="vietnamese">Vietnamese</option>
-              <option value="african">African</option>
-              <option value="asian">Asian</option>
-              <option value="american">American</option>
-              <option value="british">British</option>
-              <option value="cajun">Cajun</option>
-              <option value="caribbean">Caribbean</option>
-              <option value="chinese">Chinese</option>
-              <option value="european">European</option>
-              <option value="eastern European">Eastern European</option>
-              <option value="french">French</option>
-              <option value="german">German</option>
-              <option value="greek">Greek</option>
-              <option value="indian">Indian</option>
-              <option value="irish">Irish</option>
-              <option value="japanese">Japanese</option>
-              <option value="jewish">Jewish</option>
-              <option value="korean">Korean</option>
-              <option value="latin american">Latin American</option>
-              <option value="mediterranean">Mediterranean</option>
-              <option value="middle eastern">Middle Eastern</option>
-              <option value="nordic">Nordic</option>
-              <option value="spanish">Spanish</option>
-              <option value="thai">Thai</option>
-            </select>
-            {/* Diet filter dropdown */}
-            <select value={filters.diet} onChange={(e) => handleFilterChange(e, 'diet')}>
-              <option value="">Diets</option>
-              <option value="gluten free">Gluten Free</option>
-              <option value="vegetarian">Vegetarian</option>
-              <option value="lacto vegetarian">Lacto-Vegetarian</option>
-              <option value="ovo vegetarian">Ovo-Vegetarian</option>
-              <option value="ketogenic">Ketogenic</option>
-              <option value="vegan">Vegan</option>
-              <option value="paleo">Paleo</option>
-              <option value="primal">Primal</option>
-              <option value="Low Fodmap">LOW FODMAP</option>
-              <option value="whole 30">Whole30</option>
-              <option value="GAPS_FULL">GAP FULL</option>
-              <option value="fodmap friendly">Fodmap Friendly</option>
-              <option value="pescatarian">Pescatarian</option>
-              <option value="dairy free">Dairy free</option>
-              <option value="lacto ovo vegetarian">Lacto-Ovo Vegetarian</option>
-              <option value="paleolithic">Paleolithic</option>
-            </select>
-            {/* Add more filter dropdowns for other criteria*/}
+          <Input type="search" label="Search" onChange={handleSearch} />
+        </div>
+        <div className="container" >
+          <div className="listbox-container">
+            <ListboxWrapper>
+              <Listbox
+                label="Select an option"
+                classNames={{
+                  base: "max-w-xs",
+                  list: "max-h-[300px] overflow-scroll",
+                }}
+                selectionMode="multiple"
+                variant="flat"
+                onSelectionChange={(selectedItems) =>
+                  handleListboxChange(selectedItems, "cuisine")
+                }
+              >
+                <ListboxSection title="Cuisine" showDivider>
+                  {[{key: "African"},{key: "American"},{key: "Asian"},{key: "British"},{key: "Cajun"},{key: "Caribbean"},{key: "Chinese"},{key: "Eastern European"},{key: "European"},{key: "French"},{key: "German"},{key: "Greek"},{key: "Indian"},{key: "Irish"},{key: "Italian"},{key: "Japanese"},{key: "Jewish"},{key: "Korean"},{key: "Latin American"},{key: "Nordic"},{key: "Mediterranean"},{key: "Mexican"},{key: "Middle Eastern"},{key: "Spanish"},{key: "Thai"},{key: "Vietnamese"}].map((item) => (
+                    <ListboxItem
+                      key={item.key}
+                      textValue={item.key}
+                      onAction={() => handleListboxChange(item.key, "cuisine")}
+                    >
+                      <div className="flex gap-2 items-center">
+                        <div className="flex flex-col">
+                          <span className="text-small">{item.key}</span>
+                        </div>
+                      </div>
+                    </ListboxItem>
+                  ))}
+                </ListboxSection>
+              </Listbox>
+
+              <Listbox
+                label="Select an option"
+                classNames={{
+                  base: "max-w-xs",
+                  list: "max-h-[300px] overflow-scroll",
+                }}
+                selectionMode="multiple"
+                variant="flat"
+                onSelectionChange={(selectedItems) =>
+                  handleListboxChange(selectedItems, "diet")
+                }>
+                <ListboxSection title="Diets" showDivider>
+                  {[
+                    { key: "dairy free",  name: "Dairy Free" },
+                    { key: "gluten free", name: "Gluten Free" },
+                    { key: "ketogenic",  name: "Keto" },
+                    { key: "lacto ovo vegetarian", name: "Lacto-Ovo Vegetarian" },
+                    { key: "lacto vegetarian", name: "Lacto Vegetarian" },
+                    { key: "Low Fodmap",  name: "Low Fodmap" },
+                    { key: "ovo vegetarian", name: "Ovo Vegetarian" },
+                    { key: "paleolithic", name: "Paleolithic" },
+                    { key: "pescatarian", name: "Pescatarian" },
+                    { key: "primal", name: "Primal" },
+                    { key: "vegan" , name: "Vegan" },
+                    { key: "vegetarian", name: "Vegetarian"},
+                    // Add more items as needed
+                  ].map((item) => (
+                    <ListboxItem
+                      key={item.key}
+                      textValue={item.key}
+                      onAction={() => handleListboxChange(item.key, "diet")}
+                    >
+                      <div className="flex gap-2 items-center">
+                        <div className="flex flex-col">
+                          <span className="text-small">{item.name}</span>
+                        </div>
+                      </div>
+                    </ListboxItem>
+                  ))}
+                </ListboxSection>
+              </Listbox>
+
+              <Listbox
+                label="Select an option"
+                classNames={{
+                  base: "max-w-xs",
+                  list: "max-h-[300px] overflow-scroll",
+                }}
+                selectionMode="multiple"
+                variant="flat"
+                onSelectionChange={(selectedItems) =>
+                  handleListboxChange(selectedItems, "dishType")
+                }>
+                <ListboxSection title="Dish Types" showDivider>
+                  {[
+                    { key: "antipasti",  name: "Antipasti" },
+                    { key: "antipasto", name: "Antipasto" },
+                    { key: "appetizer",  name: "Appetizer" },
+                    { key: "beverage", name: "Beverage" },
+                    { key: "bread", name: "Bread" }, // might removed it 
+                    { key: "breakfast", name: "Breakfast" },
+                    { key: "brunch",  name: "Brunch" },
+                    { key: "condiment", name: "Condiment" },
+                    { key: "dessert", name: "Dessert" },
+                    { key: "dinner", name: "Dinner" },
+                    { key: "dip", name: "Dip" },
+                    { key: "drink" , name: "Drink" },
+                    { key: "fingerfood", name: "Fingerfood"},
+                    { key: "hor d'oeuvre", name: "Hor d'oeuvre"},
+                    { key: "lunch", name: "Lunch"},
+                    { key: "main course", name: "Main Course"},
+                    { key: "main dish", name: "Main Dish"},
+                    { key: "marinade", name: "Marinade"},
+                    { key: "morning meal", name: "Morning Meal"},
+                    { key: "salad", name: "Salad"},
+                    { key: "sauce", name: "Sauce"},
+                    { key: "seasoning", name: "Seasoning"},
+                    { key: "side dish", name: "Side Sish"},
+                    { key: "snack", name: "Snack"},
+                    { key: "soup", name: "Soup"},
+                    { key: "spread", name: "Spread"},
+                    { key: "starter", name: "Starter"},
+                  ].map((item) => (
+                    <ListboxItem
+                      key={item.key}
+                      textValue={item.key}
+                      onAction={() => handleListboxChange(item.key, "dishType")}
+                    >
+                      <div className="flex gap-2 items-center">
+                        <div className="flex flex-col">
+                          <span className="text-small">{item.name}</span>
+                        </div>
+                      </div>
+                    </ListboxItem>
+                  ))}
+                </ListboxSection>
+              </Listbox>
+       
+              <div className="flex flex-col gap-2">
+                <h1 className="text-default-500 text-small">Serving</h1>
+                <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
+                    <Input
+                      key={"outside"}
+                      type="number"
+                      labelPlacement={"outside"}
+                      onChange={handleServingsInputChange}
+                      placeholder="Enter servings"
+                      className="input"
+                    />
+                </div>
+              </div> 
+            </ListboxWrapper>
           </div>
-        </div>
-        {/* Display search results */}
-        <div id="div-center" className="user-recipes" data-user-cards-container>
-          {isLoading && <p>Loading...</p>}
-          {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
-            <div key={recipe.recipe_id} className="card">
-              <div className="header" data-header>{recipe.title}</div>
-              <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+
+          <div className="recipe-container">   
+          {/* Display search results */}
+            <div id="div-center" className="user-recipes" data-user-cards-container>
+              {isLoading && <p>Loading...</p>}
+              {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
+                <div key={recipe.recipe_id} className="card">
+                  <div className="header" data-header>{recipe.title}</div>
+                  <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+                </div>
+              ))}
+              {/* Too results */}
+              {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
             </div>
-          ))}
-          {/* Too results */}
-          {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
-        </div>
+          </div>
+        </div>  
       </section>
-      {/* <section>
-      <Grid.Container gap={2}>
-        <Grid xs={12} sm={6}>
-          <Select
-            label="Cuisine"
-            placeholder="Select cuisine"
-          />
-        </Grid>
-      <Spacer x={2} />
-      <Grid xs={12} sm={6}>
-        <Select
-          label="Diet"
-          placeholder="Select diet"
-        />
-      </Grid>
-    </Grid.Container>
-      </section> */}
+
     </div>
   );
 }
-
 export default Search;
