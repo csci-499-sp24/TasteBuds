@@ -93,6 +93,67 @@ const {
     CaloricBreakdown, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
 
+app.get('/search_by_id', async (req, res) => {
+    try {
+        const {id} = req.query; 
+        const desired_recipe = await Recipe.findOne({
+            where: {recipe_id: id}
+        });
+        const recipe_ingredients = await Ingredients.findOne({
+            where: {}
+        })
+        res.status(200).json(desired_recipe);
+    } catch (error) {
+        console.error("Error finding recipe by id:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+/*
+Things to get for the recipe profile:
+Price per saving:
+Rating:
+Difficulty:
+Time:
+Description:
+Ingredients:
+Equipment:
+*/
+`
+Price per serving: $2.01
+
+Rating(out of 10): 1/10
+
+Difficulty: 5/10 
+
+Time needed: 35 mins
+
+Description:
+Review:
+
+Ingredients needed:
+
+-13.5 oz canned full-fat coconut milk
+-1 cup water
+-1/3 cup nutritional yeast
+-2 Tbps plant-based buttery spread
+-4 tsps potato starch
+-1/2 cup water
+-1 tsp dried parsley
+-sea salt
+-white pepper
+-3 cups gluten-free fusilli
+-2 heads broccoli
+
+Equipment needed:
+
+-Steamer basket
+-Whisk
+-Sauce pan
+-Stove
+-Bowl
+-Pot`
+
 // search + filter 
 app.get('/searchV2', async (req, res) => {
     try {
