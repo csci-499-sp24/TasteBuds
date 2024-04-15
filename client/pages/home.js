@@ -81,12 +81,6 @@ function Homepage() {
         <div id="div-center" className="head">
           Recipe of the Day:
           {randomRecipe && (
-            // <Card className="recipe-card" style={{ height: '500px', width: '700px', backgroundImage: `url(${randomRecipe.image})`, backgroundSize: 'cover' }}>
-            //   <CardHeader>
-            //     <h4 style={{fontWeight: "bolder", color: "white", textShadow: "black 2px 2px"}}>{randomRecipe.title}</h4>
-            //   </CardHeader>
-            //   {/* <CardBody>{randomRecipe.summary}</CardBody> */}
-            // </Card>
             <Card className="recipe-card" style={{ height: '500px', width: '700px' }}>
               <div style={{ height: '100%', width: '100%', backgroundImage: `url(${randomRecipe.image})`, backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>
                  <CardHeader>
