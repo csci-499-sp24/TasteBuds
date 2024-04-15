@@ -6,3 +6,5 @@ export const ListboxWrapper = ({ children }) => (
     {children}
   </div>
 );
+
+export default ListboxWrapper;
