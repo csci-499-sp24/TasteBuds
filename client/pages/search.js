@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 import Sidebar from "./sidebar";
-import {Listbox, ListboxItem, ListboxSection, Input, Chip, ScrollShadow} from "@nextui-org/react";
+import {Listbox, ListboxItem, ListboxSection, Input, Tab, Tabs, Chip, ScrollShadow} from "@nextui-org/react";
 import {ListboxWrapper} from "./ListboxWrapper";
 
 function Search() {
@@ -119,35 +119,34 @@ const handleServingsInputChange = (event) => {
         <div className="container" >
           <div className="listbox-container">
             <ListboxWrapper>
-              <Listbox
-                label="Select an option"
-                classNames={{
-                  base: "max-w-xs",
-                  list: "max-h-[300px] overflow-scroll",
-                }}
-                selectionMode="multiple"
-                variant="flat"
-                onSelectionChange={(selectedItems) =>
-                  handleListboxChange(selectedItems, "cuisine")
-                }
-              >
-                <ListboxSection title="Cuisine" showDivider>
-                  {[{key: "African"},{key: "American"},{key: "Asian"},{key: "British"},{key: "Cajun"},{key: "Caribbean"},{key: "Chinese"},{key: "Eastern European"},{key: "European"},{key: "French"},{key: "German"},{key: "Greek"},{key: "Indian"},{key: "Irish"},{key: "Italian"},{key: "Japanese"},{key: "Jewish"},{key: "Korean"},{key: "Latin American"},{key: "Nordic"},{key: "Mediterranean"},{key: "Mexican"},{key: "Middle Eastern"},{key: "Spanish"},{key: "Thai"},{key: "Vietnamese"}].map((item) => (
-                    <ListboxItem
-                      key={item.key}
-                      textValue={item.key}
-                      onAction={() => handleListboxChange(item.key, "cuisine")}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <div className="flex flex-col">
-                          <span className="text-small">{item.key}</span>
+                <Listbox
+                  label="Select an option"
+                  classNames={{
+                    base: "max-w-xs",
+                    list: "max-h-[300px] overflow-scroll",
+                  }}
+                  selectionMode="multiple"
+                  variant="flat"
+                  onSelectionChange={(selectedItems) =>
+                    handleListboxChange(selectedItems, "cuisine")
+                  }
+                >
+                  <ListboxSection title="Cuisine" showDivider>
+                    {[{key: "African"},{key: "American"},{key: "Asian"},{key: "British"},{key: "Cajun"},{key: "Caribbean"},{key: "Chinese"},{key: "Eastern European"},{key: "European"},{key: "French"},{key: "German"},{key: "Greek"},{key: "Indian"},{key: "Irish"},{key: "Italian"},{key: "Japanese"},{key: "Jewish"},{key: "Korean"},{key: "Latin American"},{key: "Nordic"},{key: "Mediterranean"},{key: "Mexican"},{key: "Middle Eastern"},{key: "Spanish"},{key: "Thai"},{key: "Vietnamese"}].map((item) => (
+                      <ListboxItem
+                        key={item.key}
+                        textValue={item.key}
+                        onAction={() => handleListboxChange(item.key, "cuisine")}
+                      >
+                        <div className="flex gap-2 items-center">
+                          <div className="flex flex-col">
+                            <span className="text-small">{item.key}</span>
+                          </div>
                         </div>
-                      </div>
-                    </ListboxItem>
-                  ))}
-                </ListboxSection>
-              </Listbox>
-
+                      </ListboxItem>
+                    ))}
+                  </ListboxSection>
+                </Listbox>
               <Listbox
                 label="Select an option"
                 classNames={{
