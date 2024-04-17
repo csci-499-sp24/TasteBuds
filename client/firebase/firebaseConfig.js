@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp } from 'firebase/app';
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCfX7oWswUtw22qgP6erQzu8ncXOb1EQJ0",
@@ -16,5 +16,16 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
+
+export const testFirestore = async () => {
+    try {
+        const snapshot = await getDocs(collection(firestore, 'users'));
+        snapshot.forEach(doc => {
+            console.log(doc.id, '=>', doc.data());
+        });
+    } catch (error) {
+        console.error("Error accessing Firestore:", error);
+    }
+};
  
-export {auth, firestore};
+export { firestore, auth };
