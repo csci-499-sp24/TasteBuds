@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
-import Sidebar from "./sidebar";
-import {Listbox, ListboxItem, ListboxSection, Input, Tab, Tabs, Chip, ScrollShadow} from "@nextui-org/react";
-import {ListboxWrapper} from "./ListboxWrapper";
-
+import Sidebar from "../components/sidebar";
+import {Input} from "@nextui-org/react";
+import {ListboxWrapper} from "../components/ListboxWrapper";
+import CuisineTab from "../components/cuisineTab";
+import DietTab from "../components/dietTab";
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
   const [searchResults, setSearchResults] = useState([]); // State variable to hold the search results
@@ -117,148 +118,13 @@ const handleServingsInputChange = (event) => {
           <Input type="search" label="Search" onChange={handleSearch} />
         </div>
         <div className="container" >
+
           <div className="listbox-container">
             <ListboxWrapper>
-                <Listbox
-                  label="Select an option"
-                  classNames={{
-                    base: "max-w-xs",
-                    list: "max-h-[300px] overflow-scroll",
-                  }}
-                  selectionMode="multiple"
-                  variant="flat"
-                  onSelectionChange={(selectedItems) =>
-                    handleListboxChange(selectedItems, "cuisine")
-                  }
-                >
-                  <ListboxSection title="Cuisine" showDivider>
-                    {[{key: "African"},{key: "American"},{key: "Asian"},{key: "British"},{key: "Cajun"},{key: "Caribbean"},{key: "Chinese"},{key: "Eastern European"},{key: "European"},{key: "French"},{key: "German"},{key: "Greek"},{key: "Indian"},{key: "Irish"},{key: "Italian"},{key: "Japanese"},{key: "Jewish"},{key: "Korean"},{key: "Latin American"},{key: "Nordic"},{key: "Mediterranean"},{key: "Mexican"},{key: "Middle Eastern"},{key: "Spanish"},{key: "Thai"},{key: "Vietnamese"}].map((item) => (
-                      <ListboxItem
-                        key={item.key}
-                        textValue={item.key}
-                        onAction={() => handleListboxChange(item.key, "cuisine")}
-                      >
-                        <div className="flex gap-2 items-center">
-                          <div className="flex flex-col">
-                            <span className="text-small">{item.key}</span>
-                          </div>
-                        </div>
-                      </ListboxItem>
-                    ))}
-                  </ListboxSection>
-                </Listbox>
-              <Listbox
-                label="Select an option"
-                classNames={{
-                  base: "max-w-xs",
-                  list: "max-h-[300px] overflow-scroll",
-                }}
-                selectionMode="multiple"
-                variant="flat"
-                onSelectionChange={(selectedItems) =>
-                  handleListboxChange(selectedItems, "diet")
-                }>
-                <ListboxSection title="Diets" showDivider>
-                  {[
-                    { key: "dairy free",  name: "Dairy Free" },
-                    { key: "gluten free", name: "Gluten Free" },
-                    { key: "ketogenic",  name: "Keto" },
-                    { key: "lacto ovo vegetarian", name: "Lacto-Ovo Vegetarian" },
-                    { key: "lacto vegetarian", name: "Lacto Vegetarian" },
-                    { key: "Low Fodmap",  name: "Low Fodmap" },
-                    { key: "ovo vegetarian", name: "Ovo Vegetarian" },
-                    { key: "paleolithic", name: "Paleolithic" },
-                    { key: "pescatarian", name: "Pescatarian" },
-                    { key: "primal", name: "Primal" },
-                    { key: "vegan" , name: "Vegan" },
-                    { key: "vegetarian", name: "Vegetarian"},
-                    // Add more items as needed
-                  ].map((item) => (
-                    <ListboxItem
-                      key={item.key}
-                      textValue={item.key}
-                      onAction={() => handleListboxChange(item.key, "diet")}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <div className="flex flex-col">
-                          <span className="text-small">{item.name}</span>
-                        </div>
-                      </div>
-                    </ListboxItem>
-                  ))}
-                </ListboxSection>
-              </Listbox>
-
-              <Listbox
-                label="Select an option"
-                classNames={{
-                  base: "max-w-xs",
-                  list: "max-h-[300px] overflow-scroll",
-                }}
-                selectionMode="multiple"
-                variant="flat"
-                onSelectionChange={(selectedItems) =>
-                  handleListboxChange(selectedItems, "dishType")
-                }>
-                <ListboxSection title="Dish Types" showDivider>
-                  {[
-                    { key: "antipasti",  name: "Antipasti" },
-                    { key: "antipasto", name: "Antipasto" },
-                    { key: "appetizer",  name: "Appetizer" },
-                    { key: "beverage", name: "Beverage" },
-                    { key: "bread", name: "Bread" }, // might removed it 
-                    { key: "breakfast", name: "Breakfast" },
-                    { key: "brunch",  name: "Brunch" },
-                    { key: "condiment", name: "Condiment" },
-                    { key: "dessert", name: "Dessert" },
-                    { key: "dinner", name: "Dinner" },
-                    { key: "dip", name: "Dip" },
-                    { key: "drink" , name: "Drink" },
-                    { key: "fingerfood", name: "Fingerfood"},
-                    { key: "hor d'oeuvre", name: "Hor d'oeuvre"},
-                    { key: "lunch", name: "Lunch"},
-                    { key: "main course", name: "Main Course"},
-                    { key: "main dish", name: "Main Dish"},
-                    { key: "marinade", name: "Marinade"},
-                    { key: "morning meal", name: "Morning Meal"},
-                    { key: "salad", name: "Salad"},
-                    { key: "sauce", name: "Sauce"},
-                    { key: "seasoning", name: "Seasoning"},
-                    { key: "side dish", name: "Side Sish"},
-                    { key: "snack", name: "Snack"},
-                    { key: "soup", name: "Soup"},
-                    { key: "spread", name: "Spread"},
-                    { key: "starter", name: "Starter"},
-                  ].map((item) => (
-                    <ListboxItem
-                      key={item.key}
-                      textValue={item.key}
-                      onAction={() => handleListboxChange(item.key, "dishType")}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <div className="flex flex-col">
-                          <span className="text-small">{item.name}</span>
-                        </div>
-                      </div>
-                    </ListboxItem>
-                  ))}
-                </ListboxSection>
-              </Listbox>
-       
-              <div className="flex flex-col gap-2">
-                <h1 className="text-default-500 text-small">Serving</h1>
-                <div className="flex w-full flex-wrap items-end md:flex-nowrap mb-6 md:mb-0 gap-4">
-                    <Input
-                      key={"outside"}
-                      type="number"
-                      labelPlacement={"outside"}
-                      onChange={handleServingsInputChange}
-                      placeholder="Enter servings"
-                      className="input"
-                    />
-                </div>
-              </div> 
-            </ListboxWrapper>
+              <CuisineTab />
+              <hr className="my-4 border-gray-300" />              
+              <DietTab />
+            </ListboxWrapper> 
           </div>
 
           <div className="recipe-container">   

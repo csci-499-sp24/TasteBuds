@@ -32,10 +32,16 @@ async function main() {
         for (const cuisineType of lowestCountCuisines) {
             const os = await getOffsetForCuisine(cuisineType.cuisine_name);
             // console.log(os)
-            const offset = parseInt(os, 10)+ 350;
-            // 145 paleolithic
-            // 130 keto
-            // 320
+            const offset = parseInt(os, 10) + 12;
+            // 146 African-paleolithic,195 
+            // 183 (+4?) keto, Indian 
+            // 145 pescatarian, Scand, 239
+            // 500 
+            // 155
+            //chinese fod 10, Thai 100 Fod
+            // (8)E.E 2 vegetarian, (1)M.E 9, (2) l.A 8
+            // 116 Fodmap 
+
 
             // console.log(offset)
             const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?$cuisine=${cuisineType.cuisine_name}&number=10&offset=${offset}&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
@@ -75,6 +81,7 @@ async function main() {
                 const extractedRecipe = await fetchRecipesFromSource(detailApiUrl);
                 const transformedRecipes = transformRecipeData(extractedRecipe);
                 transformedRecipes[0].cuisine.push(cuisineType.cuisine_name);
+                // transformedRecipes[0].diet.push("vegetarian");
                 // console.log(transformedRecipes[0].cuisine);
                 // transformedRecipes[0].cuisine.cuisine_nameforEach(function(entry) {
                 //     console.log(entry);
@@ -108,7 +115,7 @@ async function getCuisinesWithLowestCount(count) {
         LEFT JOIN public.recipes ON recipe_cuisine.recipe_id = recipes.recipe_id
         GROUP BY cuisine_name
         ORDER BY recipe_count
-        OFFSET 2
+        OFFSET 3
         LIMIT ${count};`, // ignore the lowest cuisine thier is no more of it  // OFFSET 1  -- Skip the first result
 
         { type: QueryTypes.SELECT }

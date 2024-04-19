@@ -349,14 +349,7 @@ app.get('/searchV2', async (req, res) => {
         //         };
         //     }
         // }
-        
-        
-        
-        
-        
-         
-    
-  
+          
         // console.log("Executing query:", baseQuery);
 
         // Fetch recipes from the database
