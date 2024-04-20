@@ -121,9 +121,9 @@ const handleServingsInputChange = (event) => {
 
           <div className="listbox-container">
             <ListboxWrapper>
-              <CuisineTab />
-              <hr className="my-4 border-gray-300" />              
-              <DietTab />
+            <CuisineTab handleListboxChange={handleListboxChange} />              
+            <hr className="my-4 border-gray-300" />              
+            <DietTab handleListboxChange={handleListboxChange} />
             </ListboxWrapper> 
           </div>
 

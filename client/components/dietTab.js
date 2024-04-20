@@ -2,7 +2,7 @@
 import React from 'react';
 import { Select, SelectItem } from '@nextui-org/react';
 
-const DietTab = () => {
+const DietTab = ({ handleListboxChange }) => {
   return (
     <div className="mb-4"> {/* Add margin top */}
     <Select
@@ -11,6 +11,9 @@ const DietTab = () => {
       color="warning"
       isMultiline="true"
       className="max-w-xs"
+      onSelectionChange={(selectedItems) =>
+        handleListboxChange(selectedItems, "diet")
+      }
     >
       {[
         { key: "dairy free",  name: "Dairy Free" },
