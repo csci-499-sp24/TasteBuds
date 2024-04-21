@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Sidebar from "./sidebar";
-
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Image,
-  Button,
-} from "@nextui-org/react";
+import RecipeBox from './RecipeBox'; // Import the RecipeCard component
 
 function Homepage() {
   const [randomRecipe, setRandomRecipe] = useState(null);
-  const [nextUpdateTimer, setNextUpdateTimer] = useState(60); // Value set to 60 seconds for demo
-  // const [nextUpdateTimer, setNextUpdateTimer] = useState(86400); // Initial 24 hours in seconds
+  const [nextUpdateTimer, setNextUpdateTimer] = useState(5); // Value set to 60 seconds for demo
 
   const fetchRandomRecipe = async () => {
     try {
@@ -27,19 +18,16 @@ function Homepage() {
         setRandomRecipe(data);
         localStorage.setItem('randomRecipe', JSON.stringify(data));
         localStorage.setItem('lastFetchTime', Date.now().toString());
-        setNextUpdateTimer(60); // Reset the timer to 60 seconds
-        // setNextUpdateTimer(86400); // Reset the timer to 24 hours
+        setNextUpdateTimer(5); // Reset the timer to 60 seconds
       };
 
       const lastFetchTime = localStorage.getItem('lastFetchTime');
-      if (!lastFetchTime || Date.now() - parseInt(lastFetchTime) >= 60 * 1000) {
-      // if (!lastFetchTime || Date.now() - parseInt(lastFetchTime) >= 24 * 60 * 60 * 1000) { //24hr
+      if (!lastFetchTime || Date.now() - parseInt(lastFetchTime) >= 5 * 1000) {
         await getRandomRecipeFromServer();
       } else {
         const recipeFromStorage = localStorage.getItem('randomRecipe');
         setRandomRecipe(JSON.parse(recipeFromStorage));
-        const remainingTime = 60 * 1000 - (Date.now() - parseInt(lastFetchTime));
-        // const remainingTime = 24 * 60 * 60 * 1000 - (Date.now() - parseInt(lastFetchTime)); //24hr
+        const remainingTime = 5 * 1000 - (Date.now() - parseInt(lastFetchTime));
         setNextUpdateTimer(Math.ceil(remainingTime / 1000));
         const timer = setTimeout(getRandomRecipeFromServer, remainingTime);
         return () => clearTimeout(timer);
@@ -58,8 +46,7 @@ function Homepage() {
       setNextUpdateTimer((prev) => {
         if (prev === 0) {
           fetchRandomRecipe();
-          return 60; // Reset the timer to 60 sec
-          // return 86400; // Reset the timer to 24 hours
+          return 5; // Reset the timer to 60 sec
         } else {
           return prev - 1;
         }
@@ -80,15 +67,7 @@ function Homepage() {
       <section className='bg'>
         <div id="div-center" className="head">
           Recipe of the Day:
-          {randomRecipe && (
-            <Card className="recipe-card" style={{ height: '500px', width: '700px' }}>
-              <div style={{ height: '100%', width: '100%', backgroundImage: `url(${randomRecipe.image})`, backgroundSize: 'cover', backgroundPosition: 'center', padding: '20px' }}>
-                 <CardHeader>
-                  <h4 style={{ fontWeight: "bolder", color: "white", textShadow: "black 2px 2px" }}>{randomRecipe.title}</h4>
-                </CardHeader>
-              </div>
-            </Card>
-          )}
+          {randomRecipe && <RecipeBox recipe={randomRecipe} />} {/* Use the RecipeCard component */}
           <div style={{fontWeight: "bolder", color: "white", textShadow: "black 2px 2px"}}>Next update in: {nextUpdateTimer} seconds</div>
         </div>
       </section>

@@ -45,3 +45,6 @@ next-env.d.ts
 
 # local env files
 /server/.env
+
+# node_modules
+node_modules
