@@ -122,11 +122,9 @@ app.get('/search_by_id', async (req, res) => {
                 }
             ],
         });
-
         //console.log("printing the returned value to see what happens")
         //console.log(JSON.parse(JSON.stringify(recipe_data)))
         //console.log(JSON.parse(JSON.stringify(equipment_ids)))
-        
         res.status(200).json(recipe_data);
     } catch (error) {
         console.error("Error finding recipe by id:", error);
