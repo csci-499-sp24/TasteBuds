@@ -1,135 +1,179 @@
-*{
+* {
   margin: 0;
   padding: 0;
   list-style: none;
   text-decoration: none;
 }
+
+
 .sidebar {
   position: fixed;
   width: 250px;
   height: 100%;
-  left:-250px;
+  left: -250px;
   background: #161616;
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
-.sidebar header{
+
+.sidebar header {
   font-size: 22px;
   text-align: center;
   line-height: 70px;
-  color:white;
+  color: white;
   background: #0dbbf0;
   user-select: none;
 }
-.sidebar ul a{
+
+.sidebar ul a {
   font-size: 20px;
   line-height: 65px;
-  display:block;
+  display: block;
   height: 100%;
   width: 100%;
   color: white;
   padding-left: 40px;
   box-sizing: border-box;
-  border-top: 1px solid rgba(255,255,255,.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid black;
-  transition: .4s;
+  transition: 0.4s;
 }
-ul li:hover a{
+
+ul li:hover a {
   padding-left: 50px;
 }
-#check{
+
+#check {
   display: none;
 }
-label #btn,label #cancel{
+
+label #btn,
+label #cancel {
   position: absolute;
   background: #042331;
   border-radius: 3px;
   cursor: pointer;
+  
 }
-label #btn{
+
+label #btn {
   left: 40px;
   top: 25px;
   font-size: 35px;
   color: white;
   padding: 6px 12px;
-  transition: all .5s;
+  transition: all 0.5s;
+  
 }
-label #cancel{
+
+label #cancel {
   z-index: 1111;
   left: -195px;
   top: 17px;
   font-size: 30px;
   color: #0a5275;
   padding: 4px 9px;
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
-#check:checked ~ .sidebar{
+
+#check:checked ~ .sidebar {
   left: 0;
+  
 }
-#check:checked ~ label #btn{
+
+#check:checked ~ label #btn {
   left: 250px;
   opacity: 0;
   pointer-events: none;
 }
-#check:checked ~ label #cancel{
+
+#check:checked ~ label #cancel {
   left: 195px;
 }
-#check:checked ~ section{
+
+#check:checked ~ section {
   margin-left: 250px;
 }
-section{
+
+section {
   background: url("../public/bg.jpg") no-repeat;
   background-position: center;
   background-size: cover;
-  height: 100vh;
-  transition: all .5s;
+  height: 100%;
+  transition: all 0.5s;
+  overflow-y: auto; /* Enable vertical scrolling */
 }
-.sidebar ul a i{
+
+.sidebar ul a i {
   margin-right: 16px;
 }
 
 .search-wrapper {
   display: flex;
   flex-direction: column;
-  gap: .25rem;
+  gap: 0.25rem;
 }
 
 .input {
   font-size: 1rem;
-  width: calc(100% - 20px); /* Adjust the width to fit within the sidebar */
-  padding: 8px; /* Add padding for better visual appearance */
-  margin: 0 auto; /* Center the input horizontally */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  width: calc(100% - 20px);
+  padding: 8px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
-
 
 .user-recipes {
   display: grid;
-  grid-template-columns: repeat(auto-fill,
-  minmax(150px, 1fr));
-  gap: .25rem;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.25rem;
   margin-top: 1rem;
+  padding: 0 10px; /* Add padding to the grid container */
 }
 
 .card {
   border: 1px solid black;
   background-color: white;
-  padding: .5rem;
+  padding: 0.5rem;
 }
 
 .card > .header {
-  margin-bottom: .25rem;
+  margin-bottom: 0.25rem;
 }
 
 .card > .body {
-  font-size: .8rem;
+  font-size: 0.8rem;
   color: black;
-}
-
-.hide {
-  display: none;
 }
 
 #div-center {
   width: 665px;
   margin: auto;
+}
+
+.container {
+  display: flex;
+  margin-top: 20px; 
+  justify-content: center; /* Center the children horizontally */
+  align-items: flex-start; /* Align items to the top */
+}
+
+/* Adjust the spacing between inner and outer scrollbars */
+.listbox-wrapper {
+  height: 500px; /* Set the height as needed */
+  overflow-y: auto; /* Enable vertical scrollbar when content overflows */
+  padding-right: 20px; /* Add some padding to the right side to separate the inner and outer scrollbars */
+}
+
+.listbox-container {
+  margin-right: -20px; /* Compensate for the padding on the right side of the .listbox-wrapper */
+}
+
+.listbox-container {
+  flex: 1;
+  margin-right: 20px; /* Add margin between the listbox and the recipe container */
+  /* overflow-y: auto; Enable vertical scrollbar when content overflows */
+}
+
+.recipe-container {
+  margin-right: 70px; 
+  flex: 1;
 }
