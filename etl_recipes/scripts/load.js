@@ -739,10 +739,55 @@ const CaloricBreakdown = sequelize.define('CaloricBreakdown', {
 // Define the relationship with Recipe and CaloricBreakdown (1:1)
 CaloricBreakdown.belongsTo(Recipe, { foreignKey: 'recipe_id' });
 
+
+/* Intolerances */
+// const Intolerances = sequelize.define('Intolerances', {
+//     intolerance_id: {
+//         type: DataTypes.INTEGER,
+//         primaryKey: true,
+//         autoIncrement: true,
+//         allowNull: false,
+//     },
+//     intolerance_name: {
+//         type: DataTypes.STRING,
+//     }
+// }, {
+//     tableName: 'intolerances',
+//     timestamps: false,
+// });
+
+// const RecipeIntolerance = sequelize.define('RecipeIntolerance', {
+//     recipe_id: {
+//       type: DataTypes.INTEGER,
+//       primaryKey: true,
+//       references: {
+//         model: 'recipes',
+//         key: 'recipe_id'
+//       }
+//     },
+//     intolerance_id: {
+//       type: DataTypes.INTEGER,
+//       primaryKey: true,
+//       references: {
+//         model: 'intolerances',
+//         key: 'intolerance_id'
+//       }
+//     },
+//   }, {
+//     tableName: 'recipe_intolerance',
+//     timestamps: false
+//   });
+  
+// // Define the ER of Cuisines and Recipe (M:M)
+// Intolerances.belongsToMany(Recipe, { through: RecipeIntolerance, foreignKey: 'intolerance_id' });
+// Recipe.belongsToMany(Intolerances, { through: RecipeIntolerance, foreignKey: 'recipe_id' });
+
 /* END OF MODELS*/
 
 // Function to load the transformed data into your database
 async function loadRecipesIntoDatabase(transformedData) {
+    // async function loadRecipesIntoDatabase(transformedData, intolerances) {
+
     try {
         // Authenticate the sequelize connection
         // await sequelize.authenticate();
@@ -766,8 +811,8 @@ async function loadRecipesIntoDatabase(transformedData) {
             } catch (error) {
                 console.error(`Error loading recipe with ID ${recipeData.recipe_id}: ${error.message}`);
             }
-
-                    
+            /*intolerances*/
+                                
             /* CUISINIE */ 
             for (const cuisineData of recipeResponse.cuisine) {
                 let createdCuisine = await Cuisines.findOne({ where: { cuisine_name: cuisineData} });

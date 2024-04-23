@@ -500,7 +500,7 @@ app.post('/searchByIngredients', async (req, res) => {
         res.status(500).json({ error: 'Error fetching recipes by ingredients' });
     }
 });
-
+// Random Daily Recipe
 app.get('/getRandomRecipe', async (req, res) => {
     try {
       // Fetch all recipes
