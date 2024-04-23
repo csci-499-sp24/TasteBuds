@@ -4,7 +4,7 @@ import {Card, CardHeader, CardBody, Image} from "@nextui-org/react";
 const RecipeBox = ({recipe}) => {
   return (
     <Card className="recipe-card" style={{ width: '350px', height: '250px' }}>
-      <CardBody className="overflow-visible py-2">
+      <CardBody className="overflow-visible py-2 bg-white">
       <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
         <img src={recipe.image} alt={recipe.title} 
         style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
