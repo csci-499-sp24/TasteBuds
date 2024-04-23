@@ -3,7 +3,7 @@ import Sidebar from "./sidebar";
 import RecipeBox from './RecipeBox';
 
 function Homepage() {
-  const [randomRecipe, setRandomRecipe] = useState(null);
+  const [randomRecipe, setRandomRecipe] = useState([]);
   /*Uncomment const [] = useState for timer */
   // const [nextUpdateTimer, setNextUpdateTimer] = useState(5); 
   /* Value set to 60 seconds for demo
@@ -11,22 +11,29 @@ function Homepage() {
   */
   const [loading, setLoading] = useState(false);
 
-  const fetchRandomRecipe = async () => {
+  const fetchMultipleRecipes = async (count) => {
     setLoading(true);
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/getRandomRecipe');
-      if (!response.ok) {
-        throw new Error('Failed to fetch random recipe');
+      const recipesArray = [];
+      for (let i = 0; i < count; i++)
+      {
+        const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/getRandomRecipe');
+        if (!response.ok) 
+        {
+          throw new Error('Failed to fetch random recipe ${i + 1}');
+        }
+        const data = await response.json();
+        recipesArray.push(data);
       }
-      const data = await response.json();
-      setRandomRecipe(data);
-      localStorage.setItem('randomRecipe', JSON.stringify(data));
-      localStorage.setItem('lastFetchTime', Date.now().toString());
+      //localStorage.setItem('randomRecipe', JSON.stringify(data));
+      //localStorage.setItem('lastFetchTime', Date.now().toString());
       /*Uncomment setNextUpdateTimer for timer function */
       //setNextUpdateTimer(5); // Reset the timer to 60 seconds
       // setNextUpdateTimer(86400); // Reset the timer to 24 hours
+      setRandomRecipe(recipesArray);
       setLoading(false); // Set loading state to false after fetching
-    } catch (error) {
+    } catch (error) 
+    {
       console.error(error);
       setLoading(false); // If there is an error loading state set to false
     }
@@ -34,7 +41,7 @@ function Homepage() {
 
   // useEffect hook fetches a random recipe when component mounts
   useEffect(() => {
-    fetchRandomRecipe();
+    fetchMultipleRecipes(3);
   }, []);
 
   // useEffect updates the countdown timer every second, remove comments to enable timer
@@ -59,7 +66,7 @@ function Homepage() {
 
   // This func handles click event of getting a new recipe
   const handleGetNewRecipe = () => {
-    fetchRandomRecipe(); // New recipe is fetched when button clicked
+    fetchMultipleRecipes(3); // New recipe is fetched when button clicked
   };
 
   return (
@@ -74,7 +81,9 @@ function Homepage() {
         <div id="div-center" className="head">
           Recipe of the Day:
           {/* RecipeBox component*/}
-          {randomRecipe && <RecipeBox recipe={randomRecipe} />}
+          {randomRecipe.map((recipe, index) => (
+            <RecipeBox key={index} recipe={recipe} />
+          ))}
           {/* Displays the ciuntdown, remove comment for timer */}
           {/*
           <div style={{fontWeight: "bolder", color: "white", textShadow: "black 2px 2px"}}>Next update in: {nextUpdateTimer} seconds</div>
