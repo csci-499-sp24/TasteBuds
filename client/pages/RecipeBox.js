@@ -22,7 +22,7 @@ const RecipeBox = ({recipe}) => {
           <div style={{position: 'absolute', top: 0, right: 10, zIndex: 1 }}>
           <i 
             className="fas fa-heart" id="heart-btn" 
-            style={{color: isClicked ? 'red' : 'black', transition: 'color 0.3s' 
+            style={{color: isClicked ? 'red' : 'black', transition: 'color 0.3s'
             }}
             onClick={handleClick}
           ></i>
