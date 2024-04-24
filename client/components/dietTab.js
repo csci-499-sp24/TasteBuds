@@ -1,11 +1,29 @@
 // DietTab.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Select, SelectItem } from '@nextui-org/react';
 
-const DietTab = ({ handleListboxChange }) => {
+const DietTab = ({ handleListboxChange, triggerFetch }) => {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+        triggerFetch(); // Trigger fetch here
+        event.stopPropagation(); // Prevent event from bubbling up
+      }
+    };
+
+    const selectElement = document.getElementById('diet-select');
+    selectElement.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      selectElement.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [triggerFetch]);
+
+  
   return (
     <div className="mb-4"> {/* Add margin top */}
     <Select
+      id="diet-select"
       label="Selected Diet"
       selectionMode="multiple"
       color="warning"
