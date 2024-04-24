@@ -112,3 +112,21 @@ body {
 .posts-container {
   /* Your styles for the posts container */
 }
+
+.recipe-box-container {
+  display: flex;
+  flex-wrap: nowrap; /* Ensures items stay on the same line without wrapping */
+}
+
+.recipe-box-item {
+  margin-right: 15px; /* Add spacing between items */
+  margin-bottom: 20px; /* Add spacing between rows */
+}
+
+/* Add media query for smaller screens */
+@media screen and (max-width: 768px) {
+  .recipe-box-item {
+    width: 100%; /* Each item takes full width on smaller screens */
+    margin-right: 0; /* Remove right margin on smaller screens */
+  }
+}
