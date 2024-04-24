@@ -3,14 +3,14 @@ import "/styles/index.css";
 import "/styles/search.css";
 import "/styles/login.css";
 import { NextUIProvider } from "@nextui-org/react";
-import UserAuthContextProvider from "@/firebase/userAuthContext"; // Use only the provider
+import UserAuthContext from "@/firebase/userAuthContext";
 
 export default function App({ Component, pageProps }) {
   return (
-    <UserAuthContextProvider> {/* Use this as the top-level provider */}
+    <UserAuthContext>
       <NextUIProvider>
         <Component {...pageProps} />
       </NextUIProvider>
-    </UserAuthContextProvider>
+    </UserAuthContext>
   );
 }

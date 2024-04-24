@@ -1,9 +1,8 @@
-// firebase/userAuthContext.js
 import React, { useContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  signOut as firebaseSignOut, // Renamed to avoid name clash
+  signOut,
 } from "firebase/auth";
 import { auth, firestore } from "./firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
@@ -14,7 +13,7 @@ export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-const UserAuthContextProvider = ({ children }) => {
+const UserAuthContext = ({ children }) => {
   const [error, setError] = useState("");
   const [currentUser, setCurrentUser] = useState();
 
@@ -24,7 +23,6 @@ const UserAuthContextProvider = ({ children }) => {
         setCurrentUser(user);
         console.log(user.uid);
       } else {
-        setCurrentUser(null);
         console.log("no user available");
       }
     });
@@ -36,49 +34,45 @@ const UserAuthContextProvider = ({ children }) => {
 
   const signup = async (email, password, username) => {
     setError("");
-  
-    console.log('Attempting to sign up with:', email, username); // Log the email and username
-  
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       const user = userCredential.user;
-  
-      console.log('Firebase Auth User created:', user); // Log the auth user data
-  
-      // Now we create the user document in Firestore
-      const userDocRef = doc(firestore, "users", user.uid);
-      console.log('Attempting to create a Firestore document for:', userDocRef.path); // Log the path of the doc
-  
-      await setDoc(userDocRef, {
-        username: username,
-        email: email,
-        // Add other user data here
+
+      await setDoc(doc(firestore, "users", user.uid), {
+        username,
+        email,
+        // Add other user data here to store in the firestore database.
       });
-  
-      console.log('Firestore document created successfully'); // Indicate success
-  
-      setCurrentUser(user); // Set the current user in the state
+
+      setCurrentUser(user);
     } catch (error) {
-      // If an error occurs, log it
-      console.error("Error during signup:", error);
-      setError(error.message);
+      if (error.code === "auth/email-already-in-use") {
+        setError("Email is already in use");
+      } else if (error.code === "auth/weak-password") {
+        setError("Password must be at least 6 characters");
+      } else {
+        setError(error.message);
+      }
     }
   };
-  
 
-  const logout = async () => {
+  const signOut = async () => {
     try {
-      await firebaseSignOut(auth); // Correctly use the renamed import
-      setCurrentUser(null); // Remove the user from the state
+      await signOut(auth);
+      setCurrentUser(null);
     } catch (error) {
       console.error("Error signing out:", error);
-      setError(error.message);
     }
   };
 
-  const value = { currentUser, signup, logout, error };
+  const value = { currentUser, signup, signOut, error };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export default UserAuthContextProvider;
+export default UserAuthContext;

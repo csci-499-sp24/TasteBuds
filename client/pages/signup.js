@@ -25,7 +25,6 @@ const Registration = () => {
 
   const RegistrationHandler = async (e) => {
     e.preventDefault();
-    console.log('Form submitted');
     setError(null);
     const { username, email, password, confirmPassword } = user;
     if (password !== confirmPassword) {
