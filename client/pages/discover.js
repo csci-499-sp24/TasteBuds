@@ -1,6 +1,6 @@
 import { useState } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
-import Sidebar from "./sidebar";
+import Sidebar from "../components/sidebar";
 
 import {
   Card,
