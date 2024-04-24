@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import {Card, CardHeader, CardBody} from "@nextui-org/react";
 
 const RecipeBox = ({recipe}) => {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <Card className="recipe-card" style={{width: '350px', height: '250px'}}>
       <CardBody className="overflow-visible py-2 bg-white">
         <div style={{position: 'relative', width: '100%', height: '100%', overflow: 'hidden'}}>
           <div style={{position: 'absolute', top: 0, right: 10, zIndex: 1 }}>
-            <i className="fas fa-heart" id="heart-btn" style={{color: 'white'}}></i>
+          <i 
+            className="fas fa-heart" 
+            id="heart-btn" 
+            style={{ 
+              color: isHovered ? 'red' : 'black',
+              transition: 'color 0.3s' 
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            ></i>
           </div>
         <img src={recipe.image} alt={recipe.title} 
         style={{width: '100%', height: '100%', objectFit: 'cover'}} />
