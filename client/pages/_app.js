@@ -1,9 +1,7 @@
-// pages/_app.js
-import "../styles/globals.css";
-import "../styles/index.css";
-import "../styles/search.css";
-import "../styles/login.css";
-
+import "/styles/globals.css";
+import "/styles/index.css";
+import "/styles/search.css";
+import "/styles/login.css";
 import { NextUIProvider } from "@nextui-org/react";
 import UserAuthContextProvider from "@/firebase/userAuthContext"; // Use only the provider
 

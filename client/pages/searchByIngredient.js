@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"; // React Hooks - for managing states of components
+import { useEffect, useState } from "react"; 
 import Link from "next/link";
 import { Autocomplete, AutocompleteItem, Chip, Divider, Card, CardHeader, CardBody, CardFooter, Image, Button } from "@nextui-org/react";
-import Sidebar from "./sidebar";
+import Sidebar from "../components/sidebar";
 
 function SearchByIngredient() {
   const [searchResults, setSearchResults] = useState([]);
@@ -191,7 +191,5 @@ function SearchByIngredient() {
     </div>
   );
 }
-
-
 
 export default SearchByIngredient;

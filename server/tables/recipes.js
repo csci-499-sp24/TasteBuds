@@ -56,6 +56,16 @@ const Recipe = sequelize.define('Recipe', {
     source_url:{
         type: DataTypes.STRING,
     },
+    totalPrice: {
+        type: DataTypes.VIRTUAL,
+        get() {
+            // Calculate total price based on servings and price_per_serving
+            return this.getDataValue('servings') * this.getDataValue('price_per_serving') / 100;
+        },
+        set(value) {
+            throw new Error('Do not try to set the total price value!');
+        }
+    }
 }, {
     tableName: 'recipes',  
     timestamps: false, 
