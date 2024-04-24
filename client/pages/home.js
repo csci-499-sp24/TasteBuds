@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Sidebar from "./sidebar";
-import RecipeBox from './RecipeBox';
+import RecipeBox from '../components/RecipeBox';
 import Link from 'next/link';
 import Sidebar from "../components/sidebar";
 import {
