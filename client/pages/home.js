@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from "./sidebar";
 import RecipeBox from './RecipeBox';
+import { Button } from '@nextui-org/react';
 
 function Homepage() {
   const [randomRecipe, setRandomRecipe] = useState([]);
@@ -94,11 +95,10 @@ function Homepage() {
           */}
           </div>
           {/* Fetches a new recipe  after clicking on button*/}
-          <button onClick={handleGetNewRecipe} disabled={loading} 
-          style={{ padding: '8px', marginTop: '10px', borderRadius: '5px', 
-          color: 'white', border: '3px solid white', cursor: 'pointer' }}>
+          <Button onClick={handleGetNewRecipe} loading={loading} 
+          color={loading ? 'default' : 'warning'} variant="solid" size="lg">
             {loading ? 'Fetching New Recipes...' : 'Get New Recipes'}
-          </button>
+          </Button>
         </div>
       </section>
     </div>
