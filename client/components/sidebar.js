@@ -17,8 +17,12 @@ function Sidebar() {
         <li><Link href="/discover"><i className="fas fa-search"></i>Discover</Link></li> 
         <li><Link href="/searchByIngredient"><i className="fas fa-search"></i>Ingredient Search</Link></li> 
         {currentUser && ( <>
-        <li><a href="/savedRecipes"><i className="fas fa-star"></i>Saved Recipes</a></li>
-        <li>
+          <li>
+              <Link href={`/savedRecipes`}>
+                <i className="fas fa-star"></i>Saved Recipes
+              </Link>
+            </li>        
+            <li>
               <Link href={`/users/${currentUser.uid}`}>
                 <i className="fas fa-user"></i>Profile
               </Link>
