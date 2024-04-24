@@ -79,7 +79,7 @@ function Homepage() {
       </label>
       <Sidebar />
       <section className='bg'>
-      <h1>Hello</h1>
+        <h1>Hello</h1>
         <div id="div-center" className="head">
           Discover Recipes
           <div className="recipe-box-container">
