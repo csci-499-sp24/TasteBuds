@@ -54,6 +54,7 @@ const searchRoutes = require('./searchRoutes.js')(sequelize, DataTypes);
 
 async function sync_table() {
     try {
+        // await sequelize.sync()
         await database.sync();
         await User.sync();
         console.log("The table for the db has been (re)created.");
@@ -93,6 +94,87 @@ const {
     WeightPerServing,
     CaloricBreakdown, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
+
+/*
+Things to get for the recipe profile:
+Price per serving: recipe_data.price_per_serving
+Rating:
+Difficulty:
+Time: recipe_data.ready_in_minutes
+Description: recipe_data.summary
+Ingredients: 
+Equipment: equipment_ids
+*/
+
+// for some reason Express gets very worked up if this is above the block of text above
+// so I moved it down
+app.get('/search_by_id', async (req, res) => {
+    try {
+        const {id} = req.query; 
+        const recipe_data = await Recipe.findOne({
+            where: {recipe_id: id},
+            include: [
+                {
+                    model: Equipment,
+                }, 
+                {
+                    model: Ingredients,
+                },
+                // {
+                //     model: Nutrients
+                // },
+                // {
+                //     model: Instructions,//Instructions and Recipe doesn't have a connector table
+                //     //association: new Sequelize.belongsTo(Recipe, Instructions, {/*options*/}),
+                // },
+                // {
+                //     model: InstructionLength,
+                // },
+            ],
+        });
+        const instruction_data = await Instructions.findAll({
+            where: {recipe_id: id}
+        })
+        let instr_ids = []
+        if (instruction_data !== null) {
+            instruction_data.forEach((json_obj) => {
+                instr_ids.push(json_obj.instruction_id)
+            })
+        }
+        const instr_length_data = await InstructionLength.findAll({
+            where: {
+                instruction_id: //instruction_data[0].instruction_id}
+                {
+                    [Sequelize.Op.in]: instr_ids,
+                }
+            }
+        })
+        //console.log("printing the returned value to see what happens")
+        //console.log(instruction_data.instruction_id)
+        //console.log(JSON.parse(JSON.stringify(equipment_ids)))
+        res.status(200).json([recipe_data, instruction_data, instr_length_data]);
+    } catch (error) {
+        console.error("Error finding recipe by id:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+// app.get('/test', async (req, res) => {
+//     try {
+//         //const {id} = req.query; 
+//         const instr_data = await Instructions.findAll({
+//             //where: {recipe_id: 13}
+//         })
+//         const length_data = await InstructionLength.findAll({
+//             //where: {instruction_id: instr_data.instruction_id}
+//         });
+//         console.log(instr_data[0].instruction_id)
+//         res.status(200).json(instr_data)
+//     } catch (error) {
+//         console.error("Error finding recipe by id:", error);
+//         res.status(500).json({ error: "Internal server error" });
+//     }
+// })
 
 // search + filter 
 app.use('/searchV2', searchRoutes); // Use the new search routes

@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+//const { Sequelize, DataTypes } = require('sequelize');
 
 // https://stackoverflow.com/questions/62556633/sequelize-6-import-models-from-file
 module.exports = function (sequelize, DataTypes) {
