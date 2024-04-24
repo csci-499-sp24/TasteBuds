@@ -41,7 +41,7 @@ function Homepage() {
 
   // useEffect hook fetches a random recipe when component mounts
   useEffect(() => {
-    fetchMultipleRecipes(3);
+    fetchMultipleRecipes(4);
   }, []);
 
   // useEffect updates the countdown timer every second, remove comments to enable timer
@@ -66,7 +66,7 @@ function Homepage() {
 
   // This func handles click event of getting a new recipe
   const handleGetNewRecipe = () => {
-    fetchMultipleRecipes(3); // New recipe is fetched when button clicked
+    fetchMultipleRecipes(4); // New recipe is fetched when button clicked
   };
 
   return (
@@ -78,21 +78,26 @@ function Homepage() {
       </label>
       <Sidebar />
       <section className='bg'>
+      <h1>Hello</h1>
         <div id="div-center" className="head">
-          Recipe of the Day:
+          Discover Recipes
+          <div className="recipe-box-container">
           {/* RecipeBox component*/}
-          {randomRecipe.map((recipe, index) => (
-            <RecipeBox key={index} recipe={recipe} />
-          ))}
+            {randomRecipe.map((recipe, index) => (
+              <div key={index} className="recipe-box-item">
+                <RecipeBox recipe={recipe} />
+              </div>
+            ))}
           {/* Displays the ciuntdown, remove comment for timer */}
           {/*
           <div style={{fontWeight: "bolder", color: "white", textShadow: "black 2px 2px"}}>Next update in: {nextUpdateTimer} seconds</div>
           */}
+          </div>
           {/* Fetches a new recipe  after clicking on button*/}
           <button onClick={handleGetNewRecipe} disabled={loading} 
-          style={{ padding: '8px', marginTop: '10px', borderRadius: '5px', background: 'transparent', 
-          color: 'white', border: '1px solid white', cursor: 'pointer' }}>
-            {loading ? 'Fetching New Recipe...' : 'Get New Recipe'}
+          style={{ padding: '8px', marginTop: '10px', borderRadius: '5px', 
+          color: 'white', border: '3px solid white', cursor: 'pointer' }}>
+            {loading ? 'Fetching New Recipes...' : 'Get New Recipes'}
           </button>
         </div>
       </section>

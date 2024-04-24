@@ -1,5 +1,5 @@
 import React from "react";
-import {Card, CardHeader, CardBody, Image} from "@nextui-org/react";
+import {Card, CardHeader, CardBody} from "@nextui-org/react";
 
 const RecipeBox = ({recipe}) => {
   return (
