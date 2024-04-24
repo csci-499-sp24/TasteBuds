@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { firestore } from '../../firebase/firebaseConfig';
 import { getFirestore, doc, collection, query, getDoc } from 'firebase/firestore';
-import Sidebar from '../sidebar';
+import Sidebar from "../../components/sidebar.js"
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);

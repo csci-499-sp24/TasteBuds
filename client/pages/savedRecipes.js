@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../firebase/userAuthContext';
 import { firestore } from '../firebase/firebaseConfig';
 import { getFirestore, collection, query, getDocs } from 'firebase/firestore';
-import Sidebar from './sidebar';
+import Sidebar from "../components/sidebar.js"
 
 export default function SavedRecipes() {
   const { currentUser } = useAuth();
