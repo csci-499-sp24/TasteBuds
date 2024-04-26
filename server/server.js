@@ -177,7 +177,7 @@ app.get('/search_by_id', async (req, res) => {
 // })
 
 // search + filter 
-app.use('/searchV2', searchRoutes); // Use the new search routes
+app.use('/searchV2', searchRoutes); // search routes
 
 
 app.get('/getAllOccasions', async (req, res) => {
