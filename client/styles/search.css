@@ -94,14 +94,15 @@ label #cancel {
   margin-left: 250px;
 }
 
-section {
-  background: url("../public/bg.jpg") no-repeat;
+.b {
+  background: url('../public/search.jpg') no-repeat;
   background-position: center;
   background-size: cover;
-  height: 100%;
+  height: 100vh; /* Set height to 100% of viewport height */
   transition: all 0.5s;
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-y: auto;
 }
+
 
 .sidebar ul a i {
   margin-right: 16px;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 import Sidebar from "../components/sidebar";
-import {Input, Select, SelectItem, Checkbox} from "@nextui-org/react";
+import {Input, Select, SelectItem, Button} from "@nextui-org/react";
 import {ListboxWrapper} from "../components/ListboxWrapper";
 import CuisineTab from "../components/cuisineTab";
 import DietTab from "../components/dietTab";
@@ -13,18 +13,13 @@ function Search() {
   const [searchResults, setSearchResults] = useState([]); // State variable to hold the search results
   const [isLoading, setIsLoading] = useState(false);  // State variable to indicate if data is loading
   const [filters, setFilters] = useState({  // State variable to hold filter criteria
-    cuisine: "",
-    diet: "",
-    occasion: "",
-    dishType: "",
+    cuisine: "", diet: "", occasion: "", dishType: "",
     servings: "", minServing: "", maxServing: "",
     smartPoints: "", smartPointsMin: "", smartPointsMax:"",
     readyInMinutes: "", readyInMinutesMin:"", readyInMinutesMax: "",
-    pricePerServingMin: "", pricePerServingMax: "", pricePerServing: "",
     includeTips: "" , cheap: "" , healthy: "" , sustainable: "" ,
     minTotalPrice: "", maxTotalPrice: "",  totalPrice: "",
     calories: "", minCalories: "", maxCalories: "",
-    // more filter criterias, look into doc
   }); 
 
   useEffect(() => {
@@ -122,9 +117,10 @@ function Search() {
       <Sidebar />
 
       {/* Main content section */}
-      <section> 
+      <section className='b'>
         <div id="div-center" className="search-wrapper">
-          <Input type="search" label="Search" onChange={handleSearch} />
+          <Input  color="warning"  type="search" label="Search" onChange={handleSearch} />
+          <Button  color="warning" onClick={handleTriggerFetch}>Search</Button> 
         </div>
         <div className="container" >
 
