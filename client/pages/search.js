@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
+import RecipeBox from "../components/RecipeBox";
 import Sidebar from "../components/sidebar";
 import {Input, Select, SelectItem, Button} from "@nextui-org/react";
 import {ListboxWrapper} from "../components/ListboxWrapper";
@@ -315,16 +316,14 @@ function Search() {
           </div>
 
           <div className="recipe-container">   
-          {/* Display search results */}
-            <div id="div-center" className="user-recipes" data-user-cards-container>
+            {/* Display search results */}
+            <div className="recipe-row">
               {isLoading && <p>Loading...</p>}
-              {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
-                <div key={recipe.recipe_id} className="card">
-                  <div className="header" data-header>{recipe.title}</div>
-                  <img src={recipe.image} alt={recipe.title} className="recipe-image" />
-                </div>
-              ))}
-              {/* Too results */}
+              {!isLoading && Array.isArray(searchResults) && (
+                searchResults.map(recipe => (
+                  <RecipeBox key={recipe.recipe_id} recipe={recipe} />
+                ))
+              )}
               {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
             </div>
           </div>

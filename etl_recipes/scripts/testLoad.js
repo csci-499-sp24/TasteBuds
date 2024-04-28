@@ -97,8 +97,8 @@ async function main() {
             
             // let j = 60040; 
             // let j = 600010;
-            // let j  = 638060;
-            let j  = 639000;
+            // let j  = 638060, 639060
+            let j  = 636000;
             let recipeLt2 = [];
             for(let i = j; i < (j)+ 20;i++){
                 let exitsRecipe = await Recipe.findOne({ where: { recipe_id: i} });
