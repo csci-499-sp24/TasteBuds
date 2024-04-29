@@ -123,10 +123,8 @@ label #cancel {
 }
 
 .recipe-container {
-  margin-left: -90px; 
-  flex: 3;
+  flex: 1; /* Adjust flex property as needed */
 }
-
 .recipe-row {
   display: flex;
   flex-wrap: wrap;
@@ -151,12 +149,3 @@ label #cancel {
   padding-right: 20px; /* Add some padding to the right side to separate the inner and outer scrollbars */
 }
 
-.listbox-container {
-  margin-right: -20px; /* Compensate for the padding on the right side of the .listbox-wrapper */
-}
-
-.listbox-container {
-  flex: 1;
-  margin-right: 20px; /* Add margin between the listbox and the recipe container */
-  /* overflow-y: auto; Enable vertical scrollbar when content overflows */
-}
