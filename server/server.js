@@ -263,7 +263,7 @@ app.post('/comments', isAuthenticated, async (req, res) => {
     try {
         const { userId, recipeId, commentText, firebaseUserId } = req.body;
         // Insert the new comment into the database
-        const newComment = await Comment.create({
+        const newComment = await Comments.create({
             user_id: userId,
             recipe_id: recipeId,
             comment_text: commentText,
