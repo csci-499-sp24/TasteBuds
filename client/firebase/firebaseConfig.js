@@ -16,16 +16,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const firestore = getFirestore(app);
-
-export const testFirestore = async () => {
-    try {
-        const snapshot = await getDocs(collection(firestore, 'users'));
-        snapshot.forEach(doc => {
-            console.log(doc.id, '=>', doc.data());
-        });
-    } catch (error) {
-        console.error("Error accessing Firestore:", error);
-    }
-};
  
 export { firestore, auth };
