@@ -6,6 +6,7 @@ const Recipe = () => {
   const router = useRouter();
   const { id } = router.query;
   const [recipe, setRecipe] = useState(null);
+  const [instructions, setInstructions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,7 +16,8 @@ const Recipe = () => {
         if (response.ok) {
           const data = await response.json();
           console.log(data); // Log the data received from the API
-          setRecipe(data[0]); // Assuming the API returns an array with one object
+          setRecipe(data[0]); // Assuming the recipe data is in array 0
+          setInstructions(data[1]); // Assuming the instructions data is in array 1
           setLoading(false);
         } else {
           throw new Error("Failed to fetch recipe");
@@ -55,10 +57,10 @@ const Recipe = () => {
           <p>Total Price: {recipe.totalPrice}</p>
         )}
         <h2>Instructions</h2>
-        {recipe.instructions && recipe.instructions.length > 0 ? (
+        {instructions.length > 0 ? (
           <ol>
-            {recipe.instructions.map(instruction => (
-              <li key={instruction.instruction_id}>{instruction.step}</li>
+            {instructions.map((instruction, index) => (
+              <li key={index}>{instruction.step}</li>
             ))}
           </ol>
         ) : (
