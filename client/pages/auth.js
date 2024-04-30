@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState } from 'react';
 const AuthContext = createContext();
 
 // Provider component
-export const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
 
   const login = (userData) => {
@@ -26,3 +26,5 @@ export const AuthProvider = ({ children }) => {
 
 // Custom hook to use the auth context
 export const useAuth = () => useContext(AuthContext);
+
+export default AuthProvider;

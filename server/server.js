@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
-const userRoutes = require('./firebase/user.js')
+const userRoutes = require('./firebase/user.js');
+const isAuthenticated = require('./isAuthenticated');
 // const searchRoutes = require('./searchRoutes.js');
 
 require('dotenv').config();
@@ -92,7 +93,8 @@ const {
     Properties,
     RecipeProperties,
     WeightPerServing,
-    CaloricBreakdown, 
+    CaloricBreakdown,
+    Comments, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
 
 /*
@@ -159,25 +161,8 @@ app.get('/search_by_id', async (req, res) => {
     }
 })
 
-// app.get('/test', async (req, res) => {
-//     try {
-//         //const {id} = req.query; 
-//         const instr_data = await Instructions.findAll({
-//             //where: {recipe_id: 13}
-//         })
-//         const length_data = await InstructionLength.findAll({
-//             //where: {instruction_id: instr_data.instruction_id}
-//         });
-//         console.log(instr_data[0].instruction_id)
-//         res.status(200).json(instr_data)
-//     } catch (error) {
-//         console.error("Error finding recipe by id:", error);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-// })
-
 // search + filter 
-app.use('/searchV2', searchRoutes); // Use the new search routes
+app.use('/searchV2', searchRoutes); // search routes
 
 
 app.get('/getAllOccasions', async (req, res) => {
@@ -247,6 +232,7 @@ app.post('/searchByIngredients', async (req, res) => {
         res.status(500).json({ error: 'Error fetching recipes by ingredients' });
     }
 });
+
 // Random Daily Recipe
 app.get('/getRandomRecipe', async (req, res) => {
     try {
@@ -272,6 +258,24 @@ app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
     next();
 });
+
+app.post('/comments', isAuthenticated, async (req, res) => {
+    try {
+        const { userId, recipeId, commentText, firebaseUserId } = req.body;
+        // Insert the new comment into the database
+        const newComment = await Comments.create({
+            user_id: userId,
+            recipe_id: recipeId,
+            comment_text: commentText,
+            firebase_user_id: firebaseUserId,
+        });
+        res.status(201).json(newComment);
+    } catch (error) {
+        console.error('Error creating comment:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
