@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import RecipeBox from '../components/RecipeBox';
-import Link from 'next/link';
+import { useRouter } from "next/router";
 import Sidebar from "../components/sidebar";
 
 function Recipe({recipes}){
