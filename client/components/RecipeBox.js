@@ -16,7 +16,7 @@ const RecipeBox = ({ recipe }) => {
   }, [recipe]); // This is triggered when props are changed
 
   const viewRecipe = () => {
-    router.push(`/recipe/${recipe.recipe_id}`);
+    router.push(`/${recipe.recipe_id}`);
   };
 
   return (
