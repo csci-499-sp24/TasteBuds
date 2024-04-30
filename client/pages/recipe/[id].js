@@ -15,7 +15,7 @@ const Recipe = () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/search_by_id?id=${id}`);
         if (response.ok) {
           const data = await response.json(); 
-          console.log(data); // Logging data from api
+          console.log(data); // Logging data from api 
           setRecipe(data[0]); // data of recipe in array 0
           setInstructions(data[1]); // in the data instructions are array 1
           setLoading(false); 
