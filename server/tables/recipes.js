@@ -728,6 +728,43 @@ const CaloricBreakdown = sequelize.define('CaloricBreakdown', {
 // Define the relationship with Recipe and CaloricBreakdown (1:1)
 CaloricBreakdown.belongsTo(Recipe, { foreignKey: 'recipe_id' });
 
+
+const Comments = sequelize.define('Comments', {
+    comment_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+    },
+    firebase_user_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    comment_text: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+    },
+    recipe_id: {
+        type: DataTypes.INTEGER, 
+        allowNull: false, 
+        references: {
+            model: 'Recipe', 
+            key: 'recipe_id',
+        }
+    },
+    timestamp: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW 
+      },
+}, {
+    tableName: 'comments', 
+    timestamps: false
+});
+// Define the ER of Comments and Recipe (M:1)
+Comments.belongsTo(Recipe, { foreignKey: 'recipe_id' });
+Recipe.hasMany(Comments, { foreignKey: 'recipe_id' });
+ 
+
 /* END OF MODELS*/
     return {
         Recipe,
@@ -756,6 +793,7 @@ CaloricBreakdown.belongsTo(Recipe, { foreignKey: 'recipe_id' });
         Properties,
         RecipeProperties,
         WeightPerServing,
-        CaloricBreakdown,    
+        CaloricBreakdown,   
+        Comments, 
     }
 }
