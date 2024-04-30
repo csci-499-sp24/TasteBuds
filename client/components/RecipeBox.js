@@ -20,7 +20,7 @@ const RecipeBox = ({ recipe }) => {
   };
 
   return (
-    <Card className="recipe-card" style={{ width: '350px', height: '250px' }}>
+    <Card className="recipe-card" style={{ width: '350px', height: '300px' }}>
       <CardBody className="overflow-visible py-2 bg-white">
         <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: 0, right: 10, zIndex: 1 }}>
@@ -50,7 +50,8 @@ const RecipeBox = ({ recipe }) => {
           </div>
         </div>
       </CardBody>
-      <Button onClick={viewRecipe}>View Recipe</Button>
+      <Button onClick={viewRecipe}
+          color={'warning'} >View Recipe</Button>
     </Card>
   );
 }

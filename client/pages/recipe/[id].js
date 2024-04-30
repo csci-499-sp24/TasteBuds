@@ -1,5 +1,3 @@
-// pages/recipe/[id].js
-
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar";
@@ -17,7 +15,7 @@ const Recipe = () => {
         if (response.ok) {
           const data = await response.json();
           console.log(data); // Log the data received from the API
-          setRecipe(data);
+          setRecipe(data[0]); // Assuming the API returns an array with one object
           setLoading(false);
         } else {
           throw new Error("Failed to fetch recipe");
@@ -52,9 +50,19 @@ const Recipe = () => {
       <div>
         <h1>{recipe.title}</h1>
         <img src={recipe.image} alt={recipe.title} />
-        <p>{recipe.description}</p>
+        <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
         {recipe.totalPrice !== undefined && (
           <p>Total Price: {recipe.totalPrice}</p>
+        )}
+        <h2>Instructions</h2>
+        {recipe.instructions && recipe.instructions.length > 0 ? (
+          <ol>
+            {recipe.instructions.map(instruction => (
+              <li key={instruction.instruction_id}>{instruction.step}</li>
+            ))}
+          </ol>
+        ) : (
+          <p>No instructions available</p>
         )}
         {/* Display other recipe details */}
       </div>
