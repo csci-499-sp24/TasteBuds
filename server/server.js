@@ -276,6 +276,20 @@ app.post('/comments', isAuthenticated, async (req, res) => {
     }
 });
 
+app.get('/comments/:recipeId', async (req, res) => {
+    try {
+        const { recipeId } = req.params;
+        const comments = await Comments.findAll({
+            where: { recipe_id: recipeId },
+        });
+        res.status(200).json(comments);
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {

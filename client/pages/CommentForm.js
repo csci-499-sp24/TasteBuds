@@ -1,13 +1,13 @@
-import { auth } from '../firebase/firebaseConfig'; 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import axios for making HTTP requests
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { auth } from '../firebase/firebaseConfig';
 
 const CommentForm = ({ recipeId }) => {
   const [commentText, setCommentText] = useState('');
-  const [userId, setUserId] = useState(null); // State to store the user ID
+  const [userId, setUserId] = useState(null);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    // Get the currently logged-in user ID from your authentication system
     const fetchUserId = async () => {
       if (auth.currentUser) {
         setUserId(auth.currentUser.uid);
@@ -17,17 +17,29 @@ const CommentForm = ({ recipeId }) => {
     fetchUserId();
   }, []);
 
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const recipeId = 13; // remove later 
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/${recipeId}`);
+        setComments(response.data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
+
+    fetchComments();
+  }, [recipeId]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Fetch the Firebase user ID of the currently logged-in from your authentication system
+
     const firebaseUserId = auth.currentUser ? auth.currentUser.uid : null;
-    const recipeId = 13;
+    const recipeId = 13; // remove later 
+
     try {
-      // Get the JWT token from the authentication system
       const token = await auth.currentUser.getIdToken();
-  
-      // Make a POST request to your server to submit the comment
+
       const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments`, {
         userId,
         recipeId,
@@ -35,19 +47,18 @@ const CommentForm = ({ recipeId }) => {
         firebaseUserId,
       }, {
         headers: {
-          Authorization: `Bearer ${token}`, // Include the JWT token in the request headers
+          Authorization: `Bearer ${token}`,
         },
       });
-  
+
       console.log('Comment submitted successfully:', response.data);
-  
-      // Reset the comment text after submission
+
       setCommentText('');
     } catch (error) {
       console.error('Error submitting comment:', error);
     }
   };
-  
+
   return (
     <div>
       <h2>Add a Comment</h2>
@@ -61,6 +72,13 @@ const CommentForm = ({ recipeId }) => {
         <br />
         <button type="submit">Submit</button>
       </form>
+      
+      <h2>Comments</h2>
+      <ul>
+        {comments.map((comment) => (
+          <li key={comment.id}>{comment.comment_text}</li>
+        ))}
+      </ul>
     </div>
   );
 };
