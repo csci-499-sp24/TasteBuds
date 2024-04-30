@@ -1,39 +1,37 @@
 import { useState, useEffect } from "react";
-import Sidebar from "../../components/sidebar";
+import { useRouter } from "next/router"; // Import useRouter here
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null);
   const [instructions, setInstructions] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // Use useRouter conditionally
+  const router = typeof useRouter !== 'undefined' ? useRouter() : null;
+  const id = router ? router.query.id : null;
 
   useEffect(() => {
-    // Dynamic import of useRouter only on the client side
-    const fetchRecipe = async () => {
-      try {
-        const nextRouter = await import("next/router");
-        const router = nextRouter.default;
-        const { query } = router;
-        const id = query.id;
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/search_by_id?id=${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setRecipe(data[0]);
-          setInstructions(data[1]);
+    if (id) {
+      const fetchRecipe = async () => {
+        try {
+          const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/search_by_id?id=${id}`);
+          if (response.ok) {
+            const data = await response.json();
+            setRecipe(data[0]);
+            setInstructions(data[1]);
+            setLoading(false);
+          } else {
+            throw new Error("Failed to fetch recipe");
+          }
+        } catch (error) {
+          console.error("Error fetching recipe:", error);
           setLoading(false);
-        } else {
-          throw new Error("Failed to fetch recipe");
         }
-      } catch (error) {
-        console.error("Error fetching recipe:", error);
-        setLoading(false);
-      }
-    };
+      };
 
-    if (typeof window !== "undefined") {
       fetchRecipe();
     }
-  }, []);
+  }, [id]);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -50,7 +48,6 @@ const Recipe = () => {
         <i className="fas fa-bars" id="btn"></i>
         <i className="fas fa-times" id="cancel"></i>
       </label>
-      <Sidebar />
       <div>
         <h1>{recipe.title}</h1>
         <img src={recipe.image} alt={recipe.title} />
