@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
 import Sidebar from "../../components/sidebar.js";
 import ProfilePicPreview from '../../components/ProfilePicPreview'; 
+import styles from './UserProfile.module.css'
+
 
 export default function UserProfile() {
   const router = useRouter();
@@ -56,6 +58,35 @@ export default function UserProfile() {
     }
   };
 
+  const savePantryAndFridgeItems = async () => {
+    const db = getFirestore();
+    const userDocRef = doc(db, "users", userid); 
+  
+    const pantryString = pantryItems.join(','); 
+    const fridgeString = fridgeItems.join(','); 
+
+    updateDoc(userDocRef, {
+      username: newUsername,
+      email: newEmail,
+      profilePic: profilePic
+    }).then(() => {
+      setUser({ ...user, username: newUsername, email: newEmail, profilePic: profilePic });
+      setEditMode(false);
+    }).catch(error => setError('Failed to update profile.'));
+  
+    try {
+      await updateDoc(userDocRef, {
+        pantry: pantryString, 
+        fridge: fridgeString  
+      });
+      console.log('Pantry and fridge items saved successfully');
+    } catch (error) {
+      console.error('Error saving pantry and fridge items: ', error);
+      setError('Failed to save pantry and fridge items.');
+    }
+  };
+  
+
   const removeItem = (item, items, setItems) => {
     setItems(items.filter((i) => i !== item));
   };
@@ -98,91 +129,75 @@ export default function UserProfile() {
   }
 
   return (
-    <div>
+    <section className='bg'>
+    <div className={styles.mainContainer}>
+      
       <Sidebar />
-      <section className='bg'>
-        <div className="head">
-          <h1>User Profile</h1>
+      <section className={styles.profileLayout}>
+        <div className={styles.profileBox}>
           <ProfilePicPreview 
             fileInputRef={fileInputRef}
-            profilePic={profilePic}
+            profilePic={profilePic || '/profpic.jpeg'}
             setProfilePic={setProfilePic}
-            className="profile-pic"
           />
-          {editMode ? (
-            <>
-              <input type="text" value={newUsername} onChange={e => setNewUsername(e.target.value)} />
-              <input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} />
-              <div className="pantry-container">
-              <h2>My Pantry</h2>
-              <div className="pantry-tags">
-                {pantryItems.map((item, index) => (
-                  <div key={index} className="pantry-tag">
-                    {item}
-                    <button onClick={() => removeItem(item, pantryItems, setPantryItems)}>×</button>
-                  </div>
-                ))}
+          <h2>{user?.username}</h2>
+          <p>{user?.email}</p>
+        </div>
+        <div>
+        <div className={styles.pantryBox}>
+          <h2>My Pantry</h2>
+          <div className={styles.pantryTags}>
+            {pantryItems.map((item, index) => (
+              <div key={index} className={styles.pantryTag}>
+                {item}
+                <button onClick={() => removeItem(item, pantryItems, setPantryItems)}>×</button>
               </div>
-              <input
-                ref={pantryInputRef}
-                type="text"
-                onKeyDown={(e) => handleKeyDown(e, pantryItems, setPantryItems, pantryInputRef)}
-                placeholder="Add pantry item and press Enter"
-                className="tag-input"
-              />
-            </div>
-            <div className="fridge-container">
-              <h2>My Fridge</h2>
-              <div className="fridge-tags">
-                {fridgeItems.map((item, index) => (
-                  <div key={index} className="fridge-tag">
-                    {item}
-                    <button onClick={() => removeItem(item, fridgeItems, setFridgeItems)}>×</button>
-                  </div>
-                ))}
+            ))}
+          </div>
+          {editMode && (
+          <input
+            ref={pantryInputRef}
+            type="text"
+            onKeyDown={(e) => handleKeyDown(e, pantryItems, setPantryItems, pantryInputRef)}
+            placeholder="Add pantry item and press 'Enter' "
+            className={styles.pantryInput}
+            size="30"
+          />
+          )}
+        </div>
+        <div className={styles.fridgeBox}>
+          <h2>My Fridge</h2>
+          <div className={styles.fridgeTags}>
+            {fridgeItems.map((item, index) => (
+              <div key={index} className={styles.fridgeTag}>
+                {item}
+                <button onClick={() => removeItem(item, fridgeItems, setFridgeItems)}>×</button>
               </div>
+              ))}
+              </div>
+              {editMode && (
               <input
                 ref={fridgeInputRef}
                 type="text"
                 onKeyDown={(e) => handleKeyDown(e, fridgeItems, setFridgeItems, fridgeInputRef)}
-                placeholder="Add fridge item and press Enter"
-                className="tag-input"
+                placeholder="Add fridge item and press 'Enter' "
+                className={styles.pantryInput} 
+                size="30"
               />
-            </div>
-            <button onClick={() => saveUpdates()}>Save Changes</button>
-            <button onClick={() => saveItems(pantryItems, 'pantry')}>Save Pantry</button>
-            <button onClick={() => saveItems(fridgeItems, 'fridge')}>Save Fridge</button>
-            <button onClick={() => setEditMode(false)}>Cancel</button>
-          </>
-        ) : (
-          <>
-            <p><strong>Username: </strong>{user.username}</p>
-            <p><strong>Email: </strong>{user.email}</p>
-            <div className="pantry-container">
-              <h2>My Pantry</h2>
-              {pantryItems.length > 0 ? (
-                pantryItems.map((item, index) => (
-                  <span key={index} className="pantry-tag">{item}</span>
-                ))
-              ) : (
-                <p>No items in pantry.</p>
               )}
             </div>
-            <div className="fridge-container">
-              <h2>My Fridge</h2>
-              {fridgeItems.length > 0 ? (
-                fridgeItems.map((item, index) => (
-                  <span key={index} className="fridge-tag">{item}</span>
-                ))
-              ) : (
-                <p>No items in fridge.</p>
-              )}
             </div>
-            <button onClick={() => setEditMode(true)}>Edit Profile</button>
-          </>
-        )}
-      </div>
-    </section>
-  </div>
-);
-}
+            </section>
+            {editMode && (
+              <>
+                <button onClick={savePantryAndFridgeItems} className={styles.saveButton}>Save Changes</button>
+                <button onClick={() => setEditMode(false)} className={styles.cancelButton}>Cancel</button>
+              </>
+            )}
+          {!editMode && (
+            <button onClick={() => setEditMode(true)} className={styles.editProfileButton}>Edit Profile</button>
+          )}
+        </div>
+        </section>
+      );
+    }
