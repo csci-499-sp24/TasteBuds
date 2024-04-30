@@ -1,73 +1,83 @@
-import { useState, useEffect } from "react"; 
-import Sidebar from "../../components/sidebar"; 
+import { useState, useEffect } from "react";
+import Sidebar from "../../components/sidebar";
 
 const Recipe = () => {
-  const [recipe, setRecipe] = useState(null); // recipe data 
-  const [instructions, setInstructions] = useState([]); // instruction data
-  const [loading, setLoading] = useState(true); // state tracks load or not
+  const [recipe, setRecipe] = useState(null);
+  const [instructions, setInstructions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [router, setRouter] = useState(null);
 
   useEffect(() => {
+    // Dynamic import of useRouter only on the client side
+    import("next/router").then((nextRouter) => {
+      setRouter(nextRouter);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!router) return; // Check if router is available
+
+    const { query } = router;
+    const id = query.id;
+
     const fetchRecipe = async () => {
-      const router = require("next/router"); //router wraped inside client env
-      const { id } = router.query;
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/search_by_id?id=${id}`);
         if (response.ok) {
-          const data = await response.json(); 
-          console.log(data); // Logging data from api
-          setRecipe(data[0]); // data of recipe in array 0
-          setInstructions(data[1]); // in the data instructions are array 1
-          setLoading(false); 
+          const data = await response.json();
+          setRecipe(data[0]);
+          setInstructions(data[1]);
+          setLoading(false);
         } else {
-          throw new Error("Failed to fetch recipe"); // Throw an error if fetching the recipe data fails
+          throw new Error("Failed to fetch recipe");
         }
       } catch (error) {
-        console.error("Error fetching recipe:", error); // Logging any errors that occur during data fetching
-        setLoading(false); // Update loading state to indicate data has been loaded to false
+        console.error("Error fetching recipe:", error);
+        setLoading(false);
       }
     };
 
-    if (typeof window !== 'undefined') {
+    if (id) {
       fetchRecipe();
     }
-  }, []); 
+  }, [router]);
 
   if (loading) {
-    return <div>Loading...</div>; // Render a loading message while data is fetched
+    return <div>Loading...</div>;
   }
 
   if (!recipe) {
-    return <div>Recipe not found</div>; // When no data is fetched
+    return <div>Recipe not found</div>;
   }
 
   return (
     <div>
-      <input type="checkbox" id="check" /> 
+      <input type="checkbox" id="check" />
       <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i> 
-        <i className="fas fa-times" id="cancel"></i> 
+        <i className="fas fa-bars" id="btn"></i>
+        <i className="fas fa-times" id="cancel"></i>
       </label>
-      <Sidebar /> 
+      <Sidebar />
       <div>
-        <h1>{recipe.title}</h1> 
-        <img src={recipe.image} alt={recipe.title} /> 
-        <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p> {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
+        <h1>{recipe.title}</h1>
+        <img src={recipe.image} alt={recipe.title} />
+        <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
         {recipe.totalPrice !== undefined && (
-          <p>Total Price: {recipe.totalPrice}</p> 
+          <p>Total Price: {recipe.totalPrice}</p>
         )}
-        <h2>Instructions</h2> {/* Recipe Instructions are rendered when the condition is met/available */}
+        <h2>Instructions</h2>
         {instructions.length > 0 ? (
           <ol>
             {instructions.map((instruction, index) => (
-              <li key={index}>{instruction.step}</li> // Map over instructions and render each one as a list item
+              <li key={index}>{instruction.step}</li>
             ))}
           </ol>
         ) : (
-          <p>No instructions available</p> // Else this render when ther are no instructions
+          <p>No instructions available</p>
         )}
       </div>
     </div>
   );
 };
 
-export default Recipe; 
+export default Recipe;
