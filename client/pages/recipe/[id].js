@@ -1,16 +1,15 @@
-import { useRouter } from "next/router"; 
 import { useState, useEffect } from "react"; 
 import Sidebar from "../../components/sidebar"; 
 
 const Recipe = () => {
-  const router = useRouter(); // useRouter hook is initilized to access router object
-  const { id } = router.query; 
   const [recipe, setRecipe] = useState(null); // recipe data 
   const [instructions, setInstructions] = useState([]); // instruction data
   const [loading, setLoading] = useState(true); // state tracks load or not
 
   useEffect(() => {
     const fetchRecipe = async () => {
+      const router = require("next/router"); //router wraped inside client env
+      const { id } = router.query;
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/search_by_id?id=${id}`);
         if (response.ok) {
@@ -28,10 +27,10 @@ const Recipe = () => {
       }
     };
 
-    if (id) {
-      fetchRecipe(); // Call fetchRecipe function when id parameter is available
+    if (typeof window !== 'undefined') {
+      fetchRecipe();
     }
-  }, [id]); // Effect runs only if 'id' changes
+  }, []); 
 
   if (loading) {
     return <div>Loading...</div>; // Render a loading message while data is fetched
