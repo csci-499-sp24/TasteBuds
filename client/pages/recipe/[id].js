@@ -5,23 +5,16 @@ const Recipe = () => {
   const [recipe, setRecipe] = useState(null);
   const [instructions, setInstructions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [router, setRouter] = useState(null);
 
   useEffect(() => {
     // Dynamic import of useRouter only on the client side
-    import("next/router").then((nextRouter) => {
-      setRouter(nextRouter);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!router) return; // Check if router is available
-
-    const { query } = router;
-    const id = query.id;
-
     const fetchRecipe = async () => {
       try {
+        const nextRouter = await import("next/router");
+        const router = nextRouter.default;
+        const { query } = router;
+        const id = query.id;
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/search_by_id?id=${id}`);
         if (response.ok) {
           const data = await response.json();
@@ -37,10 +30,10 @@ const Recipe = () => {
       }
     };
 
-    if (id) {
+    if (typeof window !== "undefined") {
       fetchRecipe();
     }
-  }, [router]);
+  }, []);
 
   if (loading) {
     return <div>Loading...</div>;
