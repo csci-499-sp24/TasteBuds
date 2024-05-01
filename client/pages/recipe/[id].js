@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react"; 
 import { useRouter } from 'next/router'; 
+import { useState, useEffect } from "react"; 
 import Sidebar from "../../components/sidebar"; 
+import ErrorPage from 'next/error';
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
@@ -38,7 +39,7 @@ const Recipe = () => {
   }
 
   if (!recipe) {
-    return <div>Recipe not found</div>; // When no data is fetched
+    return <ErrorPage statusCode={404} />; // When no data is fetched, render a 404 error page
   }
 
   return (
