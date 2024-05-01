@@ -76,7 +76,7 @@ const SavedRecipes = sequelize.define('savedRecipes', {
 async function sync_table() {
     try {
         // await sequelize.sync()
-        //await database.sync();
+        await database.sync();
         //await User.sync();
         await SavedRecipes.sync()
         console.log("The table for the db has been (re)created.");
