@@ -99,6 +99,11 @@ export default function UserProfile() {
 
   return (
     <div>
+      <input type="checkbox" id="check" />
+      <label htmlFor="check">
+        <i className="fas fa-bars" id="btn"></i>
+        <i className="fas fa-times" id="cancel"></i>
+      </label>
       <Sidebar />
       <section className='bg'>
         <div className="head">
