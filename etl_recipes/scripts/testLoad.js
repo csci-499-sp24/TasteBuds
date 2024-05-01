@@ -24,18 +24,18 @@ syncDB();
 async function main() {
     try {
         // Fetch the 10 cuisines with the lowest count
-        const lowestCountCuisines = await getCuisinesWithLowestCount(5);
+        // const lowestCountCuisines = await getCuisinesWithLowestCount(5);
         // const lowestCountDiets = await getDietWithLowestCount(3);
         // const getIntolerancesWithLowestCount = getDietWithLowestCount(3);
         // let i = 0;
         // lowestCountCuisines = [{cuisine_name: "Korean"}, {cuisine_name: "Chinese"}];
-        for (const cuisineType of lowestCountCuisines) {
-            const os = await getOffsetForCuisine(cuisineType.cuisine_name);
+        // for (const cuisineType of lowestCountCuisines) {
+            // const os = await getOffsetForCuisine(cuisineType.cuisine_name);
             // const os = await getOffsetForCuisine("Central American");
             // console.log(os)
-            const offset = parseInt(os, 10);
+            // const offset = parseInt(os, 10) + 10;
             // 146 African-paleolithic,195 
-            // 183 (+4?) keto, Indian 
+            // 183 70(+4?) ketogenic, Indian 
             // 145 pescatarian, Scand, 239
             // 500 550 570 or 157, 700 740 790
             // 205 Central American
@@ -45,15 +45,15 @@ async function main() {
 
 
             // console.log(offset)
-            const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?$cuisine=${cuisineType.cuisine_name}&number=10&offset=${offset}&diet=fodmap&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+            // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?$cuisine=${cuisineType.cuisine_name}&number=10&offset=${offset}&diet=whole 30&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
             // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?$cuisine=Central American&number=20&offset=${offset}&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
             // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine.cuisine_name}&diet=${lowestCountDiets[i].diet_name}&number=10&offset=${offset}&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
             // const listApiUrl = `https://api.spoonacular.com/recipes/complexSearch?cuisine=${cuisine.cuisine_name}&diet=${lowestCountDiets[i].cuisine_name}&intolerances=${lowestCountintolerances[i].intolerance_name}&number=10&offset=${offset}&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
 
 
             // console.log(listApiUrl)
-            let listResponse = await axios.get(listApiUrl);
-            let recipeList = listResponse.data.results;
+            // let listResponse = await axios.get(listApiUrl);
+            // let recipeList = listResponse.data.results;
             // console.log(`Number of recipes fetched: ${recipeList.length}`);
             // console.log(`id: ${recipeList[0].id}`);
 
@@ -68,77 +68,94 @@ async function main() {
             // for (const recipe of recipeLt) {
             //     console.log(`ID:${recipe.id}`);
             // }
+
+
+            
+            // let recipeLt2 = [];
+
+            // for(const recipe of recipeList){
+            //     let exitsRecipe = await Recipe.findOne({ where: { recipe_id: recipe.id} });
+            //     if(!exitsRecipe){
+            //         recipeLt2.push(recipe);
+            //     }
+            //     else{
+            //         let createdCuisines = await Cuisines.findOne({ where: { cuisine_name: cuisineType.cuisine_name} });
+            //         const existingRecipeCuisines = await RecipeCuisines.findOne({
+            //             where: {
+            //                 recipe_id: recipe.id,
+            //                 cuisine_id: createdCuisines.cuisine_id,
+            //             }
+            //         });
+            //         if (!existingRecipeCuisines && exitsRecipe) {
+            //             await RecipeCuisines.create({
+            //                 recipe_id: recipe.id,
+            //                 cuisine_id: createdCuisines.cuisine_id,
+            //             });
+            //         }
+            //     }
+            // }
+            
+            // let j = 60040; 
+            // let j = 600010;
+            // let j  = 638060, 639060, 636000
+            let j  = 639273;
             let recipeLt2 = [];
-            for(const recipe of recipeList){
-                let exitsRecipe = await Recipe.findOne({ where: { recipe_id: recipe.id} });
+            for(let i = j; recipeLt2.length <= 20;i++){
+                let exitsRecipe = await Recipe.findOne({ where: { recipe_id: i} });
                 if(!exitsRecipe){
-                    recipeLt2.push(recipe);
-                }
-                else{
-                    let createdCuisines = await Cuisines.findOne({ where: { cuisine_name: cuisineType.cuisine_name} });
-                    const existingRecipeCuisines = await RecipeCuisines.findOne({
-                        where: {
-                            recipe_id: recipe.id,
-                            cuisine_id: createdCuisines.cuisine_id,
-                        }
-                    });
-                    if (!existingRecipeCuisines && exitsRecipe) {
-                        await RecipeCuisines.create({
-                            recipe_id: recipe.id,
-                            cuisine_id: createdCuisines.cuisine_id,
-                        });
-                    }
+                    recipeLt2.push(i);
                 }
             }
 
             for (const recipe of recipeLt2) {
-                const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+                // const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
+                const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
 
                 const extractedRecipe = await fetchRecipesFromSource(detailApiUrl);
                 const transformedRecipes = transformRecipeData(extractedRecipe);
-                transformedRecipes[0].cuisine.push(cuisineType.cuisine_name);
+                // transformedRecipes[0].cuisine.push(cuisineType.cuisine_name);
                 // transformedRecipes[0].cuisine.push("Central American");
 
-                // transformedRecipes[0].diet.push("vegetarian");
+                // transformedRecipes[0].diet.push("whole 30");
                 // console.log(transformedRecipes[0].cuisine);
                 // transformedRecipes[0].cuisine.cuisine_nameforEach(function(entry) {
                 //     console.log(entry);
                 //   });
                 await loadRecipesIntoDatabase(transformedRecipes);
             }
-            console.log(`Size: ${recipeLt2.length}`);
-        }
+            // console.log(`Size: ${recipeLt2.length}`);
+        // }
 
     } catch (error) {
         console.error('Error in main execution:', error);
     }
 }
-async function getOffsetForCuisine(cuisineName) {
-    const count = await sequelize.query(
-        `SELECT COUNT(recipe_cuisine.recipe_id) AS count
-        FROM public.recipe_cuisine
-        LEFT JOIN public.cuisines ON recipe_cuisine.cuisine_id = cuisines.cuisine_id
-        WHERE cuisines.cuisine_name = '${cuisineName}';`,
-        { type: QueryTypes.SELECT }
-    );
+// async function getOffsetForCuisine(cuisineName) {
+//     const count = await sequelize.query(
+//         `SELECT COUNT(recipe_cuisine.recipe_id) AS count
+//         FROM public.recipe_cuisine
+//         LEFT JOIN public.cuisines ON recipe_cuisine.cuisine_id = cuisines.cuisine_id
+//         WHERE cuisines.cuisine_name = '${cuisineName}';`,
+//         { type: QueryTypes.SELECT }
+//     );
 
-    return count[0].count || 0; // Return the count or 0 if not found
-}
+//     return count[0].count || 0; // Return the count or 0 if not found
+// }
 
-async function getCuisinesWithLowestCount(count) {
-    return await sequelize.query(
-        `SELECT cuisine_name, COUNT(recipes.recipe_id) AS recipe_count
-        FROM public.cuisines
-        LEFT JOIN public.recipe_cuisine ON cuisines.cuisine_id = recipe_cuisine.cuisine_id
-        LEFT JOIN public.recipes ON recipe_cuisine.recipe_id = recipes.recipe_id
-        GROUP BY cuisine_name
-        ORDER BY recipe_count
-        OFFSET 2
-        LIMIT ${count};`, // ignore the lowest cuisine thier is no more of it  // OFFSET 1  -- Skip the first result
+// async function getCuisinesWithLowestCount(count) {
+//     return await sequelize.query(
+//         `SELECT cuisine_name, COUNT(recipes.recipe_id) AS recipe_count
+//         FROM public.cuisines
+//         LEFT JOIN public.recipe_cuisine ON cuisines.cuisine_id = recipe_cuisine.cuisine_id
+//         LEFT JOIN public.recipes ON recipe_cuisine.recipe_id = recipes.recipe_id
+//         GROUP BY cuisine_name
+//         ORDER BY recipe_count
+//         OFFSET 2
+//         LIMIT ${count};`, // ignore the lowest cuisine thier is no more of it  // OFFSET 1  -- Skip the first result
 
-        { type: QueryTypes.SELECT }
-    );
-}
+//         { type: QueryTypes.SELECT }
+//     );
+// }
 
 
 // async function getDietWithLowestCount(count) {
