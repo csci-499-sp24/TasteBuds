@@ -1,13 +1,13 @@
-import { useRouter } from "next/router"; 
 import { useState, useEffect } from "react"; 
+import { useRouter } from 'next/router'; 
 import Sidebar from "../../components/sidebar"; 
 
 const Recipe = () => {
-  const router = useRouter(); // useRouter hook is initilized to access router object
-  const { id } = router.query; 
   const [recipe, setRecipe] = useState(null); // recipe data 
   const [instructions, setInstructions] = useState([]); // instruction data
   const [loading, setLoading] = useState(true); // state tracks load or not
+  const router = useRouter(); // Initialize useRouter hook to access router object
+  const { id } = router.query; // Get the id from the router query
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -71,4 +71,4 @@ const Recipe = () => {
   );
 };
 
-export default Recipe; 
+export default Recipe;
