@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardHeader, CardBody, Button } from "@nextui-org/react";
 
 const RecipeBox = ({ recipe }) => {
