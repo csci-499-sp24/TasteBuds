@@ -1,12 +1,54 @@
 import React, {useState, useEffect} from "react";
 import {Card, CardHeader, CardBody} from "@nextui-org/react";
+import { useAuth } from "@/firebase/userAuthContext";
+import { auth } from '../firebase/firebaseConfig';
+import axios from "axios";
 
 const RecipeBox = ({recipe}) => {
   const [isClicked, setIsClicked] = useState(false);
+  const { currentUser } = useAuth();
 
-  const handleClick = () => 
+  const handleClick = async () => 
   {
     setIsClicked(!isClicked);
+
+    //add recipe to current user's saved recipes
+    if(currentUser && !isClicked){
+      try{
+        const token = await auth.currentUser.getIdToken();
+
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_SERVER_URL}/saveRecipe`, {
+          userId: currentUser.uid,
+          recipeTitle: recipe.title,
+          recipeId: recipe.recipe_id,
+          imageUrl: recipe.image,
+          
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the JWT token in the request headers
+          },
+        });
+        console.log(response);
+        console.log("Recipe saved successfully!");
+      }catch(error){
+        console.error("Error saving recipe:", error);
+      }
+    }
+    if(currentUser && isClicked){
+      try{
+        const token = await auth.currentUser.getIdToken();
+  
+        const response = await axios.delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/deleteRecipe/${currentUser.uid}/${recipe.recipe_id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, 
+          },
+        });
+        console.log(response);
+        console.log("Recipe deleted successfully!");
+      }catch(error){
+        console.error("Error deleting recipe:", error);
+      }
+    }
   }
 
   useEffect(() => 
@@ -22,7 +64,7 @@ const RecipeBox = ({recipe}) => {
           <div style={{position: 'absolute', top: 0, right: 10, zIndex: 1 }}>
           <i 
             className="fas fa-heart" id="heart-btn" 
-            style={{color: isClicked ? 'red' : 'black', transition: 'color 0.3s'
+            style={{cursor: "pointer", color: isClicked ? 'red' : 'black', transition: 'color 0.3s'
             }}
             onClick={handleClick}
           ></i>
