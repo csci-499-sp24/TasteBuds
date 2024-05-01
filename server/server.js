@@ -297,6 +297,18 @@ app.post('/comments', isAuthenticated, async (req, res) => {
     }
 });
 
+app.get('/comments/:recipeId', async (req, res) => {
+    try {
+        const { recipeId } = req.params;
+        const comments = await Comments.findAll({
+            where: { recipe_id: recipeId },
+        });
+        res.status(200).json(comments);
+    } catch (error) {
+        console.error('Error fetching comments:', error)
+    }
+});
+
 //get all saved recipes for a user
 app.get('/savedRecipes/:userId', isAuthenticated, async (req, res) => {
     try {
@@ -308,6 +320,7 @@ app.get('/savedRecipes/:userId', isAuthenticated, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
 
 //saving a recipe, adding it to savedRecipes table
 app.post('/saveRecipe', isAuthenticated, async (req, res) => {
