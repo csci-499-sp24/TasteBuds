@@ -23,7 +23,7 @@ const IngredientCardItem = ({ ingredient }) => {
     <li style={{ width: '100px', height: '120px' }}>
       <Card>
         <div style={{ position: 'relative', width: '100px', height: '100px' }}>
-          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-30%, -50%)' }}>
+          <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
             <Image
               src={
                 ingredient.image.startsWith('http')
@@ -31,8 +31,8 @@ const IngredientCardItem = ({ ingredient }) => {
                   : `https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`
               }
               alt={ingredient.standard_name}
-              width={'200%'}
-              height={'200%'}
+              width={150}
+              height={150}
               objectFit={'cover'}
             />
           </div>
