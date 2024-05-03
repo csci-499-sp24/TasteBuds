@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from "react"; 
 import Sidebar from "../../components/sidebar"; 
 import ErrorPage from 'next/error';
+import styles from './RecipeProfile.module.css'
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
