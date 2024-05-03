@@ -6,6 +6,7 @@ import styles from './RecipeProfile.module.css'
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
+  const [ingredients, setIngredients] = useState([]); // ingredient data
   const [instructions, setInstructions] = useState([]); // instruction data
   const [loading, setLoading] = useState(true); // state tracks load or not
   const router = useRouter(); // Initialize useRouter hook to access router object
@@ -19,6 +20,8 @@ const Recipe = () => {
           const data = await response.json(); 
           console.log(data); // Logging data from api 
           setRecipe(data[0]); // data of recipe in array 0
+          const ingredientsData = data[0]?.Ingredients || []; // access ingredients array from data[0]
+          setIngredients(ingredientsData); // set ingredients in state
           setInstructions(data[1]); // in the data instructions are array 1
           setLoading(false); 
         } else {
@@ -58,6 +61,19 @@ const Recipe = () => {
         {recipe.totalPrice !== undefined && (
           <p>Total Price: {recipe.totalPrice}</p> 
         )}
+        <h2>Ingredients</h2>
+        <ul>
+          {ingredients && ingredients.length > 0 ? (
+            ingredients.map((ingredient, index) => (
+              <li key={index}>
+                <img src={ingredient.image} />
+                {ingredient.standard_name}
+              </li>
+            ))
+          ) : (
+            <p>No ingredients available</p>
+          )}
+        </ul>
         <h2>Instructions</h2> {/* Recipe Instructions are rendered when the condition is met/available */}
         {instructions.length > 0 ? (
           <ol>
