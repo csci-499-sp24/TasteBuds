@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card, Avatar, Text } from '@nextui-org/react';
 
 const IngredientCard = ({ ingredients }) => {
   return (
@@ -26,5 +27,7 @@ const IngredientCard = ({ ingredients }) => {
     </>
   );
 };
+
+
 
 export default IngredientCard;
