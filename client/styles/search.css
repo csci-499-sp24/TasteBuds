@@ -6,11 +6,12 @@
 }
 
 
+/* Add this CSS to your existing CSS file */
 .sidebar {
   position: fixed;
   width: 250px;
   height: 100%;
-  left: -250px;
+  left: 0;
   background: #161616;
   transition: all 0.5s ease;
 }
@@ -22,7 +23,11 @@
   color: white;
   background: #0dbbf0;
   user-select: none;
+  position: sticky; /* Make the header sticky */
+  top: 0; /* Stick the header to the top */
+  z-index: 999; /* Ensure the header stays above other content */
 }
+
 
 .sidebar ul a {
   font-size: 20px;
@@ -94,7 +99,7 @@ label #cancel {
   margin-left: 250px;
 }
 
-.b {
+.main-content {
   background: url('../public/search.jpg') no-repeat;
   background-position: center;
   background-size: cover;
@@ -123,7 +128,6 @@ label #cancel {
 }
 
 .recipe-container {
-  margin-left: -90px; 
   flex: 3;
 }
 
@@ -140,23 +144,14 @@ label #cancel {
 .container {
   display: flex;
   margin-top: 20px; 
-  justify-content: center; /* Center the children horizontally */
-  align-items: flex-start; /* Align items to the top */
+  margin-left: 20px; 
+
+  justify-content: center; 
+  align-items: flex-start; 
 }
 
-/* Adjust the spacing between inner and outer scrollbars */
 .listbox-wrapper {
-  height: 500px; /* Set the height as needed */
-  overflow-y: auto; /* Enable vertical scrollbar when content overflows */
-  padding-right: 20px; /* Add some padding to the right side to separate the inner and outer scrollbars */
-}
-
-.listbox-container {
-  margin-right: -20px; /* Compensate for the padding on the right side of the .listbox-wrapper */
-}
-
-.listbox-container {
-  flex: 1;
-  margin-right: 20px; /* Add margin between the listbox and the recipe container */
-  /* overflow-y: auto; Enable vertical scrollbar when content overflows */
+  height: 500px;
+  overflow-y: auto;
+  padding-right: 20px;
 }
