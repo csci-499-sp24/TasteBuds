@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from "react";
-import {Card, CardHeader, CardBody} from "@nextui-org/react";
+import { useRouter } from "next/router";
+import {Card, CardHeader, CardBody, Button} from "@nextui-org/react";
 import { useAuth } from "@/firebase/userAuthContext";
 import { auth } from '../firebase/firebaseConfig';
 import axios from "axios";
 
 const RecipeBox = ({recipe}) => {
   const [isClicked, setIsClicked] = useState(false);
+  const router = useRouter();
   const { currentUser } = useAuth();
 
   const handleClick = async () => 
@@ -57,6 +59,10 @@ const RecipeBox = ({recipe}) => {
     setIsClicked(false);
   }, [recipe]); // This is triggered when props are changed
 
+  const viewRecipe = () => {
+    router.push(`/recipe/${recipe.recipe_id}`);
+  };
+
   return (
     <Card className="recipe-card" style={{width: '350px', height: '250px'}}>
       <CardBody className="overflow-visible py-2 bg-white">
@@ -82,6 +88,8 @@ const RecipeBox = ({recipe}) => {
         </div>
       </div>
       </CardBody>
+      <Button onClick={viewRecipe}
+          color={'warning'} >View Recipe</Button>
     </Card>
   );
 }
