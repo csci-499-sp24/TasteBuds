@@ -105,7 +105,6 @@ function Search() {
 
   
   return (
-    
     <div>
        {/* Sidebar navigation */}
       <input type="checkbox" id="check" />
@@ -118,14 +117,16 @@ function Search() {
       <Sidebar />
 
       {/* Main content section */}
-      <section className='b'>
+      <section className='main-content'>
+
         <div id="div-center" className="search-wrapper">
+          <br/>
           <Input  color="warning"  type="search" label="Search" onChange={handleSearch} />
           <Button  color="warning" onClick={handleTriggerFetch}>Search</Button> 
         </div>
-        <div className="container" >
 
-          <div className="listbox-container">
+        <div className="container" >
+          <div className="filters">
             <ListboxWrapper>
             <CuisineTab
                   handleListboxChange={handleListboxChange}
@@ -327,6 +328,7 @@ function Search() {
               {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
             </div>
           </div>
+          
         </div>  
       </section>
 
