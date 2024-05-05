@@ -2,9 +2,12 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from "react"; 
 import Sidebar from "../../components/sidebar"; 
 import ErrorPage from 'next/error';
+import IngredientCard from "../../components/IngredientCard";
+import styles from './RecipeProfile.module.css'
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
+  const [ingredients, setIngredients] = useState([]); // ingredient data
   const [instructions, setInstructions] = useState([]); // instruction data
   const [loading, setLoading] = useState(true); // state tracks load or not
   const router = useRouter(); // Initialize useRouter hook to access router object
@@ -18,6 +21,8 @@ const Recipe = () => {
           const data = await response.json(); 
           console.log(data); // Logging data from api 
           setRecipe(data[0]); // data of recipe in array 0
+          const ingredientsData = data[0]?.Ingredients || []; // access ingredients array from data[0]
+          setIngredients(ingredientsData); // set ingredients in state
           setInstructions(data[1]); // in the data instructions are array 1
           setLoading(false); 
         } else {
@@ -57,6 +62,8 @@ const Recipe = () => {
         {recipe.totalPrice !== undefined && (
           <p>Total Price: {recipe.totalPrice}</p> 
         )}
+        <IngredientCard ingredients={ingredients} /> 
+        {/* Display the ingredientCard component with ingredients data */}
         <h2>Instructions</h2> {/* Recipe Instructions are rendered when the condition is met/available */}
         {instructions.length > 0 ? (
           <ol>
