@@ -131,6 +131,9 @@ label #cancel {
   width: 665px;
   margin: auto;
 }
+.input:hover {
+  background-color: #f57c00 !important; /* Set the background color to the desired color */
+}
 
 .container {
   display: flex;

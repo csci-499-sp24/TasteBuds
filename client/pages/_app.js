@@ -8,7 +8,7 @@ import UserAuthContext from "@/firebase/userAuthContext";
 export default function App({ Component, pageProps }) {
   return (
     <UserAuthContext>
-      <NextUIProvider >
+      <NextUIProvider>
         <Component {...pageProps} />
       </NextUIProvider>
     </UserAuthContext>
