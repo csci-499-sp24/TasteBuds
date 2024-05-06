@@ -31,7 +31,8 @@ function Homepage({ userId }) {
 
   return (
     <div>
-       <input type="checkbox" id="check" />
+       {/* Sidebar navigation */}
+      <input type="checkbox" id="check" />
       <label htmlFor="check">
         <i className="fas fa-bars" id="btn"></i>
         <i className="fas fa-times" id="cancel"></i>
