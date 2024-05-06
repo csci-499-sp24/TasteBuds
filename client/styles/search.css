@@ -1,3 +1,5 @@
+
+/* search.css */
 * {
   margin: 0;
   padding: 0;
@@ -5,13 +7,12 @@
   text-decoration: none;
 }
 
-
 .sidebar {
   position: fixed;
   width: 250px;
   height: 100%;
-  left: -250px;
-  background: #161616;
+  left: 0;
+  background: #212121; /* Dark Primary color */
   transition: all 0.5s ease;
 }
 
@@ -20,8 +21,11 @@
   text-align: center;
   line-height: 70px;
   color: white;
-  background: #0dbbf0;
+  background: #FF9800; /* Primary color */
   user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
 
 .sidebar ul a {
@@ -34,7 +38,7 @@
   padding-left: 40px;
   box-sizing: border-box;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #757575; /* Secondary Text color */
   transition: 0.4s;
 }
 
@@ -49,10 +53,9 @@ ul li:hover a {
 label #btn,
 label #cancel {
   position: absolute;
-  background: #042331;
+  background: #212121; /* Dark Primary color */
   border-radius: 3px;
   cursor: pointer;
-  
 }
 
 label #btn {
@@ -62,7 +65,6 @@ label #btn {
   color: white;
   padding: 6px 12px;
   transition: all 0.5s;
-  
 }
 
 label #cancel {
@@ -70,14 +72,13 @@ label #cancel {
   left: -195px;
   top: 17px;
   font-size: 30px;
-  color: #0a5275;
+  color: #FF5252; /* Accent Color */
   padding: 4px 9px;
   transition: all 0.5s ease;
 }
 
 #check:checked ~ .sidebar {
   left: 0;
-  
 }
 
 #check:checked ~ label #btn {
@@ -94,18 +95,13 @@ label #cancel {
   margin-left: 250px;
 }
 
-.b {
+.main-content {
   background: url('../public/search.jpg') no-repeat;
   background-position: center;
   background-size: cover;
-  height: 100vh; /* Set height to 100% of viewport height */
+  height: 100vh;
   transition: all 0.5s;
   overflow-y: auto;
-}
-
-
-.sidebar ul a i {
-  margin-right: 16px;
 }
 
 .search-wrapper {
@@ -123,7 +119,6 @@ label #cancel {
 }
 
 .recipe-container {
-  margin-left: -90px; 
   flex: 3;
 }
 
@@ -136,27 +131,20 @@ label #cancel {
   width: 665px;
   margin: auto;
 }
+.input:hover {
+  background-color: #f57c00 !important; /* Set the background color to the desired color */
+}
 
 .container {
   display: flex;
   margin-top: 20px; 
-  justify-content: center; /* Center the children horizontally */
-  align-items: flex-start; /* Align items to the top */
+  margin-left: 20px; 
+  justify-content: center; 
+  align-items: flex-start; 
 }
 
-/* Adjust the spacing between inner and outer scrollbars */
 .listbox-wrapper {
-  height: 500px; /* Set the height as needed */
-  overflow-y: auto; /* Enable vertical scrollbar when content overflows */
-  padding-right: 20px; /* Add some padding to the right side to separate the inner and outer scrollbars */
-}
-
-.listbox-container {
-  margin-right: -20px; /* Compensate for the padding on the right side of the .listbox-wrapper */
-}
-
-.listbox-container {
-  flex: 1;
-  margin-right: 20px; /* Add margin between the listbox and the recipe container */
-  /* overflow-y: auto; Enable vertical scrollbar when content overflows */
+  height: 500px;
+  overflow-y: auto;
+  padding-right: 20px;
 }

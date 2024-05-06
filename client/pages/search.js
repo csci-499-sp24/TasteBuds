@@ -1,5 +1,7 @@
+// color palette: #F57C00(Dark Primary color) #FFE0B2(Light Primary color) #FF9800(Primary color) #212121(Text/Icon) #FF5252(Accent Color) #212121(Primary Text) #757575(Secondary Text) #BDBDBD(Divider Color)
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
+import {commonColors, semanticColors} from "@nextui-org/theme";
 import RecipeBox from "../components/RecipeBox";
 import Sidebar from "../components/sidebar";
 import {Input, Select, SelectItem, Button} from "@nextui-org/react";
@@ -8,6 +10,7 @@ import CuisineTab from "../components/cuisineTab";
 import DietTab from "../components/dietTab";
 import OccasionTab from "../components/occasionTab";
 import DishTypeTab from "../components/dishTypeTab";
+
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
@@ -105,27 +108,63 @@ function Search() {
 
   
   return (
-    
     <div>
+      <div>
        {/* Sidebar navigation */}
-      <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-
-      {/* Sidebar component */}
-      <Sidebar />
+        <input type="checkbox" id="check" />
+        <label htmlFor="check">
+          <i className="fas fa-bars" id="btn"></i>
+          <i className="fas fa-times" id="cancel"></i>
+        </label>
+            
+        {/* Sidebar component */}
+        <Sidebar />
+      </div>
 
       {/* Main content section */}
-      <section className='b'>
+      <section className='main-content'>
         <div id="div-center" className="search-wrapper">
-          <Input  color="warning"  type="search" label="Search" onChange={handleSearch} />
-          <Button  color="warning" onClick={handleTriggerFetch}>Search</Button> 
+          <br/>    
+          <Input
+            // classNames={{
+            //   label: "text-default-100 dark:text-default-600",
+            //   input: [
+            //     "bg-[#f57c00]",
+            //     "text-default-100 dark:text-default-600",
+            //     "placeholder:text-default-100 dark:placeholder:text-default-600",
+            //   ],
+            //   mainWrapper: ["bg-[#f57c00]"],
+            //   innerWrapper: ["bg-[#f57c00]"],
+            //   inputWrapper: [
+            //     "bg-[#f57c00]",
+            //     "focus-within:!bg-[#f57c00]",
+            //   ],
+            // }}
+            classNames={{
+              label: "text-black/50 dark:text-white/90",
+              input: [
+                "bg-[#f57c00]",
+                "text-black/90 dark:text-white/90",
+                "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+              ],
+              innerWrapper: "bg-[#f57c00]",
+              inputWrapper: [
+                "shadow-xl",
+                "bg-[#f57c00]",
+                "focus-within-[focus=true]:bg-[#f57c00]", 
+                "group-data-[focus=true]:bg-[#f57c00]",              
+                "group-data-[hover=true]:bg-[#f57c00]",              
+              ],
+            }}
+            type="search"
+            label="Search"
+            onChange={handleSearch}
+          />
+          <Button className="bg-[#f57c00]" onClick={handleTriggerFetch}>Search</Button> 
         </div>
-        <div className="container" >
 
-          <div className="listbox-container">
+        <div className="container" >
+          <div className="filters">
             <ListboxWrapper>
             <CuisineTab
                   handleListboxChange={handleListboxChange}
@@ -327,6 +366,7 @@ function Search() {
               {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
             </div>
           </div>
+          
         </div>  
       </section>
 
