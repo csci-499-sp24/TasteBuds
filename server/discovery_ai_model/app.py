@@ -25,6 +25,9 @@ def get_recipe_ids():
 @app.route('/recommend', methods=['GET'])
 def recommend():
     user_id = request.args.get('userId')
+    print("User ID:", user_id)
+    if not user_id:
+        return jsonify({'error': 'User ID is required'}), 400
     recipe_ids = get_recipe_ids()
     recommendations = []
     
@@ -35,7 +38,8 @@ def recommend():
     # sorted by predicted rating
     recommendations.sort(key=lambda x: x['predictedRating'], reverse=True)
     
-    return jsonify(recommendations)
+    #return jsonify(recommendations)
+    return jsonify({"message": "Endpoint hit successfully", "userId": user_id})
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -2,32 +2,43 @@ import React, { useState, useEffect } from 'react';
 import RecipeBox from '../components/RecipeBox';
 import Sidebar from "../components/sidebar";
 import { Button } from "@nextui-org/react";
+import { useAuth } from "@/firebase/userAuthContext";
 
-function Homepage({ userId }) {
+function Homepage() {
+  const {currentUser} = useAuth();
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchRecommendations = async () => {
-    setLoading(true);
+  const fetchRecommendations = async (userId) => {
+    const serverURL = process.env.NEXT_PUBLIC_SERVER_URL;
+    console.log('Server URL:', serverURL);
+    if (!currentUser) {
+      console.error("User ID is undefined");
+      return;
+    }
+  
+    const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL;
+    console.log('Server URL:', serverUrl); 
+  
+    const url = `${serverURL}/recommend?userId=${currentUser.uid}`;
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/recommend?userId=${userId}`);
+      const response = await fetch(url);
       if (!response.ok) {
-        throw new Error('Failed to fetch recommendations');
+        throw new Error(`Failed to fetch recommendations: ${response.statusText}`);
       }
       const data = await response.json();
-      setRecipes(data);
+      console.log('Recommendations:', data);
+      setRecipes(data); // Update state with fetched data
     } catch (error) {
-      console.error('Error fetching recommendations:', error);
-    } finally {
-      setLoading(false);
+      console.error('Error fetching recommendations:', error.message);
     }
-  };
+  }  
 
   useEffect(() => {
-    if (userId) {
+    if (currentUser) {
       fetchRecommendations();
     }
-  }, [userId]);
+  }, [currentUser]);
 
   return (
     <div>
