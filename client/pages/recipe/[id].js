@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar"; 
 import ErrorPage from 'next/error';
 import IngredientCard from "../../components/IngredientCard";
+import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
 
 const Recipe = () => {
@@ -56,8 +57,10 @@ const Recipe = () => {
       </label>
       <Sidebar /> 
       <div>
-        <h1>{recipe.title}</h1> 
-        <img src={recipe.image} alt={recipe.title} /> 
+      <h1 style={{ margin: 'auto', maxWidth: '500px' }}>{recipe.title}</h1> 
+        <div style={{ margin: 'auto', maxWidth: '500px' }}> {/* Adjust max-width as needed */}
+          <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
+        </div>
         <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p> {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
         {recipe.totalPrice !== undefined && (
           <p>Total Price: {recipe.totalPrice}</p> 
