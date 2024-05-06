@@ -1,3 +1,4 @@
+// color palette: #F57C00(Dark Primary color) #FFE0B2(Light Primary color) #FF9800(Primary color) #212121(Text/Icon) #FF5252(Accent Color) #212121(Primary Text) #757575(Secondary Text) #BDBDBD(Divider Color)
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 import RecipeBox from "../components/RecipeBox";
@@ -8,6 +9,7 @@ import CuisineTab from "../components/cuisineTab";
 import DietTab from "../components/dietTab";
 import OccasionTab from "../components/occasionTab";
 import DishTypeTab from "../components/dishTypeTab";
+
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
@@ -106,23 +108,43 @@ function Search() {
   
   return (
     <div>
+      <div>
        {/* Sidebar navigation */}
-      <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-
-      {/* Sidebar component */}
-      <Sidebar />
+        <input type="checkbox" id="check" />
+        <label htmlFor="check">
+          <i className="fas fa-bars" id="btn"></i>
+          <i className="fas fa-times" id="cancel"></i>
+        </label>
+            
+        {/* Sidebar component */}
+        <Sidebar />
+      </div>
 
       {/* Main content section */}
       <section className='main-content'>
-
         <div id="div-center" className="search-wrapper">
-          <br/>
-          <Input  color="warning"  type="search" label="Search" onChange={handleSearch} />
-          <Button  color="warning" onClick={handleTriggerFetch}>Search</Button> 
+          <br/>    
+          <Input
+            classNames={{
+              label: "text-texts-primary",
+              input: [
+                "bg-primary-dark",
+                "text-texts-primary text-texts-primary",
+                "placeholder:text-texts-primary  placeholder:text-texts-primary",
+              ],
+              innerWrapper: ["relative w-full-[filled-within=true]: bg-primary-dark"],
+              inputWrapper: [
+                "bg-primary-dark",
+                "border-primary-dark",
+                "focus-within:!bg-primary-dark",
+                "group-data-[focused=true]:bg-primary-dark",
+              ],
+            }}
+            type="search"
+            label="Search"
+            onChange={handleSearch}
+          />
+          <Button color="primary" onClick={handleTriggerFetch}>Search</Button> 
         </div>
 
         <div className="container" >
