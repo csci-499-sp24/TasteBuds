@@ -4,6 +4,7 @@ import Sidebar from "../../components/sidebar";
 import ErrorPage from 'next/error';
 import IngredientCard from "../../components/IngredientCard";
 import styles from './RecipeProfile.module.css'
+import StarsPopup from '@/components/starpopup';
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
@@ -56,6 +57,9 @@ const Recipe = () => {
       </label>
       <Sidebar /> 
       <div>
+        <div className="stars-container">
+          <StarsPopup />
+        </div>
         <h1>{recipe.title}</h1> 
         <img src={recipe.image} alt={recipe.title} /> 
         <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p> {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
