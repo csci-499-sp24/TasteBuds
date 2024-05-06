@@ -87,7 +87,7 @@ const Registration = () => {
           </li>
         </ul>
       </div>
-      <section></section>
+      <div className = "bg"></div>
       <div className="main">
         <h3>Sign Up</h3>
         <form onSubmit={RegistrationHandler}>
