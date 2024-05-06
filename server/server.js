@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
 const { Pool } = require('pg');
 const { Sequelize, DataTypes, QueryTypes } = require('sequelize');
-const userRoutes = require('./firebase/user.js')
+const userRoutes = require('./firebase/user.js');
+const isAuthenticated = require('./isAuthenticated');
 // const searchRoutes = require('./searchRoutes.js');
 
 require('dotenv').config();
@@ -52,11 +53,32 @@ syncDB();
 const database = require("./tables/recipes.js")(sequelize, DataTypes);
 const searchRoutes = require('./searchRoutes.js')(sequelize, DataTypes);
 
+//define savedRecipes table
+const SavedRecipes = sequelize.define('savedRecipes', {
+    userId: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    recipeTitle: {
+        type: DataTypes.STRING,
+        allowNull: false
+    },
+    recipeId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    imageUrl: {
+        type: DataTypes.STRING,
+        allowNull: false
+    }
+});
+
 async function sync_table() {
     try {
         // await sequelize.sync()
         await database.sync();
-        await User.sync();
+        //await User.sync();
+        await SavedRecipes.sync()
         console.log("The table for the db has been (re)created.");
     }
     catch (error) {
@@ -92,7 +114,8 @@ const {
     Properties,
     RecipeProperties,
     WeightPerServing,
-    CaloricBreakdown, 
+    CaloricBreakdown,
+    Comments, 
 } = require("./tables/recipes.js")(sequelize, DataTypes);
 
 /*
@@ -159,25 +182,8 @@ app.get('/search_by_id', async (req, res) => {
     }
 })
 
-// app.get('/test', async (req, res) => {
-//     try {
-//         //const {id} = req.query; 
-//         const instr_data = await Instructions.findAll({
-//             //where: {recipe_id: 13}
-//         })
-//         const length_data = await InstructionLength.findAll({
-//             //where: {instruction_id: instr_data.instruction_id}
-//         });
-//         console.log(instr_data[0].instruction_id)
-//         res.status(200).json(instr_data)
-//     } catch (error) {
-//         console.error("Error finding recipe by id:", error);
-//         res.status(500).json({ error: "Internal server error" });
-//     }
-// })
-
 // search + filter 
-app.use('/searchV2', searchRoutes); // Use the new search routes
+app.use('/searchV2', searchRoutes); // search routes
 
 
 app.get('/getAllOccasions', async (req, res) => {
@@ -247,6 +253,7 @@ app.post('/searchByIngredients', async (req, res) => {
         res.status(500).json({ error: 'Error fetching recipes by ingredients' });
     }
 });
+
 // Random Daily Recipe
 app.get('/getRandomRecipe', async (req, res) => {
     try {
@@ -271,6 +278,78 @@ app.get('/getRandomRecipe', async (req, res) => {
 app.use((req, res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
     next();
+});
+
+app.post('/comments', isAuthenticated, async (req, res) => {
+    try {
+        const { userId, recipeId, commentText, firebaseUserId } = req.body;
+        // Insert the new comment into the database
+        const newComment = await Comments.create({
+            user_id: userId,
+            recipe_id: recipeId,
+            comment_text: commentText,
+            firebase_user_id: firebaseUserId,
+        });
+        res.status(201).json(newComment);
+    } catch (error) {
+        console.error('Error creating comment:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/comments/:recipeId', async (req, res) => {
+    try {
+        const { recipeId } = req.params;
+        const comments = await Comments.findAll({
+            where: { recipe_id: recipeId },
+        });
+        res.status(200).json(comments);
+    } catch (error) {
+        console.error('Error fetching comments:', error)
+    }
+});
+
+//get all saved recipes for a user
+app.get('/savedRecipes/:userId', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const savedRecipes = await SavedRecipes.findAll({ where: { userId: userId } });
+        res.status(200).json(savedRecipes);
+    } catch (error) {
+        console.error('Error fetching saved recipes:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+//saving a recipe, adding it to savedRecipes table
+app.post('/saveRecipe', isAuthenticated, async (req, res) => {
+    try {
+        const { userId, recipeTitle, imageUrl, recipeId } = req.body;
+        const savedRecipe = await SavedRecipes.create({
+            userId: userId,
+            recipeTitle: recipeTitle,
+            recipeId: recipeId,
+            imageUrl: imageUrl
+        });
+        res.status(201).json(savedRecipe);
+    } catch (error) {
+        console.error('Error creating saved recipe:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+//deleting a recipe from the savedRecipes table
+app.delete('/deleteRecipe/:userId/:recipeId', isAuthenticated, async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const recipeId = req.params.recipeId;
+        await SavedRecipes.destroy({ where: { userId: userId, recipeId: recipeId } });
+        res.status(200).json({ message: 'Saved recipe deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting saved recipe:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
 // Error handling middleware
