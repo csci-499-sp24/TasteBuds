@@ -1,0 +1,13 @@
+
+input[type="radio"] {
+    visibility:hidden;
+  }
+.starButtons {
+  display:inline;
+}
+.display{
+  color:red;
+}
+.stars-container{
+    margin-left: 50%;
+}
