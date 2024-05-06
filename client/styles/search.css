@@ -94,15 +94,14 @@ label #cancel {
   margin-left: 250px;
 }
 
-.b {
-  background: url('../public/search.jpg') no-repeat;
+section {
+  background: url("../public/bg.jpg") no-repeat;
   background-position: center;
   background-size: cover;
-  height: 100vh; /* Set height to 100% of viewport height */
+  height: 100%;
   transition: all 0.5s;
-  overflow-y: auto;
+  overflow-y: auto; /* Enable vertical scrolling */
 }
-
 
 .sidebar ul a i {
   margin-right: 16px;
@@ -122,14 +121,27 @@ label #cancel {
   box-sizing: border-box;
 }
 
-.recipe-container {
-  margin-left: -90px; 
-  flex: 3;
+.user-recipes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 0.25rem;
+  margin-top: 1rem;
+  padding: 0 10px; /* Add padding to the grid container */
 }
 
-.recipe-row {
-  display: flex;
-  flex-wrap: wrap;
+.card {
+  border: 1px solid black;
+  background-color: white;
+  padding: 0.5rem;
+}
+
+.card > .header {
+  margin-bottom: 0.25rem;
+}
+
+.card > .body {
+  font-size: 0.8rem;
+  color: black;
 }
 
 #div-center {
@@ -159,4 +171,9 @@ label #cancel {
   flex: 1;
   margin-right: 20px; /* Add margin between the listbox and the recipe container */
   /* overflow-y: auto; Enable vertical scrollbar when content overflows */
+}
+
+.recipe-container {
+  margin-right: 70px; 
+  flex: 1;
 }

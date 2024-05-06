@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
-import RecipeBox from "../components/RecipeBox";
 import Sidebar from "../components/sidebar";
-import {Input, Select, SelectItem, Button} from "@nextui-org/react";
+import {Input, Select, SelectItem, Checkbox} from "@nextui-org/react";
 import {ListboxWrapper} from "../components/ListboxWrapper";
 import CuisineTab from "../components/cuisineTab";
 import DietTab from "../components/dietTab";
@@ -14,13 +13,18 @@ function Search() {
   const [searchResults, setSearchResults] = useState([]); // State variable to hold the search results
   const [isLoading, setIsLoading] = useState(false);  // State variable to indicate if data is loading
   const [filters, setFilters] = useState({  // State variable to hold filter criteria
-    cuisine: "", diet: "", occasion: "", dishType: "",
+    cuisine: "",
+    diet: "",
+    occasion: "",
+    dishType: "",
     servings: "", minServing: "", maxServing: "",
     smartPoints: "", smartPointsMin: "", smartPointsMax:"",
     readyInMinutes: "", readyInMinutesMin:"", readyInMinutesMax: "",
+    pricePerServingMin: "", pricePerServingMax: "", pricePerServing: "",
     includeTips: "" , cheap: "" , healthy: "" , sustainable: "" ,
     minTotalPrice: "", maxTotalPrice: "",  totalPrice: "",
     calories: "", minCalories: "", maxCalories: "",
+    // more filter criterias, look into doc
   }); 
 
   useEffect(() => {
@@ -118,10 +122,9 @@ function Search() {
       <Sidebar />
 
       {/* Main content section */}
-      <section className='b'>
+      <section> 
         <div id="div-center" className="search-wrapper">
-          <Input  color="warning"  type="search" label="Search" onChange={handleSearch} />
-          <Button  color="warning" onClick={handleTriggerFetch}>Search</Button> 
+          <Input type="search" label="Search" onChange={handleSearch} />
         </div>
         <div className="container" >
 
@@ -316,14 +319,16 @@ function Search() {
           </div>
 
           <div className="recipe-container">   
-            {/* Display search results */}
-            <div className="recipe-row">
+          {/* Display search results */}
+            <div id="div-center" className="user-recipes" data-user-cards-container>
               {isLoading && <p>Loading...</p>}
-              {!isLoading && Array.isArray(searchResults) && (
-                searchResults.map(recipe => (
-                  <RecipeBox key={recipe.recipe_id} recipe={recipe} />
-                ))
-              )}
+              {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
+                <div key={recipe.recipe_id} className="card">
+                  <div className="header" data-header>{recipe.title}</div>
+                  <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+                </div>
+              ))}
+              {/* Too results */}
               {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
             </div>
           </div>
