@@ -77,7 +77,7 @@ function Discover() {
         {/* Sidebar component */}
         <Sidebar />
         
-      <bg>
+      <div className = "bg">
         <div id="div-center" className="search-wrapper">
         <label htmlFor="search">Discovery</label>
           <div className="scrollable-content">
@@ -102,7 +102,7 @@ function Discover() {
 
 
         </div>
-      </bg>
+      </div>
     </div>
   );
 }
