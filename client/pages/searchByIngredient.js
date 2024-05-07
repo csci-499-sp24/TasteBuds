@@ -113,7 +113,7 @@ function SearchByIngredient() {
         <i className="fas fa-times" id="cancel"></i>
       </label>
       <Sidebar />
-      <bg>
+      <div className = "bg">
         <div className="flex justify-center mx-atuo">
           <div id="" className=" mt-20">
             <label htmlFor="search">Search Recipes</label>
@@ -190,7 +190,7 @@ function SearchByIngredient() {
             </div>
           </div>
         </div>
-      </bg>
+      </div>
     </div>
   );
 }
