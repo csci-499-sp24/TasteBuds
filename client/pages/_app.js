@@ -3,6 +3,7 @@ import "/styles/index.css";
 import "/styles/search.css";
 import "/styles/CommentForm.css";
 import "/styles/login.css";
+import "/styles/stars.css";
 import { NextUIProvider } from "@nextui-org/react";
 import UserAuthContext from "@/firebase/userAuthContext";
 
