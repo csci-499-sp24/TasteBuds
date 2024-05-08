@@ -1,13 +1,17 @@
+// color palette: #F57C00(Dark Primary color) #FFE0B2(Light Primary color) #FF9800(Primary color) #212121(Text/Icon) #FF5252(Accent Color) #212121(Primary Text) #757575(Secondary Text) #BDBDBD(Divider Color)
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 import RecipeBox from "../components/RecipeBox";
 import Sidebar from "../components/sidebar";
-import {Input, Select, SelectItem, Button} from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
+import {Input, Select, SelectItem} from "@nextui-org/react";
 import {ListboxWrapper} from "../components/ListboxWrapper";
 import CuisineTab from "../components/cuisineTab";
 import DietTab from "../components/dietTab";
 import OccasionTab from "../components/occasionTab";
 import DishTypeTab from "../components/dishTypeTab";
+import Head from "next/head";
+
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
@@ -106,23 +110,48 @@ function Search() {
   
   return (
     <div>
+      <div>
        {/* Sidebar navigation */}
-      <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-
-      {/* Sidebar component */}
-      <Sidebar />
+        <input type="checkbox" id="check" />
+        <label htmlFor="check">
+          <i className="fas fa-bars" id="btn"></i>
+          <i className="fas fa-times" id="cancel"></i>
+        </label>
+            
+        {/* Sidebar component */}
+        <Sidebar />
+      </div>
 
       {/* Main content section */}
       <section className='main-content'>
-
         <div id="div-center" className="search-wrapper">
-          <br/>
-          <Input  color="warning"  type="search" label="Search" onChange={handleSearch} />
-          <Button  color="warning" onClick={handleTriggerFetch}>Search</Button> 
+          <br/>    
+          <Input
+            classNames={{
+              label: "text-[#212121] dark:text-[#212121]",
+              input: [
+                "bg-[#f57c00]",
+                "border-[#ff5252]",
+                "text-[#212121] dark:text-[#212121]",
+                "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+              ],
+              innerWrapper: ["bg-[#f57c00]", "border-[#ff5252]",],
+              inputWrapper: [
+                "shadow-xl",
+                "bg-[#f57c00]",
+                "border-[#ff5252]",
+                "focus-within-[focus=true]:bg-[#f57c00]", 
+                "group-data-[focus=true]:bg-[#f57c00]",              
+                "group-data-[hover=true]:bg-[#f57c00]",              
+              ],
+            }}
+            type="search"
+            label="Search"
+            onChange={handleSearch}
+          />
+          <Button className="bg-[#f57c00] text-[#212121] border-[#ff5252]" onClick={handleTriggerFetch}>Search</Button>       
+        
+        
         </div>
 
         <div className="container" >
@@ -132,22 +161,22 @@ function Search() {
                   handleListboxChange={handleListboxChange}
                   triggerFetch={handleTriggerFetch}
             />  
-              <hr className="my-4 border-gray-300" />              
+              <hr className="my-4 border-[#FF5252]" />              
               <DietTab 
                 handleListboxChange={handleListboxChange}
                 triggerFetch={handleTriggerFetch} 
               />
-              <hr className="my-4 border-gray-300" />              
+              <hr className="my-4 border-[#FF5252]" />             
               <DishTypeTab
                 handleListboxChange={handleListboxChange}
                 triggerFetch={handleTriggerFetch}
               /> 
-              <hr className="my-4 border-gray-300" />              
+              <hr className="my-4 border-[#FF5252]" />                 
               <OccasionTab
                 handleListboxChange={handleListboxChange}
                 triggerFetch={handleTriggerFetch}
               /> 
-              <hr className="my-4 border-gray-300" />        
+              <hr className="my-4 border-[#FF5252]" />           
               <Input
                 type="number"
                 color="warning"
@@ -171,7 +200,7 @@ function Search() {
                 value={filters.maxServing}
                 onChange={(event) => handleServingsInputChange(event, 'maxServing')}
               />
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
               <Input
                 type="number"
                 color="warning"
@@ -195,8 +224,7 @@ function Search() {
                 value={filters.smartPointsMax}
                 onChange={(event) => handleServingsInputChange(event, 'smartPointsMax')}
               />
-
-              <hr className="my-4 border-gray-300" /> 
+            <hr className="my-4 border-[#FF5252]" />           
               <Input
                 type="number"
                 color="warning"
@@ -220,7 +248,7 @@ function Search() {
                 value={filters.readyInMinutesMax}
                 onChange={(event) => handleServingsInputChange(event, 'readyInMinutesMax')}
               />
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
               <Input
                 type="number"
                 color="warning"
@@ -244,7 +272,7 @@ function Search() {
                 value={filters.totalPrice}
                 onChange={(event) => handleServingsInputChange(event, 'totalPrice')}
               />
-               <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
                  <Select
                   label="healthy"
                   color="warning"
@@ -255,7 +283,7 @@ function Search() {
                   <SelectItem  key="true" value="true">Yes</SelectItem>
                   <SelectItem  key="false" value="false"> No</SelectItem>
                 </Select>
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
                 <Select
                   label="Cheap"
                   color="warning"
@@ -266,7 +294,7 @@ function Search() {
                   <SelectItem  key="true" value="true">Yes</SelectItem>
                   <SelectItem  key="false" value="false"> No</SelectItem>
                 </Select>
-               <hr className="my-4 border-gray-300" /> 
+                <hr className="my-4 border-[#FF5252]" />           
                  <Select
                   label="Sustainable"
                   color="warning"
@@ -277,7 +305,7 @@ function Search() {
                   <SelectItem  key="true" value="true">Yes</SelectItem>
                   <SelectItem  key="false" value="false"> No</SelectItem>
                 </Select>
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
                  <Select
                   label="Tips"
                   color="warning"
@@ -288,7 +316,7 @@ function Search() {
                   <SelectItem  key="true" value="true">Yes</SelectItem>
                   <SelectItem  key="false" value="false"> No</SelectItem>
                 </Select>
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
                 <Input
                   type="number"
                   color="warning"
@@ -312,7 +340,7 @@ function Search() {
                   value={filters.maxCalories}
                   onChange={(event) => handleServingsInputChange(event, 'maxCalories')}
                 />
-                <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
             </ListboxWrapper> 
           </div>
 

@@ -97,8 +97,8 @@ async function main() {
             
             // let j = 60040; 
             // let j = 600010;
-            // let j  = 638060, 639060, 636000
-            let j  = 638800;
+            // let j  = 638060, 639060, 636000, 
+            let j  = 640228;
             let recipeLt2 = [];
             for(let i = j; recipeLt2.length <= 20;i++){
                 let exitsRecipe = await Recipe.findOne({ where: { recipe_id: i} });
@@ -106,7 +106,7 @@ async function main() {
                     recipeLt2.push(i);
                 }
             }
-
+            
             for (const recipe of recipeLt2) {
                 // const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
                 const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;

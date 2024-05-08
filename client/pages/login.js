@@ -77,7 +77,7 @@ const Login = () => {
           </li>
         </ul>
       </div>
-      <section></section>
+      <div className = "bg"></div>
       <div className="main">
         <h3>Login</h3>
         <form onSubmit={lognIn}>

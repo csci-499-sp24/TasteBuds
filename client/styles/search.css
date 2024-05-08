@@ -1,3 +1,4 @@
+/* search.css */
 * {
   margin: 0;
   padding: 0;
@@ -5,14 +6,12 @@
   text-decoration: none;
 }
 
-
-/* Add this CSS to your existing CSS file */
 .sidebar {
   position: fixed;
   width: 250px;
   height: 100%;
   left: 0;
-  background: #161616;
+  background: #212121; /* Dark Primary color */
   transition: all 0.5s ease;
 }
 
@@ -21,13 +20,12 @@
   text-align: center;
   line-height: 70px;
   color: white;
-  background: #0dbbf0;
+  background: #FF9800; /* Primary color */
   user-select: none;
-  position: sticky; /* Make the header sticky */
-  top: 0; /* Stick the header to the top */
-  z-index: 999; /* Ensure the header stays above other content */
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
-
 
 .sidebar ul a {
   font-size: 20px;
@@ -39,7 +37,7 @@
   padding-left: 40px;
   box-sizing: border-box;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #757575; /* Secondary Text color */
   transition: 0.4s;
 }
 
@@ -54,10 +52,9 @@ ul li:hover a {
 label #btn,
 label #cancel {
   position: absolute;
-  background: #042331;
+  background: #212121; /* Dark Primary color */
   border-radius: 3px;
   cursor: pointer;
-  
 }
 
 label #btn {
@@ -67,7 +64,6 @@ label #btn {
   color: white;
   padding: 6px 12px;
   transition: all 0.5s;
-  
 }
 
 label #cancel {
@@ -75,14 +71,13 @@ label #cancel {
   left: -195px;
   top: 17px;
   font-size: 30px;
-  color: #0a5275;
+  color: #FF5252; /* Accent Color */
   padding: 4px 9px;
   transition: all 0.5s ease;
 }
 
 #check:checked ~ .sidebar {
   left: 0;
-  
 }
 
 #check:checked ~ label #btn {
@@ -103,14 +98,9 @@ label #cancel {
   background: url('../public/search.jpg') no-repeat;
   background-position: center;
   background-size: cover;
-  height: 100vh; /* Set height to 100% of viewport height */
+  height: 100vh;
   transition: all 0.5s;
   overflow-y: auto;
-}
-
-
-.sidebar ul a i {
-  margin-right: 16px;
 }
 
 .search-wrapper {
@@ -140,12 +130,14 @@ label #cancel {
   width: 665px;
   margin: auto;
 }
+.input:hover {
+  background-color: #f57c00 !important; /* Set the background color to the desired color */
+}
 
 .container {
   display: flex;
   margin-top: 20px; 
   margin-left: 20px; 
-
   justify-content: center; 
   align-items: flex-start; 
 }
