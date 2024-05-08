@@ -5,7 +5,7 @@ import { Select, SelectItem } from '@nextui-org/react';
 const OccasionTab = ({ handleListboxChange, triggerFetch }) => {
   const [occasions, setOccasions] = useState([]); 
 
-    
+
   useEffect(() => {
     const fetchOccasions = async () => {
       try {
@@ -50,7 +50,7 @@ const OccasionTab = ({ handleListboxChange, triggerFetch }) => {
         className="max-w-xs"
         variant="bordered"
         style={{ backgroundColor: '#FFE0B2', color: '#212121', borderColor: '#FF5252' }}
-        istboxProps={{
+        listboxProps={{
           itemClasses: {
             base: [
               "rounded-md",
