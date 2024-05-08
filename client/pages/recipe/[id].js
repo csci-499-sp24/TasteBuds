@@ -5,6 +5,7 @@ import ErrorPage from 'next/error';
 import IngredientCard from "../../components/IngredientCard";
 import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
+import CommentForm from '../../components/CommentForm';
 import StarsPopup from '@/components/starpopup';
 
 const Recipe = () => {
@@ -82,6 +83,7 @@ const Recipe = () => {
           <p>No instructions available</p> // Else this render when ther are no instructions
         )}
       </div>
+      <CommentForm recipeId={id} />
     </div>
   );
 };

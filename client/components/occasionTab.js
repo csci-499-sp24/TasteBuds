@@ -1,9 +1,11 @@
 // OccasionTab.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select, SelectItem } from '@nextui-org/react';
 
 const OccasionTab = ({ handleListboxChange, triggerFetch }) => {
-  const [occasions, setOccasions] = useState([]); // State variable to hold the occasions
+  const [occasions, setOccasions] = useState([]); 
+
+    
   useEffect(() => {
     const fetchOccasions = async () => {
       try {
@@ -45,14 +47,35 @@ const OccasionTab = ({ handleListboxChange, triggerFetch }) => {
         id="occasion-select"
         label="Selected Occasion"
         selectionMode="multiple"
-        color="warning"
         className="max-w-xs"
+        variant="bordered"
+        style={{ backgroundColor: '#FFE0B2', color: '#212121', borderColor: '#FF5252' }}
+        istboxProps={{
+          itemClasses: {
+            base: [
+              "rounded-md",
+              "text-[#FF9800]",
+              "transition-opacity",
+              "data-[hover=true]:text-foreground",
+              "data-[hover=true]:bg-[#FF9800]",
+              "dark:data-[hover=true]:bg-[#FF9800]",
+              "data-[selectable=true]:focus:bg-[#FF9800]",
+              "data-[pressed=true]:opacity-70",
+              "data-[focus-visible=true]:ring-[#FF9800]",
+            ],
+          },
+        }}
+        popoverProps={{
+          classNames: {
+            base: "before:bg-[#FF5252]",
+            content: "p-0 border-small border-divider bg-background",
+          },
+        }}
         isMultiline="true"
         onSelectionChange={(selectedItems) =>
           handleListboxChange(selectedItems, 'occasion')
         }
       >
-        {/* Cuisine options */}
         {occasions.map((item) => (
           <SelectItem key={item.occasion_name} textValue={item.occasion_name}>
             <div className="flex gap-2 items-center">
