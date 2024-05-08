@@ -144,7 +144,16 @@ app.get('/search_by_id', async (req, res) => {
                     model: Ingredients,
                 },
                 {
-                    model: Nutrients
+                    model: Nutrients,
+                },
+                {
+                    model: Tips,
+                },
+                {
+                    model: WeightPerServing,
+                },
+                {
+                    model: CaloricBreakdown,
                 },
                 // {
                 //     model: Instructions,//Instructions and Recipe doesn't have a connector table
