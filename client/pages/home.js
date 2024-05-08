@@ -13,65 +13,47 @@ import {
 
 function Homepage() {
   const [randomRecipe, setRandomRecipe] = useState([]);
-  /*Uncomment const [] = useState for timer */
-  // const [nextUpdateTimer, setNextUpdateTimer] = useState(5); 
-  /* Value set to 60 seconds for demo
-  const [nextUpdateTimer, setNextUpdateTimer] = useState(86400); // Initial 24 hours in seconds
-  */
   const [loading, setLoading] = useState(false);
 
-  const fetchMultipleRecipes = async (count) => {
-    setLoading(true);
+  const fetchMultipleRecipes = async (userId) => {
     try {
-      const recipesArray = [];
-      for (let i = 0; i < count; i++)
-      {
-        const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/getRandomRecipe');
-        if (!response.ok) 
-        {
-          throw new Error('Failed to fetch random recipe ${i + 1}');
-        }
-        const data = await response.json();
-        recipesArray.push(data);
+      setLoading(true);
+      const response = await fetch(`http://127.0.0.1:5000/recommend?userId=${userId}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch recommended recipes');
       }
-      //localStorage.setItem('randomRecipe', JSON.stringify(data));
-      //localStorage.setItem('lastFetchTime', Date.now().toString());
-      /*Uncomment setNextUpdateTimer for timer function */
-      //setNextUpdateTimer(5); // Reset the timer to 60 seconds
-      // setNextUpdateTimer(86400); // Reset the timer to 24 hours
-      setRandomRecipe(recipesArray);
-      setLoading(false); // Set loading state to false after fetching
-    } catch (error) 
-    {
-      console.error(error);
-      setLoading(false); // If there is an error loading state set to false
+      const data = await response.json();
+      console.log('Recommendations received:', data);
+  
+      // Fetch recipe details for each recommended recipe
+      const recipes = await Promise.all(data.map(async (recipe) => {
+        console.log('Fetching details for recipe:', recipe.recipeId);
+        const recipeDetailsResponse = await fetch(`http://localhost:8080/recipe/${recipe.recipeId}`);
+        if (!recipeDetailsResponse.ok) {
+          throw new Error('Failed to fetch recipe details');
+        }
+        const recipeDetails = await recipeDetailsResponse.json();
+        return { ...recipe, ...recipeDetails };
+      }));
+      console.log('Full recipe details:', recipes);
+  
+      setRandomRecipe(recipes);
+      console.log('Updated state with recipes:', recipes);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching recommended recipes:', error);
+      setLoading(false);
     }
   };
+  
+  
+  
 
   // useEffect hook fetches a random recipe when component mounts
   useEffect(() => {
-    fetchMultipleRecipes(4);
+    const userId = '9EAat6G5saSMNwoirskvKdXPLI13';
+    fetchMultipleRecipes(userId);
   }, []);
-
-  // useEffect updates the countdown timer every second, remove comments to enable timer
-  /*
-  useEffect(() => {
-    const countdownTimer = setInterval(() => {
-      setNextUpdateTimer((prev) => {
-        if (prev === 0) {
-          fetchRandomRecipe();
-          return 5; // Reset the timer to 60 sec
-          // return 86400; // Reset the timer to 24 hours
-        } else {
-          return prev - 1; // constantly removes 1 sec
-        }
-      });
-    }, 1000);
-
-    // Cleanup function clea=rs timer when the component unmounts
-    return () => clearInterval(countdownTimer);
-  }, []);
-  */
 
   // This func handles click event of getting a new recipe
   const handleGetNewRecipe = () => {
@@ -91,20 +73,24 @@ function Homepage() {
           Discover Recipes
           <div className="recipe-box-container">
           {/* RecipeBox component*/}
-            {randomRecipe.map((recipe, index) => (
+          {randomRecipe.map((recipe, index) => {
+            console.log(`Rendering recipe box for recipeId: ${recipe.recipeId}`);
+            return (
               <div key={index} className="recipe-box-item">
                 <RecipeBox recipe={recipe} />
               </div>
-            ))}
+            );
+          })}
+
           {/* Displays the ciuntdown, remove comment for timer */}
           {/*
           <div style={{fontWeight: "bolder", color: "white", textShadow: "black 2px 2px"}}>Next update in: {nextUpdateTimer} seconds</div>
           */}
           </div>
           {/* Fetches a new recipe  after clicking on button*/}
-          <Button onClick={handleGetNewRecipe} loading={loading} 
+          <Button onClick={() => fetchMultipleRecipes('9EAat6G5saSMNwoirskvKdXPLI13')} loading={loading} 
           color={loading ? 'default' : 'warning'} variant="solid" size="lg">
-            {loading ? 'Fetching New Recipes...' : 'Get New Recipes'}
+            {loading ? 'Fetching Recommendations...' : 'Refresh'}
           </Button>
         </div>
       </section>

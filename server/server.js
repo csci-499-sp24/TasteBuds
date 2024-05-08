@@ -352,6 +352,21 @@ app.delete('/deleteRecipe/:userId/:recipeId', isAuthenticated, async (req, res) 
     }
 });
 
+// Endpoint to fetch recipe details by ID
+app.get('/recipe/:recipeId', async (req, res) => {
+    try {
+      const { recipeId } = req.params;
+      const recipeDetails = await Recipe.findOne({
+        where: { recipe_id: recipeId },
+        include: [Equipment, Ingredients] 
+      });
+      res.status(200).json(recipeDetails);
+    } catch (error) {
+      console.error('Error fetching recipe details:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });  
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
