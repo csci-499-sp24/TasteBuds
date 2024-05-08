@@ -51,28 +51,38 @@ const Recipe = () => {
   }
 
   return (
-    <div>
+    <div className = {styles.mainContainer}>
       <input type="checkbox" id="check" /> 
       <label htmlFor="check">
         <i className="fas fa-bars" id="btn"></i> 
         <i className="fas fa-times" id="cancel"></i> 
       </label>
       <Sidebar /> 
-      <div>
-        <h1 style={{ margin: 'auto', maxWidth: '500px' }}>{recipe.title}</h1> 
-        <div style={{ margin: 'auto', maxWidth: '500px' }}> {/* Adjust max-width as needed */}
+      <div className= {styles.backgroundImage}>
+        <div className={styles.regularTextCenter}>{recipe.title}</div> 
+        <div style={{ margin: 'auto', maxWidth: '500px' }}> 
           <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
         </div>
         <div className="stars-container">
           <StarsPopup />
         </div>
-        <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p> {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
+        <div className={styles.recipeSummary}>
+          <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
+          {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
+        </div>
+        {/*
         {recipe.totalPrice !== undefined && (
-          <p>Total Price: {recipe.totalPrice}</p> 
-        )}
-        <IngredientCard ingredients={ingredients} /> 
+            <p>Total Price: {recipe.totalPrice}</p> 
+          )}
+        */}
+        
+        <div className={styles.regularTextCenter}>Ingredients</div>
+        <div className = {styles.ingredientContainer} >
+          <IngredientCard ingredients={ingredients} />
+        </div>
         {/* Display the ingredientCard component with ingredients data */}
-        <h2>Instructions</h2> {/* Recipe Instructions are rendered when the condition is met/available */}
+        <div className={styles.regularTextCenter}>Instructions</div> {/* Recipe Instructions are rendered when the condition is met/available */}
+        <div className={styles.recipeSummary}>
         {instructions.length > 0 ? (
           <ol>
             {instructions.map((instruction, index) => (
@@ -82,8 +92,9 @@ const Recipe = () => {
         ) : (
           <p>No instructions available</p> // Else this render when ther are no instructions
         )}
+        </div>
+        <CommentForm recipeId={id} />
       </div>
-      <CommentForm recipeId={id} />
     </div>
   );
 };

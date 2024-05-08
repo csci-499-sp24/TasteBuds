@@ -1,0 +1,32 @@
+.mainContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh; /* Ensure the container takes up the full height of the viewport */
+}
+
+.backgroundImage{
+    background: url("https://wallpapercave.com/wp/wp3138532.jpg") no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    transition: all .5s;
+}
+
+.ingredientContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.recipeSummary{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; 
+    background-color: white;
+}
+
+.regularTextCenter{
+    text-align: center;
+}
