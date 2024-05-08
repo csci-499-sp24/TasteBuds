@@ -1,5 +1,5 @@
 // DietTab.js
-import React, { useEffect } from 'react';
+import React, { useEffect} from 'react';
 import { Select, SelectItem } from '@nextui-org/react';
 
 const DietTab = ({ handleListboxChange, triggerFetch }) => {
@@ -21,14 +21,35 @@ const DietTab = ({ handleListboxChange, triggerFetch }) => {
 
   
   return (
-    <div className="mb-4"> {/* Add margin top */}
+    <div className="mb-4"> 
     <Select
       id="diet-select"
       label="Selected Diet"
       selectionMode="multiple"
-      color="warning"
+      variant="bordered"
+      style={{ backgroundColor: '#FFE0B2', color: '#212121', borderColor: '#FF5252' }}
+      listboxProps={{
+        itemClasses: {
+          base: [
+            "rounded-md",
+            "text-[#FF9800]",
+            "transition-opacity",
+            "data-[hover=true]:text-foreground",
+            "data-[hover=true]:bg-[#FF9800]",
+            "dark:data-[hover=true]:bg-[#FF9800]",
+            "data-[selectable=true]:focus:bg-[#FF9800]",
+            "data-[pressed=true]:opacity-70",
+            "data-[focus-visible=true]:ring-[#FF9800]",
+          ],
+        },
+      }}
+      popoverProps={{
+        classNames: {
+          base: "before:bg-[#FF5252]",
+          content: "p-0 border-small border-divider bg-background",
+        },
+      }}
       isMultiline="true"
-      className="max-w-xs"
       onSelectionChange={(selectedItems) =>
         handleListboxChange(selectedItems, "diet")
       }
