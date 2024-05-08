@@ -1,7 +1,6 @@
 // color palette: #F57C00(Dark Primary color) #FFE0B2(Light Primary color) #FF9800(Primary color) #212121(Text/Icon) #FF5252(Accent Color) #212121(Primary Text) #757575(Secondary Text) #BDBDBD(Divider Color)
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
-import {commonColors, semanticColors} from "@nextui-org/theme";
 import RecipeBox from "../components/RecipeBox";
 import Sidebar from "../components/sidebar";
 import {Input, Select, SelectItem, Button} from "@nextui-org/react";
@@ -126,31 +125,19 @@ function Search() {
         <div id="div-center" className="search-wrapper">
           <br/>    
           <Input
-            // classNames={{
-            //   label: "text-default-100 dark:text-default-600",
-            //   input: [
-            //     "bg-[#f57c00]",
-            //     "text-default-100 dark:text-default-600",
-            //     "placeholder:text-default-100 dark:placeholder:text-default-600",
-            //   ],
-            //   mainWrapper: ["bg-[#f57c00]"],
-            //   innerWrapper: ["bg-[#f57c00]"],
-            //   inputWrapper: [
-            //     "bg-[#f57c00]",
-            //     "focus-within:!bg-[#f57c00]",
-            //   ],
-            // }}
             classNames={{
-              label: "text-black/50 dark:text-white/90",
+              label: "text-[#212121] dark:text-[#212121]",
               input: [
                 "bg-[#f57c00]",
-                "text-black/90 dark:text-white/90",
-                "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+                "border-[#ff5252]",
+                "text-[#212121] dark:text-[#212121]",
+                "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
               ],
-              innerWrapper: "bg-[#f57c00]",
+              innerWrapper: ["bg-[#f57c00]", "border-[#ff5252]",],
               inputWrapper: [
                 "shadow-xl",
                 "bg-[#f57c00]",
+                "border-[#ff5252]",
                 "focus-within-[focus=true]:bg-[#f57c00]", 
                 "group-data-[focus=true]:bg-[#f57c00]",              
                 "group-data-[hover=true]:bg-[#f57c00]",              
@@ -160,7 +147,7 @@ function Search() {
             label="Search"
             onChange={handleSearch}
           />
-          <Button className="bg-[#f57c00]" onClick={handleTriggerFetch}>Search</Button> 
+          <Button className="bg-[#f57c00] text-[#212121] border-[#ff5252]" onClick={handleTriggerFetch}>Search</Button> 
         </div>
 
         <div className="container" >

@@ -280,6 +280,7 @@ app.use((req, res, next) => {
     next();
 });
 
+// create a comment
 app.post('/comments', isAuthenticated, async (req, res) => {
     try {
         const { userId, recipeId, commentText, firebaseUserId } = req.body;
@@ -297,6 +298,7 @@ app.post('/comments', isAuthenticated, async (req, res) => {
     }
 });
 
+// get all recipe comments
 app.get('/comments/:recipeId', async (req, res) => {
     try {
         const { recipeId } = req.params;
@@ -306,6 +308,48 @@ app.get('/comments/:recipeId', async (req, res) => {
         res.status(200).json(comments);
     } catch (error) {
         console.error('Error fetching comments:', error)
+    }
+});
+// edit comment 
+app.put('/comments/:userId/:commentId', isAuthenticated, async (req, res) => {
+    try{
+        const { userId, commentId } = req.params;
+        const { updatedText } = req.body;
+
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({ error: 'Comment not found' });
+        }
+        if (comment.firebase_user_id !== userId) {
+            return res.status(403).json({ error: 'You are not authorized to edit this comment' });
+        }
+        comment.comment_text = updatedText;
+        await comment.save();
+        res.json({ message: 'Comment updated successfully', updatedComment: comment });
+
+    } catch (error) {
+        console.error('Error updating comment:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+// delete a comment
+app.delete('/comments/:userId/:commentId', isAuthenticated, async (req, res) => {
+    try{
+        const { userId, commentId } = req.params;
+        const comment = await Comment.findById(commentId);
+        if (!comment) {
+            return res.status(404).json({ error: 'Comment not found' });
+        }
+        if (comment.userId !== userId) {
+            return res.status(403).json({ error: 'You are not authorized to Delete this comment' });
+        }
+
+        await comment.remove();
+        res.json({ message: 'Comment deleted successfully' });
+
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
@@ -320,7 +364,6 @@ app.get('/savedRecipes/:userId', isAuthenticated, async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-
 
 //saving a recipe, adding it to savedRecipes table
 app.post('/saveRecipe', isAuthenticated, async (req, res) => {

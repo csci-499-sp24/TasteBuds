@@ -25,8 +25,35 @@ const CuisineTab = ({ handleListboxChange, triggerFetch }) => {
         id="cuisine-select"
         label="Selected Cuisine"
         selectionMode="multiple"
-        color="warning"
         className="max-w-xs"
+        classNames={{
+          base: "rounded-md bg-[#f57c00]", // Change background color of the base element
+          listboxWrapper: "bg-[#f57c00]",
+          innerWrapper:  "bg-[#f57c00]",
+        }}
+        listboxProps={{
+          itemClasses: {
+            base: [
+              "rounded-md",
+              "text-warning-500",
+              "transition-opacity",
+              "data-[hover=true]:text-foreground",
+              "data-[hover=true]:bg-warning-100",
+              "dark:data-[hover=true]:bg-warning-50",
+              "data-[selectable=true]:focus:bg-warning-50",
+              "data-[pressed=true]:opacity-70",
+              "data-[focus-visible=true]:ring-warning-500",
+            ],
+          },
+        }}
+        popoverProps={{
+          classNames: {
+            base: "before:bg-warning-200",
+            content: "p-0 border-small border-divider bg-background",
+          },
+        }}
+        
+        
         isMultiline="true"
         onSelectionChange={(selectedItems) =>
           handleListboxChange(selectedItems, 'cuisine')
