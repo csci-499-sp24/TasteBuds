@@ -1,11 +1,4 @@
-
 /* search.css */
-* {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration: none;
-}
 
 .sidebar {
   position: fixed;
@@ -100,7 +93,6 @@ label #cancel {
   background-position: center;
   background-size: cover;
   height: 100vh;
-  transition: all 0.5s;
   overflow-y: auto;
 }
 
@@ -118,21 +110,20 @@ label #cancel {
   box-sizing: border-box;
 }
 
+#div-center {
+  width: 665px;
+  margin: auto;
+}
+
 .recipe-container {
   flex: 3;
+  margin-left: 5px; /* Add some top margin */
+
 }
 
 .recipe-row {
   display: flex;
   flex-wrap: wrap;
-}
-
-#div-center {
-  width: 665px;
-  margin: auto;
-}
-.input:hover {
-  background-color: #f57c00 !important; /* Set the background color to the desired color */
 }
 
 .container {
@@ -148,5 +139,3 @@ label #cancel {
   overflow-y: auto;
   padding-right: 20px;
 }
-
-
