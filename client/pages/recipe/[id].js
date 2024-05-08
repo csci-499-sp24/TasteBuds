@@ -4,6 +4,7 @@ import Sidebar from "../../components/sidebar";
 import ErrorPage from 'next/error';
 import IngredientCard from "../../components/IngredientCard";
 import styles from './RecipeProfile.module.css'
+import CommentForm from '../../components/CommentForm';
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
@@ -75,6 +76,7 @@ const Recipe = () => {
           <p>No instructions available</p> // Else this render when ther are no instructions
         )}
       </div>
+      <CommentForm recipeId={id} />
     </div>
   );
 };

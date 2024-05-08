@@ -22,7 +22,6 @@ const CommentForm = ({ recipeId }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const recipeId = 13; // remove later  
 
         const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/${recipeId}`);
         const commentsWithUserData = await Promise.all(response.data.map(async (comment) => {
@@ -64,8 +63,6 @@ const CommentForm = ({ recipeId }) => {
     e.preventDefault();
 
     const firebaseUserId = auth.currentUser ? auth.currentUser.uid : null;
-    const recipeId = 13; // remove later 
-
     try {
       const token = await auth.currentUser.getIdToken();
 

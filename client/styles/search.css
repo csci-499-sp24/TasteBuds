@@ -8,8 +8,7 @@
 }
 
 .sidebar {
-  position: sticky;
-  top: 0;
+  position: fixed;
   width: 250px;
   height: 100%;
   left: 0;
@@ -18,7 +17,6 @@
 }
 
 .sidebar header {
-  position: sticky;
   font-size: 22px;
   text-align: center;
   line-height: 70px;
@@ -45,7 +43,6 @@
 }
 
 ul li:hover a {
-  position: sticky;
   padding-left: 50px;
 }
 
@@ -62,7 +59,6 @@ label #cancel {
 }
 
 label #btn {
-  position: sticky;
   left: 40px;
   top: 25px;
   font-size: 35px;
@@ -152,3 +148,5 @@ label #cancel {
   overflow-y: auto;
   padding-right: 20px;
 }
+
+
