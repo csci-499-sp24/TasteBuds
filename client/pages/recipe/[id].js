@@ -5,6 +5,7 @@ import ErrorPage from 'next/error';
 import IngredientCard from "../../components/IngredientCard";
 import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
+import StarsPopup from '@/components/starpopup';
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
@@ -57,7 +58,10 @@ const Recipe = () => {
       </label>
       <Sidebar /> 
       <div>
-      <h1 style={{ margin: 'auto', maxWidth: '500px' }}>{recipe.title}</h1> 
+        <div className="stars-container">
+          <StarsPopup />
+        </div>
+        <h1 style={{ margin: 'auto', maxWidth: '500px' }}>{recipe.title}</h1> 
         <div style={{ margin: 'auto', maxWidth: '500px' }}> {/* Adjust max-width as needed */}
           <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
         </div>
