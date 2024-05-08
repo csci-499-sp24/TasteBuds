@@ -58,12 +58,12 @@ const Recipe = () => {
       </label>
       <Sidebar /> 
       <div>
-        <div className="stars-container">
-          <StarsPopup />
-        </div>
         <h1 style={{ margin: 'auto', maxWidth: '500px' }}>{recipe.title}</h1> 
         <div style={{ margin: 'auto', maxWidth: '500px' }}> {/* Adjust max-width as needed */}
           <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
+        </div>
+        <div className="stars-container">
+          <StarsPopup />
         </div>
         <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p> {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
         {recipe.totalPrice !== undefined && (
