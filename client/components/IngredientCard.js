@@ -4,7 +4,6 @@ import { Image, Card } from '@nextui-org/react';
 const IngredientCard = ({ ingredients }) => {
   return (
     <>
-      <h2>Ingredients</h2>
       <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
         {ingredients && ingredients.length > 0 ? (
           ingredients.map((ingredient, index) => (

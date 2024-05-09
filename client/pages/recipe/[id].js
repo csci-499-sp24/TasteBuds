@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "../../components/sidebar"; 
 import ErrorPage from 'next/error';
 import IngredientCard from "../../components/IngredientCard";
+import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
 import CommentForm from '../../components/CommentForm';
 import StarsPopup from '@/components/starpopup';
@@ -50,26 +51,38 @@ const Recipe = () => {
   }
 
   return (
-    <div>
+    <div className = {styles.mainContainer}>
       <input type="checkbox" id="check" /> 
       <label htmlFor="check">
         <i className="fas fa-bars" id="btn"></i> 
         <i className="fas fa-times" id="cancel"></i> 
       </label>
       <Sidebar /> 
-      <div>
+      <div className= {styles.backgroundImage}>
+        <div className={styles.regularTextCenter}>{recipe.title}</div> 
+        <div style={{ margin: 'auto', maxWidth: '500px' }}> 
+          <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
+        </div>
         <div className="stars-container">
           <StarsPopup />
         </div>
-        <h1>{recipe.title}</h1> 
-        <img src={recipe.image} alt={recipe.title} /> 
-        <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p> {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
+        <div className={styles.recipeSummary}>
+          <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
+          {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
+        </div>
+        {/*
         {recipe.totalPrice !== undefined && (
-          <p>Total Price: {recipe.totalPrice}</p> 
-        )}
-        <IngredientCard ingredients={ingredients} /> 
+            <p>Total Price: {recipe.totalPrice}</p> 
+          )}
+        */}
+        
+        <div className={styles.regularTextCenter}>Ingredients</div>
+        <div className = {styles.ingredientContainer} >
+          <IngredientCard ingredients={ingredients} />
+        </div>
         {/* Display the ingredientCard component with ingredients data */}
-        <h2>Instructions</h2> {/* Recipe Instructions are rendered when the condition is met/available */}
+        <div className={styles.regularTextCenter}>Instructions</div> {/* Recipe Instructions are rendered when the condition is met/available */}
+        <div className={styles.recipeSummary}>
         {instructions.length > 0 ? (
           <ol>
             {instructions.map((instruction, index) => (
@@ -79,8 +92,9 @@ const Recipe = () => {
         ) : (
           <p>No instructions available</p> // Else this render when ther are no instructions
         )}
+        </div>
+        <CommentForm recipeId={id} />
       </div>
-      <CommentForm recipeId={id} />
     </div>
   );
 };
