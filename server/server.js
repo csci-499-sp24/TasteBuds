@@ -185,13 +185,23 @@ app.get('/search_by_id', async (req, res) => {
 // search + filter 
 app.use('/searchV2', searchRoutes); // search routes
 
-
 app.get('/getAllOccasions', async (req, res) => {
     try{
         const listOfOccasions = await Occasions.findAll();
         res.status(200).json(listOfOccasions);
     } catch (error){
         console.error("Error searching recipes:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Equipment
+app.get('/getAllEquipment', async (req, res) => {
+    try{
+        const listOfEquipemnts = await Equipment.findAll();
+        res.status(200).json(listOfEquipemnts);
+    } catch (error){
+        console.error("Error searching Equipment:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
