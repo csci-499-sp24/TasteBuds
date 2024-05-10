@@ -1,6 +1,7 @@
 // color palette: #F57C00(Dark Primary color) #FFE0B2(Light Primary color) #FF9800(Primary color) #212121(Text/Icon) #FF5252(Accent Color) #212121(Primary Text) #757575(Secondary Text) #BDBDBD(Divider Color)
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
+import RecipeBox from "../components/RecipeBox";
 import Sidebar from "../components/sidebar";
 import { Button } from "@nextui-org/button";
 import {Input, Select, SelectItem} from "@nextui-org/react";
@@ -16,18 +17,13 @@ function Search() {
   const [searchResults, setSearchResults] = useState([]); // State variable to hold the search results
   const [isLoading, setIsLoading] = useState(false);  // State variable to indicate if data is loading
   const [filters, setFilters] = useState({  // State variable to hold filter criteria
-    cuisine: "",
-    diet: "",
-    occasion: "",
-    dishType: "",
+    cuisine: "", diet: "", occasion: "", dishType: "",
     servings: "", minServing: "", maxServing: "",
     smartPoints: "", smartPointsMin: "", smartPointsMax:"",
     readyInMinutes: "", readyInMinutesMin:"", readyInMinutesMax: "",
-    pricePerServingMin: "", pricePerServingMax: "", pricePerServing: "",
     includeTips: "" , cheap: "" , healthy: "" , sustainable: "" ,
     minTotalPrice: "", maxTotalPrice: "",  totalPrice: "",
     calories: "", minCalories: "", maxCalories: "",
-    // more filter criterias, look into doc
   }); 
 
   useEffect(() => {
@@ -719,16 +715,14 @@ function Search() {
           </div>
 
           <div className="recipe-container">   
-          {/* Display search results */}
-            <div id="div-center" className="user-recipes" data-user-cards-container>
+            {/* Display search results */}
+            <div className="recipe-row">
               {isLoading && <p>Loading...</p>}
-              {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
-                <div key={recipe.recipe_id} className="card">
-                  <div className="header" data-header>{recipe.title}</div>
-                  <img src={recipe.image} alt={recipe.title} className="recipe-image" />
-                </div>
-              ))}
-              {/* Too results */}
+              {!isLoading && Array.isArray(searchResults) && (
+                searchResults.map(recipe => (
+                  <RecipeBox key={recipe.recipe_id} recipe={recipe} />
+                ))
+              )}
               {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
             </div>
           </div>
