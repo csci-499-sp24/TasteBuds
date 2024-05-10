@@ -140,10 +140,10 @@ app.get('/search_by_id', async (req, res) => {
                 {
                     model: Equipment,
                 }, 
-                // {
-                //     model: Ingredients, // obsoleted by use of RecipeIngredients table below
-                //     //attributes: ['ingredient_id', 'standard_name', 'image'],
-                // },
+                {
+                    model: Ingredients, 
+                    //attributes: ['ingredient_id', 'standard_name', 'image'],
+                },
                 // {
                 //     model: Nutrients,
                 //     // too resource intensive
