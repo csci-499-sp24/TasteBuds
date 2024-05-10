@@ -141,24 +141,10 @@ app.get('/search_by_id', async (req, res) => {
                     model: Equipment,
                 }, 
                 {
-                    model: Ingredients, 
-                    //attributes: ['ingredient_id', 'standard_name', 'image'],
+                    model: Ingredients,
                 },
                 // {
-                //     model: Nutrients,
-                //     // too resource intensive
-                // },
-                {
-                    model: Tips,
-                },
-                // {
-                //     model: RecipeIngredients,
-                // },
-                // {
-                //     model: WeightPerServing,
-                // },
-                // {
-                //     model: CaloricBreakdown,
+                //     model: Nutrients
                 // },
                 // {
                 //     model: Instructions,//Instructions and Recipe doesn't have a connector table
@@ -169,21 +155,7 @@ app.get('/search_by_id', async (req, res) => {
                 // },
             ],
         });
-        // These tables don't have full associations with Recipes
-        // so their data will be pulled separately
-
-        //Sequelize complains that recipeIngredients is not associated with Recipe
-        //hence the separate search
-        const recipe_ingrd_data = await RecipeIngredients.findAll({
-            where: {recipe_id: id}
-        })
         const instruction_data = await Instructions.findAll({
-            where: {recipe_id: id}
-        })
-        const weight_serving_id = await WeightPerServing.findAll({
-            where: {recipe_id: id}
-        })
-        const calories_data = await CaloricBreakdown.findAll({
             where: {recipe_id: id}
         })
         let instr_ids = []
@@ -203,7 +175,7 @@ app.get('/search_by_id', async (req, res) => {
         //console.log("printing the returned value to see what happens")
         //console.log(instruction_data.instruction_id)
         //console.log(JSON.parse(JSON.stringify(equipment_ids)))
-        res.status(200).json([recipe_data, recipe_ingrd_data, instruction_data, instr_length_data, weight_serving_id, calories_data]);
+        res.status(200).json([recipe_data, instruction_data, instr_length_data]);
     } catch (error) {
         console.error("Error finding recipe by id:", error);
         res.status(500).json({ error: "Internal server error" });

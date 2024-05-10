@@ -121,9 +121,9 @@ label #cancel {
 
 }
 
-.card > .body {
-  font-size: 0.8rem;
-  color: black;
+.recipe-row {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .container {
