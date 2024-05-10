@@ -142,9 +142,11 @@ app.get('/search_by_id', async (req, res) => {
                 }, 
                 {
                     model: Ingredients,
+                    //attributes: ['ingredient_id', 'standard_name', 'image'],
                 },
                 // {
                 //     model: Nutrients,
+                //     // too resource intensive
                 // },
                 {
                     model: Tips,
@@ -164,6 +166,8 @@ app.get('/search_by_id', async (req, res) => {
                 // },
             ],
         });
+        // These tables don't have full associations with Recipes
+        // so their data will be pulled separately
         const instruction_data = await Instructions.findAll({
             where: {recipe_id: id}
         })
