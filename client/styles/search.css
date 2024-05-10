@@ -1,17 +1,11 @@
-* {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  text-decoration: none;
-}
-
+/* search.css */
 
 .sidebar {
   position: fixed;
   width: 250px;
   height: 100%;
-  left: -250px;
-  background: #161616;
+  left: 0;
+  background: #212121; /* Dark Primary color */
   transition: all 0.5s ease;
 }
 
@@ -20,8 +14,11 @@
   text-align: center;
   line-height: 70px;
   color: white;
-  background: #0dbbf0;
+  background: #FF9800; /* Primary color */
   user-select: none;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
 
 .sidebar ul a {
@@ -34,7 +31,7 @@
   padding-left: 40px;
   box-sizing: border-box;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #757575; /* Secondary Text color */
   transition: 0.4s;
 }
 
@@ -49,10 +46,9 @@ ul li:hover a {
 label #btn,
 label #cancel {
   position: absolute;
-  background: #042331;
+  background: #212121; /* Dark Primary color */
   border-radius: 3px;
   cursor: pointer;
-  
 }
 
 label #btn {
@@ -62,7 +58,6 @@ label #btn {
   color: white;
   padding: 6px 12px;
   transition: all 0.5s;
-  
 }
 
 label #cancel {
@@ -70,14 +65,13 @@ label #cancel {
   left: -195px;
   top: 17px;
   font-size: 30px;
-  color: #0a5275;
+  color: #FF5252; /* Accent Color */
   padding: 4px 9px;
   transition: all 0.5s ease;
 }
 
 #check:checked ~ .sidebar {
   left: 0;
-  
 }
 
 #check:checked ~ label #btn {
@@ -94,17 +88,12 @@ label #cancel {
   margin-left: 250px;
 }
 
-section {
-  background: url("../public/bg.jpg") no-repeat;
+.main-content {
+  background: url('../public/search.jpg') no-repeat;
   background-position: center;
   background-size: cover;
-  height: 100%;
-  transition: all 0.5s;
-  overflow-y: auto; /* Enable vertical scrolling */
-}
-
-.sidebar ul a i {
-  margin-right: 16px;
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .search-wrapper {
@@ -121,22 +110,15 @@ section {
   box-sizing: border-box;
 }
 
-.user-recipes {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 0.25rem;
-  margin-top: 1rem;
-  padding: 0 10px; /* Add padding to the grid container */
+#div-center {
+  width: 665px;
+  margin: auto;
 }
 
-.card {
-  border: 1px solid black;
-  background-color: white;
-  padding: 0.5rem;
-}
+.recipe-container {
+  flex: 3;
+  margin-left: 5px; /* Add some top margin */
 
-.card > .header {
-  margin-bottom: 0.25rem;
 }
 
 .card > .body {
@@ -144,36 +126,16 @@ section {
   color: black;
 }
 
-#div-center {
-  width: 665px;
-  margin: auto;
-}
-
 .container {
   display: flex;
   margin-top: 20px; 
-  justify-content: center; /* Center the children horizontally */
-  align-items: flex-start; /* Align items to the top */
+  margin-left: 20px; 
+  justify-content: center; 
+  align-items: flex-start; 
 }
 
-/* Adjust the spacing between inner and outer scrollbars */
 .listbox-wrapper {
-  height: 500px; /* Set the height as needed */
-  overflow-y: auto; /* Enable vertical scrollbar when content overflows */
-  padding-right: 20px; /* Add some padding to the right side to separate the inner and outer scrollbars */
-}
-
-.listbox-container {
-  margin-right: -20px; /* Compensate for the padding on the right side of the .listbox-wrapper */
-}
-
-.listbox-container {
-  flex: 1;
-  margin-right: 20px; /* Add margin between the listbox and the recipe container */
-  /* overflow-y: auto; Enable vertical scrollbar when content overflows */
-}
-
-.recipe-container {
-  margin-right: 70px; 
-  flex: 1;
+  height: 500px;
+  overflow-y: auto;
+  padding-right: 20px;
 }

@@ -68,6 +68,37 @@ async function main() {
             // for (const recipe of recipeLt) {
             //     console.log(`ID:${recipe.id}`);
             // }
+
+
+            
+            // let recipeLt2 = [];
+
+            // for(const recipe of recipeList){
+            //     let exitsRecipe = await Recipe.findOne({ where: { recipe_id: recipe.id} });
+            //     if(!exitsRecipe){
+            //         recipeLt2.push(recipe);
+            //     }
+            //     else{
+            //         let createdCuisines = await Cuisines.findOne({ where: { cuisine_name: cuisineType.cuisine_name} });
+            //         const existingRecipeCuisines = await RecipeCuisines.findOne({
+            //             where: {
+            //                 recipe_id: recipe.id,
+            //                 cuisine_id: createdCuisines.cuisine_id,
+            //             }
+            //         });
+            //         if (!existingRecipeCuisines && exitsRecipe) {
+            //             await RecipeCuisines.create({
+            //                 recipe_id: recipe.id,
+            //                 cuisine_id: createdCuisines.cuisine_id,
+            //             });
+            //         }
+            //     }
+            // }
+            
+            // let j = 60040; 
+            // let j = 600010;
+            // let j  = 638060, 639060, 636000, 
+            let j  = 640228;
             let recipeLt2 = [];
             for(const recipe of recipeList){
                 let exitsRecipe = await Recipe.findOne({ where: { recipe_id: recipe.id} });
@@ -90,7 +121,7 @@ async function main() {
                     }
                 }
             }
-
+            
             for (const recipe of recipeLt2) {
                 const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
 

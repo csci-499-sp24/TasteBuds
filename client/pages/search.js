@@ -1,12 +1,15 @@
+// color palette: #F57C00(Dark Primary color) #FFE0B2(Light Primary color) #FF9800(Primary color) #212121(Text/Icon) #FF5252(Accent Color) #212121(Primary Text) #757575(Secondary Text) #BDBDBD(Divider Color)
 import { useState, useEffect } from "react"; // React Hooks - for managing states of components
 import Link from "next/link";
 import Sidebar from "../components/sidebar";
-import {Input, Select, SelectItem, Checkbox} from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
+import {Input, Select, SelectItem} from "@nextui-org/react";
 import {ListboxWrapper} from "../components/ListboxWrapper";
 import CuisineTab from "../components/cuisineTab";
 import DietTab from "../components/dietTab";
 import OccasionTab from "../components/occasionTab";
 import DishTypeTab from "../components/dishTypeTab";
+import Head from "next/head";
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
@@ -109,58 +112,122 @@ function Search() {
 
   
   return (
-    
     <div>
+      <div>
        {/* Sidebar navigation */}
-      <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-
-      {/* Sidebar component */}
-      <Sidebar />
+        <input type="checkbox" id="check" />
+        <label htmlFor="check">
+          <i className="fas fa-bars" id="btn"></i>
+          <i className="fas fa-times" id="cancel"></i>
+        </label>
+            
+        {/* Sidebar component */}
+        <Sidebar />
+      </div>
 
       {/* Main content section */}
-      <section> 
+      <section className='main-content'>
         <div id="div-center" className="search-wrapper">
-          <Input type="search" label="Search" onChange={handleSearch} />
+          <br/>    
+          <Input
+            classNames={{
+              label: "text-[#212121] dark:text-[#212121]",
+              input: [
+                "bg-[#f57c00]",
+                "border-[#ff5252]",
+                "text-[#212121] dark:text-[#212121]",
+                "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+              ],
+              innerWrapper: ["bg-[#f57c00]", "border-[#ff5252]",],
+              inputWrapper: [
+                "shadow-xl",
+                "bg-[#f57c00]",
+                "border-[#ff5252]",
+                "focus-within-[focus=true]:bg-[#f57c00]", 
+                "group-data-[focus=true]:bg-[#f57c00]",              
+                "group-data-[hover=true]:bg-[#f57c00]",              
+              ],
+            }}
+            type="search"
+            label="Search"
+            onChange={handleSearch}
+          />
+          <Button className="bg-[#f57c00] text-[#212121] border-[#ff5252]" onClick={handleTriggerFetch}>Search</Button>       
+        
+        
         </div>
-        <div className="container" >
 
-          <div className="listbox-container">
+        <div className="container" >
+          <div className="filters">
             <ListboxWrapper>
             <CuisineTab
                   handleListboxChange={handleListboxChange}
                   triggerFetch={handleTriggerFetch}
             />  
-              <hr className="my-4 border-gray-300" />              
+              <hr className="my-4 border-[#FF5252]" />              
               <DietTab 
                 handleListboxChange={handleListboxChange}
                 triggerFetch={handleTriggerFetch} 
               />
-              <hr className="my-4 border-gray-300" />              
-              <DishTypeTab
-                handleListboxChange={handleListboxChange}
-                triggerFetch={handleTriggerFetch}
-              /> 
-              <hr className="my-4 border-gray-300" />              
+              <hr className="my-4 border-[#FF5252]" />             
               <OccasionTab
                 handleListboxChange={handleListboxChange}
                 triggerFetch={handleTriggerFetch}
               /> 
-              <hr className="my-4 border-gray-300" />        
+              <hr className="my-4 border-[#FF5252]" />                 
+              <DishTypeTab
+                handleListboxChange={handleListboxChange}
+                triggerFetch={handleTriggerFetch}
+              /> 
+              <hr className="my-4 border-[#FF5252]" />     
+
               <Input
                 type="number"
-                color="warning"
                 label="Serving Size"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 value={filters.servings}
                 onChange={(event) => handleServingsInputChange(event, 'servings')}
               />
               <div className="mb-1"></div>
               <Input
                 type="number"
-                color="warning"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 label="Minimum Serving"
                 value={filters.minServing}
                 onChange={(event) => handleServingsInputChange(event, 'minServing')}
@@ -168,40 +235,129 @@ function Search() {
               <div className="mb-1"></div>
               <Input
                 type="number"
-                color="warning"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 label="Maximum Serving"
                 value={filters.maxServing}
                 onChange={(event) => handleServingsInputChange(event, 'maxServing')}
               />
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
               <Input
                 type="number"
-                color="warning"
-                label="Weight Watcher Smart Points"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
+                label="Weight Watcher Pts"
                 value={filters.smartPoints}
                 onChange={(event) => handleServingsInputChange(event, 'smartPoints')}
               />
               <div className="mb-1"></div>
               <Input
                 type="number"
-                color="warning"
-                label="Minimum Weight Watcher Smart Points"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
+                label="Min Weight Watcher Pts"
                 value={filters.smartPointsMin}
                 onChange={(event) => handleServingsInputChange(event, 'smartPointsMin')}
               />
               <div className="mb-1"></div>
               <Input
                 type="number"
-                color="warning"
-                label="Maximum Weight Watcher Smart Points"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
+                label="Max Weight Watcher Pts"
                 value={filters.smartPointsMax}
                 onChange={(event) => handleServingsInputChange(event, 'smartPointsMax')}
               />
-
-              <hr className="my-4 border-gray-300" /> 
+            <hr className="my-4 border-[#FF5252]" />           
               <Input
                 type="number"
-                color="warning"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 label="Total Time in Minutes"
                 value={filters.readyInMinutes}
                 onChange={(event) => handleServingsInputChange(event, 'readyInMinutes')}
@@ -209,7 +365,25 @@ function Search() {
               <div className="mb-1"></div>
               <Input
                 type="number"
-                color="warning"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 label="Min Total Time in Minutes"
                 value={filters.readyInMinutesMin}
                 onChange={(event) => handleServingsInputChange(event, 'readyInMinutesMin')}
@@ -217,15 +391,51 @@ function Search() {
               <div className="mb-1"></div>
               <Input
                 type="number"
-                color="warning"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 label="Max Total Time in Minutes"
                 value={filters.readyInMinutesMax}
                 onChange={(event) => handleServingsInputChange(event, 'readyInMinutesMax')}
               />
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
               <Input
                 type="number"
-                color="warning"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 label="Min Price in Dollars"
                 value={filters.minTotalPrice}
                 onChange={(event) => handleServingsInputChange(event, 'minTotalPrice')}
@@ -233,7 +443,25 @@ function Search() {
               <div className="mb-1"></div>
               <Input
                 type="number"
-                color="warning"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 label="Max Price in Dollars"
                 value={filters.maxTotalPrice}
                 onChange={(event) => handleServingsInputChange(event, 'maxTotalPrice')}
@@ -241,59 +469,195 @@ function Search() {
               <div className="mb-1"></div>
               <Input
                 type="number"
-                color="warning"
+                variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                 label="Total Price Dollars"
                 value={filters.totalPrice}
                 onChange={(event) => handleServingsInputChange(event, 'totalPrice')}
               />
-               <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
                  <Select
-                  label="healthy"
-                  color="warning"
-                  placeholder="Want a Healthy Recipe?"
+                  label="Want a Healthy Recipe?"
+                  selectionMode="multiple"
+                  className="max-w-xs"
+                  variant="bordered"
+                  style={{ backgroundColor: '#FFE0B2', color: '#212121', borderColor: '#FF5252' }}
+                  listboxProps={{
+                    itemClasses: {
+                      base: [
+                        "rounded-md",
+                        "text-[#FF9800]",
+                        "transition-opacity",
+                        "data-[hover=true]:text-foreground",
+                        "data-[hover=true]:bg-[#FF9800]",
+                        "dark:data-[hover=true]:bg-[#FF9800]",
+                        "data-[selectable=true]:focus:bg-[#FF9800]",
+                        "data-[pressed=true]:opacity-70",
+                        "data-[focus-visible=true]:ring-[#FF9800]",
+                      ],
+                    },
+                  }}
+                  popoverProps={{
+                    classNames: {
+                      base: "before:bg-[#FF5252]",
+                      content: "p-0 border-small border-divider bg-background",
+                    },
+                  }}
+                  isMultiline="true"
+                  // placeholder="A Healthy Recipe?"
                   onChange={(event) => handleServingsInputChange(event, 'healthy')}
                 >
                   <SelectItem  key= "" value="">Both</SelectItem>
                   <SelectItem  key="true" value="true">Yes</SelectItem>
                   <SelectItem  key="false" value="false"> No</SelectItem>
                 </Select>
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
                 <Select
-                  label="Cheap"
-                  color="warning"
-                  placeholder="Want a Cheap Recipe?"
+                  label="Want a Cheap Recipe?"
+                  selectionMode="multiple"
+                  className="max-w-xs"
+                  variant="bordered"
+                  style={{ backgroundColor: '#FFE0B2', color: '#212121', borderColor: '#FF5252' }}
+                  listboxProps={{
+                    itemClasses: {
+                      base: [
+                        "rounded-md",
+                        "text-[#FF9800]",
+                        "transition-opacity",
+                        "data-[hover=true]:text-foreground",
+                        "data-[hover=true]:bg-[#FF9800]",
+                        "dark:data-[hover=true]:bg-[#FF9800]",
+                        "data-[selectable=true]:focus:bg-[#FF9800]",
+                        "data-[pressed=true]:opacity-70",
+                        "data-[focus-visible=true]:ring-[#FF9800]",
+                      ],
+                    },
+                  }}
+                  popoverProps={{
+                    classNames: {
+                      base: "before:bg-[#FF5252]",
+                      content: "p-0 border-small border-divider bg-background",
+                    },
+                  }}
+                  isMultiline="true"
+                  // placeholder="Want a Cheap Recipe?"
                   onChange={(event) => handleServingsInputChange(event, 'cheap')}
                 >
                   <SelectItem  key= "" value="">Both</SelectItem>
                   <SelectItem  key="true" value="true">Yes</SelectItem>
                   <SelectItem  key="false" value="false"> No</SelectItem>
                 </Select>
-               <hr className="my-4 border-gray-300" /> 
+                <hr className="my-4 border-[#FF5252]" />           
                  <Select
-                  label="Sustainable"
-                  color="warning"
-                  placeholder="Want a Sustainable Recipe?"
+                  label="Want a Sustainable Recipe?"
+                  selectionMode="multiple"
+                  className="max-w-xs"
+                  variant="bordered"
+                  style={{ backgroundColor: '#FFE0B2', color: '#212121', borderColor: '#FF5252' }}
+                  listboxProps={{
+                    itemClasses: {
+                      base: [
+                        "rounded-md",
+                        "text-[#FF9800]",
+                        "transition-opacity",
+                        "data-[hover=true]:text-foreground",
+                        "data-[hover=true]:bg-[#FF9800]",
+                        "dark:data-[hover=true]:bg-[#FF9800]",
+                        "data-[selectable=true]:focus:bg-[#FF9800]",
+                        "data-[pressed=true]:opacity-70",
+                        "data-[focus-visible=true]:ring-[#FF9800]",
+                      ],
+                    },
+                  }}
+                  popoverProps={{
+                    classNames: {
+                      base: "before:bg-[#FF5252]",
+                      content: "p-0 border-small border-divider bg-background",
+                    },
+                  }}
+                  isMultiline="true"
+                  // placeholder="Want a Sustainable Recipe?"
                   onChange={(event) => handleServingsInputChange(event, 'sustainable')}
                 >
                   <SelectItem  key= "" value="">Both</SelectItem>
                   <SelectItem  key="true" value="true">Yes</SelectItem>
                   <SelectItem  key="false" value="false"> No</SelectItem>
                 </Select>
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
                  <Select
-                  label="Tips"
-                  color="warning"
-                  placeholder="Want Recipes with Tips?"
+                  label="Want Recipes with Tips?"
+                  selectionMode="multiple"
+                  className="max-w-xs"
+                  variant="bordered"
+                  style={{ backgroundColor: '#FFE0B2', color: '#212121', borderColor: '#FF5252' }}
+                  listboxProps={{
+                    itemClasses: {
+                      base: [
+                        "rounded-md",
+                        "text-[#FF9800]",
+                        "transition-opacity",
+                        "data-[hover=true]:text-foreground",
+                        "data-[hover=true]:bg-[#FF9800]",
+                        "dark:data-[hover=true]:bg-[#FF9800]",
+                        "data-[selectable=true]:focus:bg-[#FF9800]",
+                        "data-[pressed=true]:opacity-70",
+                        "data-[focus-visible=true]:ring-[#FF9800]",
+                      ],
+                    },
+                  }}
+                  popoverProps={{
+                    classNames: {
+                      base: "before:bg-[#FF5252]",
+                      content: "p-0 border-small border-divider bg-background",
+                    },
+                  }}
+                  isMultiline="true"
+                  // placeholder="Want Recipes with Tips?"
                   onChange={(event) => handleServingsInputChange(event, 'includeTips')}
                 >
                   <SelectItem  key= "" value="">Both</SelectItem>
                   <SelectItem  key="true" value="true">Yes</SelectItem>
                   <SelectItem  key="false" value="false"> No</SelectItem>
                 </Select>
-              <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
                 <Input
                   type="number"
-                  color="warning"
+                  variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                   label="Calories (Kcal)"
                   value={filters.calories}
                   onChange={(event) => handleServingsInputChange(event, 'calories')}
@@ -301,7 +665,25 @@ function Search() {
                 <div className="mb-1"></div>
                 <Input
                   type="number"
-                  color="warning"
+                  variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                   label="Min Calories (Kcal)"
                   value={filters.minCalories}
                   onChange={(event) => handleServingsInputChange(event, 'minCalories')}
@@ -309,12 +691,30 @@ function Search() {
                 <div className="mb-1"></div>
                 <Input
                   type="number"
-                  color="warning"
+                  variant="bordered"
+                classNames={{
+                  label: "text-[#212121] dark:text-[#212121]",
+                  input: [
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "text-[#212121] dark:text-[#212121]",
+                    "placeholder:text-[#212121] dark:placeholder:text-[#212121]",
+                  ],
+                  innerWrapper: ["bg-[#FFE0B2]", "border-[#FFE0B2]",],
+                  inputWrapper: [
+                    "shadow-xl",
+                    "bg-[#FFE0B2]",
+                    "border-[#FF5252]",
+                    "focus-within-[focus=true]:bg-[#FFE0B2]", 
+                    "group-data-[focus=true]:bg-[#FFE0B2]",              
+                    "group-data-[hover=true]:bg-[#FFE0B2]",              
+                  ],
+                }}
                   label="Max Calories (Kcal)"
                   value={filters.maxCalories}
                   onChange={(event) => handleServingsInputChange(event, 'maxCalories')}
                 />
-                <hr className="my-4 border-gray-300" /> 
+              <hr className="my-4 border-[#FF5252]" />           
             </ListboxWrapper> 
           </div>
 
@@ -332,6 +732,7 @@ function Search() {
               {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}
             </div>
           </div>
+          
         </div>  
       </section>
 
