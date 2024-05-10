@@ -89,7 +89,7 @@ function Homepage() {
       <section className='bg'>
         <div id="div-center" className="head">
           Discover Recipes
-          <div className="recipe-box-container">
+          <div className="recipe-box-container" style={{ display: 'flex'}}>
           {/* RecipeBox component*/}
             {randomRecipe.map((recipe, index) => (
               <div key={index} className="recipe-box-item">

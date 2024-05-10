@@ -10,7 +10,7 @@ import CuisineTab from "../components/cuisineTab";
 import DietTab from "../components/dietTab";
 import OccasionTab from "../components/occasionTab";
 import DishTypeTab from "../components/dishTypeTab";
-import Head from "next/head";
+import EquipmentTab from "../components/excludeEquipment";
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
@@ -720,7 +720,12 @@ function Search() {
               {isLoading && <p>Loading...</p>}
               {!isLoading && Array.isArray(searchResults) && (
                 searchResults.map(recipe => (
-                  <RecipeBox key={recipe.recipe_id} recipe={recipe} />
+                  <RecipeBox               
+                  key={recipe.recipe_id} 
+                  recipe={recipe}
+                  className="recipe-boxs" // Add className here
+                  style={{ paddingRight: '10px', paddingBottom: '10px' }}
+                  />
                 ))
               )}
               {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}

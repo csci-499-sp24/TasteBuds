@@ -123,9 +123,10 @@ label #cancel {
   align-items: flex-start; 
 }
 
+
 .recipe-container {
   flex: 1;
-  margin-left: 30px; 
+  margin-left: 50px; 
 }
 
 .recipe-row {

@@ -95,32 +95,37 @@ export default function SavedRecipes() {
   }, [savedRecipes]);
 
   return (
-    <div>
-    <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-        {/* Sidebar component */}
+    <div >
+
+      <div>
+        <input type="checkbox" id="check" />
+          <label htmlFor="check">
+            <i className="fas fa-bars" id="btn"></i>
+            <i className="fas fa-times" id="cancel"></i>
+          </label>
+          {/* Sidebar component */}
         <Sidebar />
-      <section className='bg'>
-      <div className="head">
-      <h1>Saved Recipes</h1>
-      <div style={{display: "flex"}}>
-        {savedRecipes ? (
-          savedRecipes.map((recipe, index) => (
-            <SavedRecipeBox 
-              key={index} 
-              recipe={recipe}
-              onDelete={() => deleteRecipe(recipe.recipeId)}
-            />
-          ))
-        ) : (
-          <li>No recipes found</li>  
-        )}
       </div>
+       
+      <div className='bg-saved-recipe'>
+        <div className="hd-saved-recipe ">
+          <h1 className="h1-saved">Saved Recipes</h1>
+            <div className= "saved-recipe-container" style={{display: "flex"}}>
+              {savedRecipes ? (
+                savedRecipes.map((recipe, index) => (
+                  <SavedRecipeBox 
+                    key={index} 
+                    recipe={recipe}
+                    onDelete={() => deleteRecipe(recipe.recipeId)}
+                  />
+                ))
+              ) : (
+                <li>No recipes found</li>  
+              )}
+            </div>
+        </div>
       </div>
-      </section>
     </div>
+
   );
 }
