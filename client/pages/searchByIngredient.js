@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"; 
 import Link from "next/link";
 import { Autocomplete, AutocompleteItem, Chip, Divider, Card, CardHeader, CardBody, CardFooter, Image, Button } from "@nextui-org/react";
-import RecipeBox from '../components/RecipeBox';
 import Sidebar from "../components/sidebar";
 
 function SearchByIngredient() {
@@ -86,7 +85,6 @@ function SearchByIngredient() {
   };
 
   //temporary card component
-  /*
   const recipeCard = (recipe) => {
     console.log(recipe)
     return (
@@ -103,7 +101,6 @@ function SearchByIngredient() {
       </Card>
     );
   }
-  */
 
   return (
     <div>
@@ -140,7 +137,7 @@ function SearchByIngredient() {
                         {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                           recipe.ingredients.length === ingredientList.length && (
                             <div key={recipe.id} className="col-span-1">
-                              <RecipeBox recipe={recipe.Recipe} />
+                              {recipeCard(recipe)}
                             </div>
                           )
                         ))}
@@ -161,7 +158,7 @@ function SearchByIngredient() {
                       {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                         (recipe.ingredients.length < ingredientList.length && recipe.ingredients.length >= ingredientList.length / 2) && (
                           <div key={recipe.id} className="col-span-1">
-                            <RecipeBox recipe={recipe.Recipe} />
+                            {recipeCard(recipe)}
                           </div>
                         )
                       ))}
@@ -178,7 +175,7 @@ function SearchByIngredient() {
                         {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                           (recipe.ingredients.length < ingredientList.length / 2) && (
                             <div key={recipe.id} className="col-span-1">
-                              <RecipeBox recipe={recipe.Recipe} />
+                              {recipeCard(recipe)}
                             </div>
                           )
                         ))}
