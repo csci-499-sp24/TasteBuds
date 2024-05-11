@@ -1,9 +1,26 @@
 import {useState} from 'react'
+import { useAuth } from '../firebase/userAuthContext';
+import id from '../pages/recipe/[id]';
 
 function Stars(){
     const [rating, setRating] = useState(null)
     const [hover, setHover] = useState(null)
-
+    //const { recipe_id } = router.query; //meant to get recipe id, but idk
+    const { currentUser } = useAuth(); //use Firebase auth to get user info (I need the uid)
+    const updateRatings = async (rating) => {
+      try {
+        //const token = await currentUser.getIdToken();
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/add_rating?firebase_user_id=${currentUser.uid}recipe_id=${id}&rating=${rating}`
+        );
+        if (!response.ok) {
+          throw new Error('Failed to update rating info');
+        }
+      } catch (error) {
+        console.error("Error updating rating info:", error);
+      }
+    }
+    
     return (
         <div>
           {[...Array(5)].map((star, index) => {
@@ -15,7 +32,10 @@ function Stars(){
                   type="radio"
                   name="rating"
                   value={currentRating}
-                  onChange={() => setRating(currentRating)}
+                  onChange={() => {
+                    setRating(currentRating)
+                    updateRatings(currentRating)
+                  }}
                 />
                 <span
                   className="star"

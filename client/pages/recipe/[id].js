@@ -15,6 +15,7 @@ const Recipe = () => {
   const [loading, setLoading] = useState(true); // state tracks load or not
   const router = useRouter(); // Initialize useRouter hook to access router object
   const { id } = router.query; // Get the id from the router query
+  
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -98,5 +99,7 @@ const Recipe = () => {
     </div>
   );
 };
-
+//exporting the recipe id value so that stars can get it
+//is that how it works?
+export const id = router.query;
 export default Recipe;
