@@ -24,10 +24,10 @@ const Recipe = () => {
         if (response.ok) {
           const data = await response.json(); 
           console.log(data); // Logging data from api 
-          setRecipe(data[0]); // data of recipe in array 0
-          const ingredientsData = data[0]?.Ingredients || []; // access ingredients array from data[0]
+          setRecipe(data["recipe_data"]); // data of recipe in array 0
+          const ingredientsData = data["recipe_data"]?.Ingredients || []; // access ingredients array from data[0]
           setIngredients(ingredientsData); // set ingredients in state
-          setInstructions(data[1]); // in the data instructions are array 1
+          setInstructions(data["instruction_data"]); // in the data instructions are array 1
           setLoading(false); 
         } else {
           throw new Error("Failed to fetch recipe"); // Throw an error if fetching the recipe data fails
@@ -101,5 +101,6 @@ const Recipe = () => {
 };
 //exporting the recipe id value so that stars can get it
 //is that how it works?
-export const id = router.query;
+// const router = useRouter();
+// export const id = router.query;
 export default Recipe;

@@ -313,7 +313,15 @@ app.get('/search_by_id', async (req, res) => {
         //console.log("printing the returned value to see what happens")
         //console.log(instruction_data.instruction_id)
         //console.log(JSON.parse(JSON.stringify(equipment_ids)))
-        res.status(200).json([recipe_data, recipe_ingrd_data, instruction_data, instr_length_data, weight_serving_id, calories_data]);
+        //res.status(200).json([recipe_data, recipe_ingrd_data, instruction_data, instr_length_data, weight_serving_id, calories_data]);
+        res.status(200).json({ //reduced usage of magic numjbers in the recipe data
+            recipe_data: recipe_data,
+            ingredients_data: recipe_ingrd_data,
+            instruction_data: instruction_data,
+            instruction_length: instr_length_data,
+            weight_serving_id: weight_serving_id,
+            calories: calories_data,
+        });
     } catch (error) {
         console.error("Error finding recipe by id:", error);
         res.status(500).json({ error: "Internal server error" });
