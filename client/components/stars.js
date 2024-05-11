@@ -7,9 +7,13 @@ function Stars(){
     const [hover, setHover] = useState(null)
     //const { recipe_id } = router.query; //meant to get recipe id, but idk
     const { currentUser } = useAuth(); //use Firebase auth to get user info (I need the uid)
-    const updateRatings = async (rating) => {
+    const updateRatings = async () => {
       try {
         //const token = await currentUser.getIdToken();
+        if (currentUser.uid == null) {
+          console.log("no user uid given")
+          throw new Error('You are not logged in')
+        }
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/add_rating?firebase_user_id=${currentUser.uid}recipe_id=${id}&rating=${rating}`
         );
@@ -33,8 +37,8 @@ function Stars(){
                   name="rating"
                   value={currentRating}
                   onChange={() => {
-                    setRating(currentRating)
-                    updateRatings(currentRating)
+                    setRating(currentRating);
+                    //updateRatings()
                   }}
                 />
                 <span
