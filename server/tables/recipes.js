@@ -763,7 +763,31 @@ const Comments = sequelize.define('Comments', {
 // Define the ER of Comments and Recipe (M:1)
 Comments.belongsTo(Recipe, { foreignKey: 'recipe_id' });
 Recipe.hasMany(Comments, { foreignKey: 'recipe_id' });
- 
+
+const Ratings = sequelize.define('Ratings', {
+    rating_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+        //omitNull: true,
+        // https://stackoverflow.com/questions/15737949/how-does-autoincrement-work-in-nodejss-sequelize
+    },
+    firebase_user_id: {
+        type: DataTypes.STRING,
+    },
+    recipe_id: {
+        type: DataTypes.INTEGER,
+    },
+    rating: {
+        type: DataTypes.INTEGER,
+    }
+}, {
+    tableName: 'ratings',
+    timestamps: false,
+});
+
+Recipe.hasMany(Ratings, {foreignKey: 'recipe_id'})
 
 /* END OF MODELS*/
     return {
@@ -795,5 +819,6 @@ Recipe.hasMany(Comments, { foreignKey: 'recipe_id' });
         WeightPerServing,
         CaloricBreakdown,   
         Comments, 
+        Ratings
     }
 }
