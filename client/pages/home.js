@@ -86,7 +86,7 @@ function Homepage() {
         <i className="fas fa-times" id="cancel"></i>
       </label>
       <Sidebar />
-      <section className='bg'>
+      <section className='bg-home'>
         <div id="div-center" className="head">
           Discover Recipes
           <div className="recipe-box-container" style={{ display: 'flex'}}>
@@ -108,6 +108,16 @@ function Homepage() {
           </Button>
         </div>
       </section>
+      <style jsx>{`
+      .bg-home {
+        background: url('home.jpg') no-repeat;
+        background-position: center;
+        background-size: cover;
+        height: 100vh;
+        overflow-y: auto;
+      }
+        
+      `}</style>
     </div>
   );
 }
