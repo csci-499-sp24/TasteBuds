@@ -1,12 +1,16 @@
 import {useState} from 'react'
 import { useAuth } from '../firebase/userAuthContext';
-import id from '../pages/recipe/[id]';
+import { useRouter } from 'next/router';
+//import id from '../pages/recipe/[id]';
 
 function Stars(){
-    const [rating, setRating] = useState(null)
+    const [rating, setRating] = useState(null)//rating is updated upon clicking in the stars popup window, so it should work?
     const [hover, setHover] = useState(null)
-    //const { recipe_id } = router.query; //meant to get recipe id, but idk
-    const { currentUser } = useAuth(); //use Firebase auth to get user info (I need the uid)
+    const router = useRouter();
+    const { recipe_id } = router.query; //meant to get recipe id from the link; it should work?
+    const { currentUser } = useAuth(); //use Firebase auth to get user info (I need the uid to pass as firebase user id)
+    //This function is meant to update the ratings table with a new rating.
+    //Not sure if it is even supposed to be in here or another js file.
     const updateRatings = async () => {
       try {
         //const token = await currentUser.getIdToken();
@@ -15,7 +19,7 @@ function Stars(){
           throw new Error('You are not logged in')
         }
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_SERVER_URL}/add_rating?firebase_user_id=${currentUser.uid}recipe_id=${id}&rating=${rating}`
+          `${process.env.NEXT_PUBLIC_SERVER_URL}/add_rating?firebase_user_id=${currentUser.uid}recipe_id=${recipe_id}&rating=${rating}`
         );
         if (!response.ok) {
           throw new Error('Failed to update rating info');
@@ -39,6 +43,8 @@ function Stars(){
                   onChange={() => {
                     setRating(currentRating);
                     //updateRatings()
+                    //Commented out so it doesn't break existing code
+                    //Tested it when uncommented it, it doesn't seem to do anything
                   }}
                 />
                 <span
