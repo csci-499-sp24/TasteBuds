@@ -110,17 +110,8 @@ function Search() {
   return (
     <div>
       <div>
-       {/* Sidebar navigation */}
-        <input type="checkbox" id="check" />
-        <label htmlFor="check">
-          <i className="fas fa-bars" id="btn"></i>
-          <i className="fas fa-times" id="cancel"></i>
-        </label>
-            
-        {/* Sidebar component */}
         <Sidebar />
       </div>
-
       {/* Main content section */}
       <section className='main-content'>
         <div id="div-center" className="search-wrapper">

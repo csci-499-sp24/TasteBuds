@@ -18,7 +18,7 @@
   text-align: center;
   line-height: 70px;
   color:white;
-  background: #0dbbf0;
+  background: #FF9800;
   user-select: none;
 }
 .sidebar ul a{
@@ -53,6 +53,8 @@ label #btn{
   color: white;
   padding: 6px 12px;
   transition: all .5s;
+  position: absolute;
+  z-index:50;
 }
 label #cancel{
   z-index: 1111;
@@ -77,52 +79,6 @@ label #cancel{
 #check:checked ~ section{
   margin-left: 250px;
 }
-.bg{
-  background: url("../public/bg.jpg") no-repeat;
-  background-position: center;
-  background-size: cover;
-  height: 100vh;
-  transition: all .5s;
-}
 .sidebar ul a i{
   margin-right: 16px;
-}
-
-.main {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    transition: transform 0.2s;
-    width: 500px;
-    text-align: center;
-}
-
-label {
-    display: block;
-    width: 100%;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    text-align: left;
-    color: #555;
-}
-
-input {
-    display: block;
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 10px;
-    box-sizing: border-box;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-.wrap {
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }

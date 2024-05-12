@@ -80,12 +80,9 @@ function Homepage() {
 
   return (
     <div>
-      <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-      <Sidebar />
+      <div>
+        <Sidebar/>
+      </div>
       <section className='bg'>
         <div id="div-center" className="head">
           Discover Recipes

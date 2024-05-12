@@ -6,6 +6,7 @@ import Sidebar from "../components/sidebar.js";
 import { auth } from '../firebase/firebaseConfig';
 import SavedRecipeBox from '@/components/savedRecipeBox';
 import axios from 'axios';
+import Sidebar from '../components/sidebar.js';
 
 export default function SavedRecipes() {
   const { currentUser } = useAuth();
@@ -96,13 +97,9 @@ export default function SavedRecipes() {
 
   return (
     <div>
-    <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-        {/* Sidebar component */}
+      <div>
         <Sidebar />
+      </div>
       <section className='bg'>
       <div className="head">
       <h1>Saved Recipes</h1>

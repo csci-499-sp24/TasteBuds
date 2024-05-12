@@ -1,93 +1,4 @@
 /* search.css */
-
-.sidebar {
-  position: fixed;
-  width: 250px;
-  height: 100%;
-  left: 0;
-  background: #212121; /* Dark Primary color */
-  transition: all 0.5s ease;
-}
-
-.sidebar header {
-  font-size: 22px;
-  text-align: center;
-  line-height: 70px;
-  color: white;
-  background: #FF9800; /* Primary color */
-  user-select: none;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-}
-
-.sidebar ul a {
-  font-size: 20px;
-  line-height: 65px;
-  display: block;
-  height: 100%;
-  width: 100%;
-  color: white;
-  padding-left: 40px;
-  box-sizing: border-box;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid #757575; /* Secondary Text color */
-  transition: 0.4s;
-}
-
-ul li:hover a {
-  padding-left: 50px;
-}
-
-#check {
-  display: none;
-}
-
-label #btn,
-label #cancel {
-  position: absolute;
-  background: #212121; /* Dark Primary color */
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-label #btn {
-  left: 40px;
-  top: 25px;
-  font-size: 35px;
-  color: white;
-  padding: 6px 12px;
-  transition: all 0.5s;
-}
-
-label #cancel {
-  z-index: 1111;
-  left: -195px;
-  top: 17px;
-  font-size: 30px;
-  color: #FF5252; /* Accent Color */
-  padding: 4px 9px;
-  transition: all 0.5s ease;
-}
-
-#check:checked ~ .sidebar {
-  left: 0;
-}
-
-#check:checked ~ label #btn {
-  left: 250px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-#check:checked ~ label #cancel {
-  left: 195px;
-}
-
-#check:checked ~ section {
-  margin-left: 250px;
-}
-
 .main-content {
   background: url('../public/search.jpg') no-repeat;
   background-position: center;
@@ -132,6 +43,8 @@ label #cancel {
   margin-left: 20px; 
   justify-content: center; 
   align-items: flex-start; 
+  z-index: 1;
+  position:relative;
 }
 
 .listbox-wrapper {
