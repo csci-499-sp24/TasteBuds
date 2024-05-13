@@ -218,7 +218,7 @@ function transformRecipeData(extractResponse) {
                         name: ingredient.name,
                         amount: ingredient.amount,
                         unit: ingredient.unit,
-                        nutrients: [] // Array to store nutrient data for each ingredient
+                        nutrients: [] // array to store nutrient data for each ingredient
                     };
             
                     if (ingredient.nutrients && ingredient.nutrients.length > 0) {

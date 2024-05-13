@@ -12,11 +12,10 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     dialectOptions: {
         ssl: {
             require: true,
-            rejectUnauthorized: false, // Note: This is for development only
+            rejectUnauthorized: false,
         }
     },
     define: {
-        // Define the schema to be used by default
         schema: 'public'
     }
 });
@@ -24,7 +23,6 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
 
 /* --- MODELS and RELATIONSHP ---- */
 
-// Define Recipe model that mirrors the structure of Recipes table
 /* RECIPE */
 const Recipe = sequelize.define('Recipe', {
     recipe_id: {
@@ -797,7 +795,7 @@ async function loadRecipesIntoDatabase(transformedData) {
         // Iterate over each recipe response object in transformedData
         let createdRecipe; 
         for (const recipeResponse of transformedData) {
-            // Extract data for the Recipe table
+            // Extract data - Recipe table
             const recipeData = recipeResponse.recipe;
             try {
                 // returns either an object representing the found record or null 
@@ -1280,7 +1278,7 @@ async function loadRecipesIntoDatabase(transformedData) {
                             createdTip = await Tips.create({
                                 type: tipData.type,
                                 tip: tipData.tip,
-                                recipe_id: createdRecipe.recipe_id, // Include the recipe_id when creating the tip
+                                recipe_id: createdRecipe.recipe_id, 
                             }, { validate: true });
                             await createdRecipe.addTip(createdTip);
                         }

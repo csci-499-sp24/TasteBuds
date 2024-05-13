@@ -1,5 +1,5 @@
 // color palette: #F57C00(Dark Primary color) #FFE0B2(Light Primary color) #FF9800(Primary color) #212121(Text/Icon) #FF5252(Accent Color) #212121(Primary Text) #757575(Secondary Text) #BDBDBD(Divider Color)
-import { useState, useEffect } from "react"; // React Hooks - for managing states of components
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import RecipeBox from "../components/RecipeBox";
 import Sidebar from "../components/sidebar";
@@ -10,13 +10,13 @@ import CuisineTab from "../components/cuisineTab";
 import DietTab from "../components/dietTab";
 import OccasionTab from "../components/occasionTab";
 import DishTypeTab from "../components/dishTypeTab";
-import Head from "next/head";
+import EquipmentTab from "../components/excludeEquipment";
 
 function Search() {
-  const [searchQuery, setSearchQuery] = useState("");  // State variable to hold the search query
-  const [searchResults, setSearchResults] = useState([]); // State variable to hold the search results
-  const [isLoading, setIsLoading] = useState(false);  // State variable to indicate if data is loading
-  const [filters, setFilters] = useState({  // State variable to hold filter criteria
+  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchResults, setSearchResults] = useState([]); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [filters, setFilters] = useState({ 
     cuisine: "", diet: "", occasion: "", dishType: "",
     servings: "", minServing: "", maxServing: "",
     smartPoints: "", smartPointsMin: "", smartPointsMax:"",
@@ -27,44 +27,46 @@ function Search() {
   }); 
 
   useEffect(() => {
-    // Event handler function to handle Enter key press
+    // Event handler for Enter 
     const handleEnterKeyPress = (event) => {
       console.log(`document.activeElement.tagName: ${document.activeElement.tagName}`)
       console.log("Key pressed:", event.key);
       console.log("Event target:", event.target);
-      if (event.key === "Enter") {  // Check if the pressed key is Enter
-        fetchRecipes(searchQuery, filters); // Call fetchRecipes when Enter key is pressed
+      if (event.key === "Enter") { 
+        fetchRecipes(searchQuery, filters); // Call fetchRecipes 
       }
     };
   
-    document.addEventListener("keydown", handleEnterKeyPress); // When any key is pressed, the handleEnterKeyPress function will be called.n
+    document.addEventListener("keydown", handleEnterKeyPress); // when enter is hit the handleEnterKeyPress called. 
   
     return () => {
-      document.removeEventListener("keydown", handleEnterKeyPress);  //  cleanup function for the effect. it removes the event listener added in the useEffect hook to prevent memory leaks and ensure proper cleanup.
+      document.removeEventListener("keydown", handleEnterKeyPress);  //  cleanup 
     };
-  }, [searchQuery, filters]); // Dependencies: searchQuery and filters, The effect function will run if any of the dependencies change.
+  }, [searchQuery, filters]); 
 
   
   // Function to fetch recipes based on search query and filters
-  const fetchRecipes = async (searchQuery, filters) => { // passes search query and filter to fetchrecipes
-    setIsLoading(true); // Set loading state to true
+  const fetchRecipes = async (searchQuery, filters) => { 
+    setIsLoading(true);
+    
     try {
-      // Construct query parameters from filters
-      const queryParams = Object.entries(filters) //  converts the filters object into an array of key-value pairs,
-      .filter(([key, value]) => value !== "" && value !==undefined) // filters out any key-value pairs where the value is an empty string. 
-      .map(([key, value]) => `${key}=${value}`) // maps each key-value pair to a string in the format "key=value",This prepares the key-value pairs to be part of the query parameters in the URL.
+      // Construct serach endpt parameters from filters
+      const queryParams = Object.entries(filters) //  converts to array of key-value pairs,
+      .filter(([key, value]) => value !== "" && value !==undefined) // out empty string. 
+      .map(([key, value]) => `${key}=${value}`) // maps each key-value pair to "key=value",
       .join("&");      
       console.log(`Query: ${process.env.NEXT_PUBLIC_SERVER_URL}/searchV2?query=${searchQuery}&${queryParams}`);
       const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/searchV2?query=${searchQuery}&${queryParams}`);
+      
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
-      const data = await response.json(); // Parse response JSON data
-      setSearchResults(data); // Set search results with fetched data
+      const data = await response.json(); 
+      setSearchResults(data); // Set search results 
     } catch (error) {
       console.error("Error fetching recipes:", error);
     } finally {
-      setIsLoading(false); // Set loading state to false after fetching completes
+      setIsLoading(false); // Set loading state to false after fetching is completes
     }
   };
 
@@ -75,15 +77,15 @@ function Search() {
 
   // Event handler to update search query as user types in the search input
   const handleSearch = (event) => {
-    const query = event.target.value.toLowerCase(); // Get search query from input and convert to lowercase
-    setSearchQuery(query); // Update search query state
+    const query = event.target.value.toLowerCase(); // convert to lowercase
+    setSearchQuery(query); 
   };
 
   // Event handler to update filter criteria when user selects an option from Listbox
   const handleListboxChange = (selectedItems, filterType) => {
-    console.log("Selected Items:", selectedItems); // Log selectedItems to the console
-    setFilters((prevFilters) => { // //filter state is updated, which returns a new state obj
-      let filterVal = []; // Extract values of selected items
+    console.log("Selected Items:", selectedItems); 
+    setFilters((prevFilters) => { // filter state is updated, which returns a new state obj
+      let filterVal = []; 
       if(Object.keys(selectedItems).length > 0 ){
         filterVal = Array.from(selectedItems);
       }
@@ -91,8 +93,8 @@ function Search() {
       console.log("prevFilters:", prevFilters);
       console.log("Filters:", filters);
       return {
-        ...prevFilters, // // spread operator (...) copies all key-value pairs from the previous state of the filters object.
-        [filterType]: filterVal.join(","), // updates the specific filter type (filterType) with the new value (filterVal), separated by commas
+        ...prevFilters,
+        [filterType]: filterVal.join(","),
       };
     });
   }
@@ -720,7 +722,12 @@ function Search() {
               {isLoading && <p>Loading...</p>}
               {!isLoading && Array.isArray(searchResults) && (
                 searchResults.map(recipe => (
-                  <RecipeBox key={recipe.recipe_id} recipe={recipe} />
+                  <RecipeBox               
+                  key={recipe.recipe_id} 
+                  recipe={recipe}
+                  className="recipe-boxs" // Add className here
+                  style={{ paddingRight: '10px', paddingBottom: '10px' }}
+                  />
                 ))
               )}
               {!isLoading && !Array.isArray(searchResults) && <p>No results found.</p>}

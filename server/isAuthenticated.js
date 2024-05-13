@@ -16,10 +16,9 @@ const isAuthenticated = async (req, res, next) => {
       return res.status(401).json({ error: 'Invalid authorization header format' });
     }
 
-    // Verify Firebase ID token
     const decodedToken = await admin.auth().verifyIdToken(token);
-    req.user = decodedToken; // Attach the user object to the request
-    next(); // Move to the next middleware or route handler
+    req.user = decodedToken; 
+    next(); 
   } catch (error) {
     console.error('Error verifying user token:', error);
     res.status(401).json({ error: 'Unauthorized' });

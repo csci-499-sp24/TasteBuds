@@ -213,13 +213,23 @@ app.get('/search_by_id', async (req, res) => {
 // search + filter 
 app.use('/searchV2', searchRoutes); // search routes
 
-
 app.get('/getAllOccasions', async (req, res) => {
     try{
         const listOfOccasions = await Occasions.findAll();
         res.status(200).json(listOfOccasions);
     } catch (error){
         console.error("Error searching recipes:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+// Equipment
+app.get('/getAllEquipment', async (req, res) => {
+    try{
+        const listOfEquipemnts = await Equipment.findAll();
+        res.status(200).json(listOfEquipemnts);
+    } catch (error){
+        console.error("Error searching Equipment:", error);
         res.status(500).json({ error: "Internal server error" });
     }
 });
@@ -332,47 +342,25 @@ app.get('/comments/:recipeId', async (req, res) => {
         const { recipeId } = req.params;
         const comments = await Comments.findAll({
             where: { recipe_id: recipeId },
+            order: [['timestamp', 'DESC']],
         });
         res.status(200).json(comments);
     } catch (error) {
         console.error('Error fetching comments:', error)
     }
 });
-// edit comment 
-app.put('/comments/:userId/:commentId', isAuthenticated, async (req, res) => {
-    try{
-        const { userId, commentId } = req.params;
-        const { updatedText } = req.body;
-
-        const comment = await Comment.findById(commentId);
-        if (!comment) {
-            return res.status(404).json({ error: 'Comment not found' });
-        }
-        if (comment.firebase_user_id !== userId) {
-            return res.status(403).json({ error: 'You are not authorized to edit this comment' });
-        }
-        comment.comment_text = updatedText;
-        await comment.save();
-        res.json({ message: 'Comment updated successfully', updatedComment: comment });
-
-    } catch (error) {
-        console.error('Error updating comment:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
 // delete a comment
 app.delete('/comments/:userId/:commentId', isAuthenticated, async (req, res) => {
     try{
         const { userId, commentId } = req.params;
-        const comment = await Comment.findById(commentId);
+        const comment = await Comments.findOne({ where: { comment_id: commentId } });
         if (!comment) {
             return res.status(404).json({ error: 'Comment not found' });
         }
-        if (comment.userId !== userId) {
+        if (comment.firebase_user_id !== userId) {
             return res.status(403).json({ error: 'You are not authorized to Delete this comment' });
         }
-
-        await comment.remove();
+        await Comments.destroy({ where: { comment_id: commentId } });
         res.json({ message: 'Comment deleted successfully' });
 
     } catch (error) {
