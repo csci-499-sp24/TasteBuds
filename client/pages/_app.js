@@ -5,6 +5,7 @@ import "/styles/savedRecipe.css";
 import "/styles/CommentForm.css";
 import "/styles/login.css";
 import "/styles/stars.css";
+import "/styles/sidebar.css";
 import { NextUIProvider } from "@nextui-org/react";
 import UserAuthContext from "@/firebase/userAuthContext";
 

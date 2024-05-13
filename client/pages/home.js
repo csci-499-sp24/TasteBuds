@@ -81,16 +81,9 @@ function Homepage() {
   return (
     <div>
       <div>
-        {/* Sidebar navigation */}
-        <input type="checkbox" id="check" />
-        <label htmlFor="check">
-          <i className="fas fa-bars" id="btn"></i>
-          <i className="fas fa-times" id="cancel"></i>
-        </label>
-
-        <Sidebar />
+        <Sidebar/>
       </div>
-      <section className='bg-home'>
+      <section className='bg'>
         <div id="div-center" className="head">
           <span style={{color: '#F57C00', textShadow: '1px 1px 1px #757575'}}>Discover Recipes</span>
           <div className="recipe-box-container" style={{ display: 'flex'}}>
