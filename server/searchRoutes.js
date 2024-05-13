@@ -13,32 +13,30 @@ router.get('/', async (req, res) => {
             readyInMinutes, pricePerServingMin, pricePerServingMax, pricePerServing, minTotalPrice , 
             maxTotalPrice, totalPrice, calories, minCalories, maxCalories } = req.query;
 
-        // Construct base query to fetch recipes
+        // base query be recipes table
         let baseQuery = {
             include: [],
         };
 
-        // Check if search query is provided and is a valid string
-        if (query) {
+       if (query) {
             baseQuery.where = {
                 [Sequelize.Op.or]: [
                     { title: { [Sequelize.Op.iLike]: `%${query}%` } },
-                    { summary: { [Sequelize.Op.iLike]: `%${query}%` } } // Add this condition for summary
+                    { summary: { [Sequelize.Op.iLike]: `%${query}%` } } 
                 ]
             };
         }
 
         if (cuisine) {
-            const cuisinesArray = cuisine.split(',').map(c => c.trim()); // Split the cuisines string by comma and trim whitespace
-            // Add join with cuisines table only if cuisine parameter is provided
+            const cuisinesArray = cuisine.split(',').map(c => c.trim()); 
             baseQuery.include.push({
                 model: Cuisines,
                 through: {
                     model: RecipeCuisines,
-                    attributes: [] // To exclude join table attributes
+                    attributes: [] 
                 },
                 where: {
-                    cuisine_name: { [Sequelize.Op.in]: cuisinesArray } // Use Sequelize.Op.in to match multiple cuisines, i.e, OR
+                    cuisine_name: { [Sequelize.Op.in]: cuisinesArray }
                 }
             });
         }
@@ -86,16 +84,13 @@ router.get('/', async (req, res) => {
             });
         }
 
-       // Check if includeTips filter is provided and handle accordingly
         if (includeTips !== undefined) {
             if (includeTips === "true") {
-                // Filter recipes that have at least one tip
                 baseQuery.include.push({
                     model: Tips,
                     required: true 
                 });
             } else if (includeTips === "false") {
-                // Subquery to filter out recipes without any tips
                 baseQuery.where = {
                     recipe_id: {
                         [Sequelize.Op.notIn]: sequelize.literal(`(
@@ -129,7 +124,6 @@ router.get('/', async (req, res) => {
         }
 
         if (smartPointsMin && smartPointsMax) {
-            // Filter by a range of smart points
             baseQuery.where = {
                 ...baseQuery.where,
                 weight_watcher_smart_points: {
@@ -137,7 +131,6 @@ router.get('/', async (req, res) => {
                 }
             };
         } else if (smartPointsMin) {
-            // Filter by minimum smart points
             baseQuery.where = {
                 ...baseQuery.where,
                 weight_watcher_smart_points: {
@@ -145,7 +138,6 @@ router.get('/', async (req, res) => {
                 }
             };
         } else if (smartPointsMax) {
-            // Filter by maximum smart points
             baseQuery.where = {
                 ...baseQuery.where,
                 weight_watcher_smart_points: {
@@ -153,7 +145,6 @@ router.get('/', async (req, res) => {
                 }
             };
         } else if (smartPoints !== undefined) {
-            // Filter by exact smart points if provided
             baseQuery.where = {
                 ...baseQuery.where,
                 weight_watcher_smart_points: smartPoints
@@ -197,7 +188,6 @@ router.get('/', async (req, res) => {
                 }
             };
         } else if (servingsMin) {
-            // Filter by minimum smart points
             baseQuery.where = {
                 ...baseQuery.where,
                 servings: {
@@ -205,7 +195,6 @@ router.get('/', async (req, res) => {
                 }
             };
         } else if (servingsMax) {
-            // Filter by maximum smart points
             baseQuery.where = {
                 ...baseQuery.where,
                 servings: {
@@ -213,7 +202,6 @@ router.get('/', async (req, res) => {
                 }
             };
         } else if (servings !== undefined) {
-            // Filter by exact smart points if provided
             baseQuery.where = {
                 ...baseQuery.where,
                 servings: servings
@@ -269,7 +257,6 @@ router.get('/', async (req, res) => {
         }
         // console.log("Executing query:", baseQuery);
 
-        // Fetch recipes from the database
         const TOLERANCE = 0.0001;
         const recipes = await Recipe.findAll(baseQuery);
         if(totalPrice !== undefined || minTotalPrice !== undefined || maxTotalPrice !== undefined){
@@ -278,20 +265,19 @@ router.get('/', async (req, res) => {
                 if (totalPrice !== undefined) {
                     return Math.abs(dbPrice - totalPrice) < TOLERANCE; 
                 } else if (minTotalPrice !== undefined && maxTotalPrice !== undefined) {
-                    return dbPrice >= minTotalPrice && dbPrice <= maxTotalPrice; // Filter by totalPrice range
+                    return dbPrice >= minTotalPrice && dbPrice <= maxTotalPrice; 
                 } else if (minTotalPrice !== undefined) {
-                    return dbPrice >= minTotalPrice; // Filter by minimum totalPrice
+                    return dbPrice >= minTotalPrice; 
                 } else if (maxTotalPrice !== undefined) {
-                    return dbPrice <= maxTotalPrice; // Filter by maximum totalPrice
+                    return dbPrice <= maxTotalPrice; 
                 }
-                return true; // If no totalPrice filter is provided, include all recipes
+                return true; 
             });
             res.json(filteredRecipes);
         }
         else{
             res.json(recipes);
         }
-        // Send filtered results as JSON response
     } catch (error) {
         console.error("Error searching recipes:", error);
         res.status(500).json({ error: "Internal server error" });

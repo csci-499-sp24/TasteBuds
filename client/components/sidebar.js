@@ -9,7 +9,16 @@ function Sidebar() {
     signOut();
   };
   return (
+  <div>
+      <div>
+      {/* Sidebar navigation */}
+      <input type="checkbox" id="check" />
+      <label htmlFor="check">
+        <i className="fas fa-bars" id="btn"></i>
+        <i className="fas fa-times" id="cancel"></i>
+      </label>
     <div className="sidebar">
+
       <header>TasteBuds</header>
       <ul>
         <li><Link href="/home"><i className="fas fa-home"></i>Home</Link></li>  
@@ -34,6 +43,8 @@ function Sidebar() {
         <li><Link href="/login"><i className="fas fa-sign-in-alt"></i>Login</Link></li>
       )}
       </ul>
+    </div>
+    </div>
     </div>
   );
 }

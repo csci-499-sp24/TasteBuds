@@ -1,8 +1,14 @@
 .hidden {
     display: none;
-  }
+}
   
-  .dropdown-menu {
+.dropdown-menu {
     display: block;
-  }
+}
+
+.comments-box {
+  padding: 10%;
+}
+
+
   

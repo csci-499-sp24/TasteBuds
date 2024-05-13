@@ -53,11 +53,6 @@ const Recipe = () => {
 
   return (
     <div className = {styles.mainContainer}>
-      <input type="checkbox" id="check" /> 
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i> 
-        <i className="fas fa-times" id="cancel"></i> 
-      </label>
       <Sidebar /> 
       <div className= {styles.backgroundImage}>
         <div className={styles.regularTextCenter}>{recipe.title}</div> 
