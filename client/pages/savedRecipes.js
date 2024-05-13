@@ -6,7 +6,6 @@ import Sidebar from "../components/sidebar.js";
 import { auth } from '../firebase/firebaseConfig';
 import SavedRecipeBox from '@/components/savedRecipeBox';
 import axios from 'axios';
-import Sidebar from '../components/sidebar.js';
 
 export default function SavedRecipes() {
   const { currentUser } = useAuth();
