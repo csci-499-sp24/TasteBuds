@@ -23,13 +23,14 @@ const CommentForm = ({ recipeId }) => {
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/${recipeId}`);
-        const commentsWithUserData = await Promise.all(response.data.map(async (comment) => {
-          const userData = await fetchUserData(comment.firebase_user_id);
-          console.log('userData:', userData); // Log userData
-          return { ...comment, userData };
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/${recipeId}`);
+          const commentsWithUserData = await Promise.all(response.data.map(async (comment) => {
+            const userData = await fetchUserData(comment.firebase_user_id);
+            console.log("firebase_user_id:",comment.firebase_user_id);
+            console.log('userData:', userData); // print userData
+            return { ...comment, userData };
         }));
-        console.log('commentsWithUserData:', commentsWithUserData); // Log comments with UserData
+        console.log('commentsWithUserData:', commentsWithUserData); // print comments with UserData
         setComments(commentsWithUserData);
       } catch (error) {
         console.error('Error fetching comments:', error);
@@ -87,7 +88,6 @@ const CommentForm = ({ recipeId }) => {
 
       console.log('Comment submitted successfully:', response.data);
        
-      // Update comments state with the newly posted comment so the user dosen't need to refresh       
       const userData = await fetchUserData(userId);
 
       setComments(prevComments => [
@@ -111,10 +111,33 @@ const CommentForm = ({ recipeId }) => {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+    try{
+      const token = await auth.currentUser.getIdToken();
+      if (!token) {
+        console.error('User is not logged in.');
+        return;
+      }
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_SERVER_URL}/comments/${userId}/${commentId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log('Comment deleted successfully:', response.data);
+      setComments(prevComments => prevComments.filter(comment => comment.comment_id !== commentId));
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+    }
+    console.log('Deleting comment:', commentId);
+  };
+
+
+  if (!currentUser) {
+    return null;
+  }
+
   return (
     <div className="comments-box">
-      <br />
-
       <form onSubmit={handleSubmit}>
         <div class="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
             <div class="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
@@ -146,6 +169,7 @@ const CommentForm = ({ recipeId }) => {
                     {comment.userData.username}
                   </>
                 )}
+
                 {!comment.userData?.profilePic && (
                   <>
                     <img className="mr-2 w-6 h-6 rounded-full" src='/profpic.jpeg' alt={comment.userData?.username || 'No Username'}/>
@@ -165,31 +189,14 @@ const CommentForm = ({ recipeId }) => {
               </div>
 
               <button
-                id={`dropdownComment${comment.comment_id}Button`}
-                data-dropdown-toggle={`dropdownComment${comment.comment_id}`}
-                class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                type="button"
+                className="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 dark:text-gray-400 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                onClick={() => handleDeleteComment(comment.comment_id)} 
               >
-                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
-                      <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z"/>
-                  </svg>
-                <span class="sr-only">Comment settings</span>
+                <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M3 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm10 14H3V5h10zm-8-7h2v6H5zm4 0h2v6h-2z"/>
+                </svg>
+                <span className="sr-only">Delete comment</span>
               </button>
-
-              <div id={`dropdownComment${comment.comment_id}`} // Unique id for each dropdown
-                className="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                <ul className="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby={`dropdownMenuIconHorizontalButton${comment.comment_id}`}>
-                  <li>
-                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
-                  </li>
-                  <li>
-                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
-                  </li>
-                  <li>
-                    <a href="#" className="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
-                  </li>
-                </ul>
-              </div>
               
             </footer>
             <p class="text-gray-500 dark:text-gray-400">

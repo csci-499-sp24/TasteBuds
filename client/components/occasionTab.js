@@ -14,13 +14,13 @@ const OccasionTab = ({ handleListboxChange, triggerFetch }) => {
           throw new Error('Failed to fetch occasions');
         }
         const data = await response.json();
-        setOccasions(data); // Set the fetched occasions in state
+        setOccasions(data); 
       } catch (error) {
         console.error('Error fetching occasions:', error);
       }
     };
 
-    fetchOccasions(); // Call fetchOccasions function when the component mounts
+    fetchOccasions(); 
   }, []);
 
 
@@ -28,8 +28,8 @@ const OccasionTab = ({ handleListboxChange, triggerFetch }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') {
-        triggerFetch(); // Trigger fetch here
-        event.stopPropagation(); // Prevent event from bubbling up
+        triggerFetch(); 
+        event.stopPropagation(); 
       }
     };
 

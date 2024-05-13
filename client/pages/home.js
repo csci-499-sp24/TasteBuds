@@ -80,15 +80,19 @@ function Homepage() {
 
   return (
     <div>
-      <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-      <Sidebar />
+      <div>
+        {/* Sidebar navigation */}
+        <input type="checkbox" id="check" />
+        <label htmlFor="check">
+          <i className="fas fa-bars" id="btn"></i>
+          <i className="fas fa-times" id="cancel"></i>
+        </label>
+
+        <Sidebar />
+      </div>
       <section className='bg-home'>
         <div id="div-center" className="head">
-          Discover Recipes
+          <span style={{color: '#F57C00', textShadow: '1px 1px 1px #757575'}}>Discover Recipes</span>
           <div className="recipe-box-container" style={{ display: 'flex'}}>
           {/* RecipeBox component*/}
             {randomRecipe.map((recipe, index) => (
@@ -102,8 +106,8 @@ function Homepage() {
           */}
           </div>
           {/* Fetches a new recipe  after clicking on button*/}
-          <Button onClick={handleGetNewRecipe} loading={loading} 
-          color={loading ? 'default' : 'warning'} variant="solid" size="lg">
+          <Button onClick={handleGetNewRecipe} loading={loading}
+          className={loading ? 'default' : 'bg-[#f57c00] text-[#212121] border-[#ff5252]'} variant="solid" size="lg" >
             {loading ? 'Fetching New Recipes...' : 'Get New Recipes'}
           </Button>
         </div>
@@ -115,8 +119,7 @@ function Homepage() {
         background-size: cover;
         height: 100vh;
         overflow-y: auto;
-      }
-        
+      }        
       `}</style>
     </div>
   );

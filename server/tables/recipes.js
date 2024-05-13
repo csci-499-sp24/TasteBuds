@@ -3,7 +3,6 @@
 module.exports = function (sequelize, DataTypes) {
 /* --- MODELS and RELATIONSHP ---- */
 
-// Define Recipe model that mirrors the structure of Recipes table
 /* RECIPE */
 const Recipe = sequelize.define('Recipe', {
     recipe_id: {
@@ -59,7 +58,6 @@ const Recipe = sequelize.define('Recipe', {
     totalPrice: {
         type: DataTypes.VIRTUAL,
         get() {
-            // Calculate total price based on servings and price_per_serving
             return this.getDataValue('servings') * this.getDataValue('price_per_serving') / 100;
         },
         set(value) {

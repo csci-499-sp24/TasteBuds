@@ -152,7 +152,7 @@ async function main() {
 //         GROUP BY cuisine_name
 //         ORDER BY recipe_count
 //         OFFSET 2
-//         LIMIT ${count};`, // ignore the lowest cuisine thier is no more of it  // OFFSET 1  -- Skip the first result
+//         LIMIT ${count};`, 
 
 //         { type: QueryTypes.SELECT }
 //     );
