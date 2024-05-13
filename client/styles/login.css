@@ -1,5 +1,5 @@
-.bg{
-  background: url("../public/bg2.jpg") no-repeat;
+.bg-login{
+  background: url("../public/sigin.jpg") no-repeat;
   background-position: center;
   background-size: cover;
   height: 100vh;
@@ -49,7 +49,7 @@ label {
     margin-top: 15px;
     margin-bottom: 15px;
     border: none;
-    color: white;
+    color: #212121;
     cursor: pointer;
     background-color: #4CAF50;
     width: 100%;
@@ -63,10 +63,10 @@ label {
 }
 
 .submit{
-  background-color: #4CAF50;
+  background-color: #F57C00;
 }
 
 .sign-up{
   text-decoration: none;
-  color: #4CAF50;
+  color: #F57C00;
 }

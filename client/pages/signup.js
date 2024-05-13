@@ -45,7 +45,7 @@ const Registration = () => {
       <div>
         <Sidebar/>
       </div>
-      <div className = "bg"></div>
+      <div className = "bg-login"></div>
       <div className="main">
         <h3>Sign Up</h3>
         <form onSubmit={RegistrationHandler}>

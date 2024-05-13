@@ -36,7 +36,7 @@ const Login = () => {
       <div>
         <Sidebar/>
       </div>
-      <div className = "bg"></div>
+      <div className = "bg-login"></div>
       <div className="main">
         <h3>Login</h3>
         <form onSubmit={lognIn}>

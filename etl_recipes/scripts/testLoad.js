@@ -98,7 +98,7 @@ async function main() {
             // let j = 60040; 
             // let j = 600010;
             // let j  = 638060, 639060, 636000, 
-            let j  = 640228;
+            let j  = 640981;
             let recipeLt2 = [];
             for(let i = j; recipeLt2.length <= 20;i++){
                 let exitsRecipe = await Recipe.findOne({ where: { recipe_id: i} });
@@ -106,6 +106,7 @@ async function main() {
                     recipeLt2.push(i);
                 }
             }
+            recipeLt2.push(640942);
             
             for (const recipe of recipeLt2) {
                 // const detailApiUrl = `https://api.spoonacular.com/recipes/informationBulk?ids=${recipe.id}&includeIngredients=true&includeInstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=${process.env.SPOON_RECIPES_API_KEY}`;
@@ -151,7 +152,7 @@ async function main() {
 //         GROUP BY cuisine_name
 //         ORDER BY recipe_count
 //         OFFSET 2
-//         LIMIT ${count};`, // ignore the lowest cuisine thier is no more of it  // OFFSET 1  -- Skip the first result
+//         LIMIT ${count};`, 
 
 //         { type: QueryTypes.SELECT }
 //     );

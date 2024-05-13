@@ -26,17 +26,6 @@
   margin: auto;
 }
 
-.recipe-container {
-  flex: 3;
-  margin-left: 5px; /* Add some top margin */
-
-}
-
-.recipe-row {
-  display: flex;
-  flex-wrap: wrap;
-}
-
 .container {
   display: flex;
   margin-top: 20px; 
@@ -45,6 +34,17 @@
   align-items: flex-start; 
   z-index: 1;
   position:relative;
+}
+
+
+.recipe-container {
+  flex: 1;
+  margin-left: 50px; 
+}
+
+.recipe-row {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .listbox-wrapper {

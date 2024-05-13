@@ -1,12 +1,11 @@
 const { transformRecipeData } = require('./transform');
 const { fetchRecipesFromSource } = require('./extract');
-// const dummyApiResponse = require('./dummyApiResponse'); // Import dummy API response here
+// const dummyApiResponse = require('./dummyApiResponse'); 
 const URL = 'https://api.spoonacular.com/recipes/informationBulk?ids=7,11,12,71826,975070&includeIngredients=true&includeinstructions=true&addRecipeInformation=true&includeNutrition=true&apiKey=666e4501970a4b5881385974bb528c58';
 
-let extactedRecipe; // Declare a variable to store the fetched recipe data
+let extactedRecipe; 
 
 beforeAll(async () => {
-  // Fetch recipes from the API and store the data in extactedRecipe variable
   extactedRecipe = await fetchRecipesFromSource(URL);
 });
 
@@ -18,7 +17,6 @@ test('TEST 1: number of Recipe Response', () => {
 
 test('TEST 2: Basic Recipe Info', async () => { 
     const transformedRecipes = transformRecipeData(extactedRecipe); 
-  // 1st recipe - info for the Recipe table
     const firstRecipe = transformedRecipes[0].recipe;
     expect(firstRecipe.recipe_id).toEqual(7);
     expect(firstRecipe.title).toEqual("Tomato & Anchovies With Bread Crumbs, Basil & Red Onion   Recip");

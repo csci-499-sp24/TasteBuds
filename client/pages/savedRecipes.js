@@ -100,24 +100,26 @@ export default function SavedRecipes() {
       <div>
         <Sidebar />
       </div>
-      <section className='bg'>
-      <div className="head">
-      <h1>Saved Recipes</h1>
-      <div style={{display: "flex"}}>
-        {savedRecipes ? (
-          savedRecipes.map((recipe, index) => (
-            <SavedRecipeBox 
-              key={index} 
-              recipe={recipe}
-              onDelete={() => deleteRecipe(recipe.recipeId)}
-            />
-          ))
-        ) : (
-          <li>No recipes found</li>  
-        )}
+       
+      <div className='bg-saved-recipe'>
+        <div className="hd-saved-recipe ">
+          <h1 className="h1-saved">Saved Recipes</h1>
+            <div className= "saved-recipe-container" style={{display: "flex"}}>
+              {savedRecipes ? (
+                savedRecipes.map((recipe, index) => (
+                  <SavedRecipeBox 
+                    key={index} 
+                    recipe={recipe}
+                    onDelete={() => deleteRecipe(recipe.recipeId)}
+                  />
+                ))
+              ) : (
+                <li>No recipes found</li>  
+              )}
+            </div>
+        </div>
       </div>
-      </div>
-      </section>
     </div>
+
   );
 }
