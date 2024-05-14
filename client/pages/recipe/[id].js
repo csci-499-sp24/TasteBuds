@@ -7,6 +7,7 @@ import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
 import CommentForm from '../../components/CommentForm';
 import StarsPopup from '@/components/starpopup';
+import RecipeSummary from '../../components/RecipeSummary';
 //import { useAuth } from '../firebase/userAuthContext';
 //import { auth } from '../firebase/firebaseConfig';
 
@@ -62,20 +63,16 @@ const Recipe = () => {
           <Sidebar />
         </div>
       </div>
-        <div className={styles.regularTextCenter}>{recipe.title}</div> 
-        <div style={{ margin: 'auto', maxWidth: '500px' }}> 
-          <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
-        </div>
+        <div className={styles.recipeSummaryContainer}>
+          <RecipeSummary recipe={recipe} id={id} />
+        </div> 
         {/* {(firebaseUserId == null) => {
 
         }} */}
         <div className="stars-container">
           <StarsPopup parent_recipe_id={id}/>
         </div>
-        <div className={styles.recipeSummary}>
-          <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
-          {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
-        </div>
+        
         {/*
         {recipe.totalPrice !== undefined && (
             <p>Total Price: {recipe.totalPrice}</p> 

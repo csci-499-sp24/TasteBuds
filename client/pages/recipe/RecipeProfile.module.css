@@ -30,3 +30,8 @@
     text-align: center;
     background-color: white;
 }
+
+.recipeSummaryContainer {
+  position: relative; 
+  margin-left: 150px; 
+}
