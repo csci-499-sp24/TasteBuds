@@ -11,7 +11,7 @@
   left:-250px;
   background: #161616;
   transition: all .5s ease;
-  z-index: 100;
+  z-index: 1000;
 }
 .sidebar header{
   font-size: 22px;
@@ -39,6 +39,7 @@ ul li:hover a{
 }
 #check{
   display: none;
+  position: fixed;
 }
 label #btn,label #cancel{
   position: absolute;
@@ -53,8 +54,6 @@ label #btn{
   color: white;
   padding: 6px 12px;
   transition: all .5s;
-  position: absolute;
-  z-index:50;
 }
 label #cancel{
   z-index: 1111;
@@ -64,6 +63,7 @@ label #cancel{
   color: #0a5275;
   padding: 4px 9px;
   transition: all .5s ease;
+  
 }
 #check:checked ~ .sidebar{
   left: 0;

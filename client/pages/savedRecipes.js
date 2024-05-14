@@ -96,11 +96,12 @@ export default function SavedRecipes() {
 
   return (
     <div>
-      <div>
-        <Sidebar />
-      </div>
-       
       <div className='bg-saved-recipe'>
+      <div class="relative h-5 w-5 ...">
+        <div class="absolute left-0 top-0 h-16 w-16 ...">
+          <Sidebar />
+        </div>
+      </div>
         <div className="hd-saved-recipe ">
           <h1 className="h1-saved">Saved Recipes</h1>
             <div className= "saved-recipe-container" style={{display: "flex"}}>
