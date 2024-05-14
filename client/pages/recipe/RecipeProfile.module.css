@@ -1,33 +1,31 @@
-.mainContainer{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.mainContainer {
+    display: grid;
+    grid-template-rows: auto 1fr auto; /* Set up grid rows */
     height: 100vh; /* Ensure the container takes up the full height of the viewport */
-}
-
-.backgroundImage{
     background: url("https://wallpapercave.com/wp/wp3138532.jpg") no-repeat;
     background-position: center;
     background-size: cover;
-    height: 100vh;
     transition: all .5s;
-}
-
-.ingredientContainer{
+  }
+  
+  .contentContainer {
+    display: grid;
+    grid-template-columns: auto 1fr; /* Set up grid columns */
+  }
+  
+  .ingredientContainer, .recipeSummary {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.recipeSummary{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center; 
-    background-color: white;
-}
-
-.regularTextCenter{
+  }
+  
+  .regularTextCenter, .recipeSummary {
     text-align: center;
     background-color: white;
-}
+    
+  }
+  
+  .recipeSummaryContainer {
+    position: relative; /* Set position to relative */
+    margin-left: 150px; /* Adjust left margin as needed */
+  }
