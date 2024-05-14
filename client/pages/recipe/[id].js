@@ -56,8 +56,12 @@ const Recipe = () => {
 
   return (
     <div className = {styles.mainContainer}>
-      <Sidebar /> 
       <div className= {styles.backgroundImage}>
+      <div class="relative h-5 w-5 ...">
+        <div class="absolute left-0 top-0 h-16 w-16 ...">
+          <Sidebar />
+        </div>
+      </div>
         <div className={styles.regularTextCenter}>{recipe.title}</div> 
         <div style={{ margin: 'auto', maxWidth: '500px' }}> 
           <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 

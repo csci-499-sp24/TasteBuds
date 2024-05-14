@@ -36,7 +36,6 @@ function Sidebar() {
                 <i className="fas fa-user"></i>Profile
               </Link>
             </li>
-        <li><a href="#"><i className="fas fa-cog"></i>User Settings</a></li>
         <li><a href="#" onClick={handleSignOut}><i className="fas fa-sign-out-alt"></i>Sign Out</a></li>
         </>)}
         {!currentUser && (
