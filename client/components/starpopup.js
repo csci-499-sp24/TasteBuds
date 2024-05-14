@@ -11,6 +11,7 @@ function StarsPopup({parent_recipe_id}) {
   const {isOpen, onOpen, onOpenChange} = useDisclosure();
   const [myRating, setMyRating] = useState(0)
   const [avgRating, setAvgRating] = useState(0)
+  const [userRating, setUserRating] = useState(0)
   const getRating = (my_rating) => {
     setMyRating(my_rating)
   }
@@ -24,7 +25,7 @@ function StarsPopup({parent_recipe_id}) {
         `${process.env.NEXT_PUBLIC_SERVER_URL}/get_avg_rating?recipe_id=${parent_recipe_id}`,
       )
       const data = await res.json(); // Parse response JSON data
-      console.log(`Average rating data: ${data["avg_rating"]}`)
+      //console.log(`Average rating data: ${data["avg_rating"]}`)
       //https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
       setAvgRating(Math.round((data["avg_rating"] + Number.EPSILON) * 100) / 100)
     } catch(error) {
@@ -32,19 +33,35 @@ function StarsPopup({parent_recipe_id}) {
     }
   }
   getAvgRating()
+  const getUserRating = async () => {
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_URL}/get_specific_rating?firebase_user_id=${firebaseUserId}&recipe_id=${parent_recipe_id}`,
+      )
+      const data = await res.json(); // Parse response JSON data
+      //console.log(`Average rating data: ${data["user_rating"]}`)
+      //https://stackoverflow.com/questions/11832914/how-to-round-to-at-most-2-decimal-places-if-necessary
+      // console.log("getAvgRating says this about the user:")
+      // console.log(JSON.stringify(data))
+      setUserRating(Math.round((data["rating"] + Number.EPSILON) * 100) / 100)
+    } catch(error) {
+      console.error("Error finding user rating info:", error);
+    }
+  }
+  getUserRating()
   const updateRatings = async () => {
     try {
       //const token = await currentUser.getIdToken();
       if (firebaseUserId == null) {
-        console.log("no user uid given")
+        //console.log("no user uid given")
         throw new Error('You are not logged in')
       }
       if (myRating == 0) {
-        console.log("bad rating")
+        //console.log("bad rating")
         throw new Error('Rating cannot be 0 (maybe you didnt catch it)')
       }
       if (parent_recipe_id == null) {
-        console.log("no recipe uid given")
+        //console.log("no recipe uid given")
         throw new Error('no Recipe ID found')
       }
       const response = await fetch(
@@ -57,6 +74,23 @@ function StarsPopup({parent_recipe_id}) {
       }
     } catch (error) {
       console.error("Error updating rating info:", error);
+    }
+  }
+
+  const yourRatingIs = () => {
+    if (userRating > 0) {
+      return (
+        <ModalBody>
+          You gave this recipe a rating of {userRating}.
+        </ModalBody>
+      )
+    }
+    else {
+      return (
+        <ModalBody>
+          You have not yet given this recipe a rating.
+        </ModalBody>
+      )
     }
   }
 
@@ -98,11 +132,14 @@ function StarsPopup({parent_recipe_id}) {
               <ModalBody>
                 The recipe average rating is {avgRating}.
               </ModalBody>
+              {
+                yourRatingIs()
+              }
               <ModalBody>
                 {
                   //https://stackoverflow.com/questions/65895361/pass-callback-function-from-parent-component-to-child-component-react
                 }
-                <Stars parentRating={myRating} onRatingChange={(value) => {console.log(`rating change: ${value}`); setMyRating(value)}}/> {/* passing a function to grab the rating value from child */}
+                <Stars parentRating={myRating} onRatingChange={(value) => {setMyRating(value)}}/> {/* passing a function to grab the rating value from child */}
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>
