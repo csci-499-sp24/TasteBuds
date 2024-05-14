@@ -41,7 +41,7 @@ function Stars({parentRating, onRatingChange}){ //getRating is passed from paren
                   name="rating"
                   value={currentRating}
                   onChange={() => {
-                    console.log(`stars.js: current rating is: ${currentRating}`)
+                    //console.log(`stars.js: current rating is: ${currentRating}`)
                     setRating(currentRating);
                     onRatingChange(currentRating);
                     //updateRatings()

@@ -144,9 +144,9 @@ app.get('/add_rating', async (req, res) => {
                 recipe_id: recipe_id
             }
         })
-        console.log(rating_exists)
+        //console.log(rating_exists)
         if (rating_exists > 0) { // if duplicate exists, overwrite old one
-            console.log("THERE IS A RATING; OVERWRITING")
+            //console.log("THERE IS A RATING; OVERWRITING")
             this_rating = await Ratings.findOne({
                 where: {
                     firebase_user_id: firebase_user_id,
@@ -189,7 +189,9 @@ app.get('/get_avg_rating', async (req, res) => {
             return 0
         }
         all_ratings = await Ratings.findAll({
-            recipe_id: recipe_id,
+            where: {
+                recipe_id: recipe_id,
+            }
         })
         let total_rating = 0
         let rating_count = 0
@@ -204,8 +206,49 @@ app.get('/get_avg_rating', async (req, res) => {
     }
 })
 
-// Finds all ratings for a given user.
-// example call: localhost/get_user_ratings?firebase_user_id=123
+// Finds a very specific rating.
+// example call: localhost/get_specific_rating?firebase_user_id=123&recipe_id=13
+app.get('/get_specific_rating', async (req, res) => {
+    try {
+        const {firebase_user_id, recipe_id} = req.query;
+        //console.log(firebase_user_id, recipe_id, rating)
+        // check if this rating exists
+        //console.log(`Get specific rating: user id is: ${firebase_user_id}`)
+        const rating_exists = await Ratings.count({
+            where: {
+                firebase_user_id: firebase_user_id,
+                recipe_id: recipe_id
+            }
+        })
+        if (rating_exists == 0) { // if no such rating exists
+            res.status(200).json({"user_rating": -1})
+            return 0
+        }
+        //rating found, eliminate from table
+        this_rating = await Ratings.findOne({
+            where: {
+                firebase_user_id: firebase_user_id,
+                recipe_id: recipe_id,
+            }
+        })
+        //console.log(JSON.stringify(this_rating))
+        res.status(200).json(this_rating)
+    } catch (error) {
+        console.error("Error removing rating:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+app.get('/get_every_rating', async (req, res) => {
+    try {
+        all_ratings = await Ratings.findAll({
+        })
+        res.status(200).json(all_ratings)
+    } catch (error) {
+        console.error("Error removing rating:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
 
 // Removes a rating.
 // example call: localhost/remove_rating?firebase_user_id=123&recipe_id=13
@@ -227,8 +270,10 @@ app.get('/remove_rating', async (req, res) => {
         }
         //rating found, eliminate from table
         this_rating = await Ratings.findOne({
-            firebase_user_id: firebase_user_id,
-            recipe_id: recipe_id,
+            where: {
+                firebase_user_id: firebase_user_id,
+                recipe_id: recipe_id,
+            }
         })
         this_rating.destroy()
         res.status(200).json({"response": 
