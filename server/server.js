@@ -189,7 +189,9 @@ app.get('/get_avg_rating', async (req, res) => {
             return 0
         }
         all_ratings = await Ratings.findAll({
-            recipe_id: recipe_id,
+            where: {
+                recipe_id: recipe_id,
+            }
         })
         let total_rating = 0
         let rating_count = 0
@@ -268,8 +270,10 @@ app.get('/remove_rating', async (req, res) => {
         }
         //rating found, eliminate from table
         this_rating = await Ratings.findOne({
-            firebase_user_id: firebase_user_id,
-            recipe_id: recipe_id,
+            where: {
+                firebase_user_id: firebase_user_id,
+                recipe_id: recipe_id,
+            }
         })
         this_rating.destroy()
         res.status(200).json({"response": 
