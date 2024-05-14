@@ -9,8 +9,7 @@ const RecipeSummary = ({ recipe }) => {
         <Image src={recipe.image} alt={recipe.title} />
       </div>
       <div className="stars-container">
-        {/* Replace StarsPopup with your NextUI equivalent */}
-        <StarsPopup />
+        <StarsPopup parent_recipe_id={id}/>
       </div>
       <div>
         <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
