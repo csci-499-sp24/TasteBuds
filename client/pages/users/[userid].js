@@ -132,11 +132,6 @@ export default function UserProfile() {
     <div>
     <section className='bg'>
     <div className={styles.mainContainer}>
-    <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
       <Sidebar />
       <section className={styles.profileLayout}>
         <div className={styles.profileBox}>
