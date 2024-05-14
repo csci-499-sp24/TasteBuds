@@ -7,7 +7,12 @@ const RecipeSummary = ({ recipe, id }) => {
       <div>{recipe.title}</div>
       <Divider className="my-4" />
       <div style={{ margin: 'auto', maxWidth: '700px' }}>
-        <Image src={recipe.image} alt={recipe.title} />
+        <Image 
+        src={recipe.image} 
+        alt={recipe.title}  
+        width={900}
+        radius
+        />
       </div>
       <Divider className="my-4" />
       <div>
