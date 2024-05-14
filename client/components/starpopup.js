@@ -70,6 +70,9 @@ function StarsPopup({parent_recipe_id}) {
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1">You must login first before you can rate.</ModalHeader>
+                  <ModalBody>
+                    This recipe's average rating is {avgRating}.
+                  </ModalBody>
                   <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
                       Close
