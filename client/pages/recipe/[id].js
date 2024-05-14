@@ -64,7 +64,7 @@ const Recipe = () => {
         </div>
       </div>
         <div className={styles.recipeSummaryContainer}>
-          <RecipeSummary recipe={recipe} id={id} />
+          <RecipeSummary recipe={recipe} id={id} instructions={instructions} />
         </div> 
         {/* {(firebaseUserId == null) => {
 
@@ -80,18 +80,6 @@ const Recipe = () => {
           <IngredientCard ingredients={ingredients} />
         </div>
         {/* Display the ingredientCard component with ingredients data */}
-        <div className={styles.regularTextCenter}>Instructions</div> {/* Recipe Instructions are rendered when the condition is met/available */}
-        <div className={styles.recipeSummary}>
-        {instructions.length > 0 ? (
-          <ol>
-            {instructions.map((instruction, index) => (
-              <li key={index}>{instruction.step}</li> // Map over instructions and render each one as a list item
-            ))}
-          </ol>
-        ) : (
-          <p>No instructions available</p> // Else this render when ther are no instructions
-        )}
-        </div>
         <CommentForm recipeId={id} />
       </div>
     </div>
