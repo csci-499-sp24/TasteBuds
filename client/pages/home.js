@@ -83,7 +83,7 @@ function Homepage() {
       <div>
         <Sidebar/>
       </div>
-      <section className='bg'>
+      <section className='bg-home'>
         <div id="div-center" className="head">
           <span style={{color: '#F57C00', textShadow: '1px 1px 1px #757575'}}>Discover Recipes</span>
           <div className="recipe-box-container" style={{ display: 'flex'}}>

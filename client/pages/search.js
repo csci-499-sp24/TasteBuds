@@ -111,11 +111,13 @@ function Search() {
   
   return (
     <div>
-      <div>
-        <Sidebar />
-      </div>
       {/* Main content section */}
       <section className='main-content'>
+      <div class="relative h-5 w-5 ...">
+        <div class="absolute left-0 top-0 h-16 w-16 ...">
+          <Sidebar />
+        </div>
+      </div>
         <div id="div-center" className="search-wrapper">
           <br/>    
           <Input
