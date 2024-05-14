@@ -208,7 +208,7 @@ app.get('/get_avg_rating', async (req, res) => {
 // example call: localhost/get_user_ratings?firebase_user_id=123
 
 // Removes a rating.
-// example call: localhost/add_rating?firebase_user_id=123&recipe_id=13
+// example call: localhost/remove_rating?firebase_user_id=123&recipe_id=13
 app.get('/remove_rating', async (req, res) => {
     try {
         const {firebase_user_id, recipe_id} = req.query;

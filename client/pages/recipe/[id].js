@@ -7,6 +7,8 @@ import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
 import CommentForm from '../../components/CommentForm';
 import StarsPopup from '@/components/starpopup';
+//import { useAuth } from '../firebase/userAuthContext';
+//import { auth } from '../firebase/firebaseConfig';
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
@@ -15,6 +17,7 @@ const Recipe = () => {
   const [loading, setLoading] = useState(true); // state tracks load or not
   const router = useRouter(); // Initialize useRouter hook to access router object
   const { id } = router.query; // Get the id from the router query
+  //const firebaseUserId = auth.currentUser ? auth.currentUser.uid : null;
   
 
   useEffect(() => {
@@ -64,8 +67,11 @@ const Recipe = () => {
         <div style={{ margin: 'auto', maxWidth: '500px' }}> 
           <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
         </div>
+        {/* {(firebaseUserId == null) => {
+
+        }} */}
         <div className="stars-container">
-          <StarsPopup />
+          <StarsPopup parent_recipe_id={id}/>
         </div>
         <div className={styles.recipeSummary}>
           <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>

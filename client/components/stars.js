@@ -3,7 +3,7 @@ import { useAuth } from '../firebase/userAuthContext';
 import { useRouter } from 'next/router';
 //import id from '../pages/recipe/[id]';
 
-function Stars(){ //getRating is passed from parent and gets the rating value
+function Stars({parentRating, onRatingChange}){ //getRating is passed from parent and gets the rating value
     const [rating, setRating] = useState(null)//rating is updated upon clicking in the stars popup window, so it should work?
     const [hover, setHover] = useState(null)
     const router = useRouter();
@@ -41,8 +41,9 @@ function Stars(){ //getRating is passed from parent and gets the rating value
                   name="rating"
                   value={currentRating}
                   onChange={() => {
+                    console.log(`stars.js: current rating is: ${currentRating}`)
                     setRating(currentRating);
-                    //getRating(currentRating);
+                    onRatingChange(currentRating);
                     //updateRatings()
                     //Commented out so it doesn't break existing code
                     //Tested it when uncommented it, it doesn't seem to do anything
