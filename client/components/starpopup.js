@@ -71,7 +71,7 @@ function StarsPopup({parent_recipe_id}) {
                 <>
                   <ModalHeader className="flex flex-col gap-1">You must login first before you can rate.</ModalHeader>
                   <ModalBody>
-                    This recipe's average rating is {avgRating}.
+                    The recipe average rating is {avgRating}.
                   </ModalBody>
                   <ModalFooter>
                     <Button color="danger" variant="light" onPress={onClose}>
@@ -96,7 +96,7 @@ function StarsPopup({parent_recipe_id}) {
             <>
               <ModalHeader className="flex flex-col gap-1">Give Your Rating</ModalHeader>
               <ModalBody>
-                This recipe's average rating is {avgRating}.
+                The recipe average rating is {avgRating}.
               </ModalBody>
               <ModalBody>
                 {
