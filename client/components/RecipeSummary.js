@@ -3,7 +3,7 @@ import StarsPopup from '@/components/starpopup';
 
 const RecipeSummary = ({ recipe, id, instructions }) => {
   return (
-    <Card shadow style={{ width: '600px', padding: '20px', textAlign: 'center' }}>
+    <Card shadow style={{ width: '900px', padding: '20px', textAlign: 'center' }}>
       <div style={{ 
         fontSize: '24px', 
         fontWeight: 'bold',
@@ -33,10 +33,10 @@ const RecipeSummary = ({ recipe, id, instructions }) => {
       </div>
       <Divider className="my-4" />
       <div style={{ 
-        fontSize: '24px', 
+        fontSize: '18px', 
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#f57c00'
+        color: '#212121'
       }}>
         Instructions
       </div>

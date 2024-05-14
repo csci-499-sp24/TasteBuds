@@ -34,6 +34,11 @@
 }
 
 .recipeSummaryContainer {
-  position: relative; 
-  margin-left: 150px; 
+  position: relative;
+  width: 100%; /* Adjust width as needed */
+  max-width: 900px; /* Set maximum width */
+  height: auto; /* Adjust height as needed */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
 }
