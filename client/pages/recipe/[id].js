@@ -69,10 +69,6 @@ const Recipe = () => {
         {/* {(firebaseUserId == null) => {
 
         }} */}
-        <div className="stars-container">
-          <StarsPopup parent_recipe_id={id}/>
-        </div>
-        
         {/*
         {recipe.totalPrice !== undefined && (
             <p>Total Price: {recipe.totalPrice}</p> 
