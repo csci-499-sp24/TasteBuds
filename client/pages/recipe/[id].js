@@ -7,6 +7,8 @@ import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
 import CommentForm from '../../components/CommentForm';
 import StarsPopup from '@/components/starpopup';
+//import { useAuth } from '../firebase/userAuthContext';
+//import { auth } from '../firebase/firebaseConfig';
 
 const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
@@ -15,6 +17,8 @@ const Recipe = () => {
   const [loading, setLoading] = useState(true); // state tracks load or not
   const router = useRouter(); // Initialize useRouter hook to access router object
   const { id } = router.query; // Get the id from the router query
+  //const firebaseUserId = auth.currentUser ? auth.currentUser.uid : null;
+  
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -23,10 +27,10 @@ const Recipe = () => {
         if (response.ok) {
           const data = await response.json(); 
           console.log(data); // Logging data from api 
-          setRecipe(data[0]); // data of recipe in array 0
-          const ingredientsData = data[0]?.Ingredients || []; // access ingredients array from data[0]
+          setRecipe(data["recipe_data"]); // data of recipe in array 0
+          const ingredientsData = data["recipe_data"]?.Ingredients || []; // access ingredients array from data[0]
           setIngredients(ingredientsData); // set ingredients in state
-          setInstructions(data[1]); // in the data instructions are array 1
+          setInstructions(data["instruction_data"]); // in the data instructions are array 1
           setLoading(false); 
         } else {
           throw new Error("Failed to fetch recipe"); // Throw an error if fetching the recipe data fails
@@ -62,8 +66,11 @@ const Recipe = () => {
         <div style={{ margin: 'auto', maxWidth: '500px' }}> 
           <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
         </div>
+        {/* {(firebaseUserId == null) => {
+
+        }} */}
         <div className="stars-container">
-          <StarsPopup />
+          <StarsPopup parent_recipe_id={id}/>
         </div>
         <div className={styles.recipeSummary}>
           <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
@@ -97,5 +104,8 @@ const Recipe = () => {
     </div>
   );
 };
-
+//exporting the recipe id value so that stars can get it
+//is that how it works?
+// const router = useRouter();
+// export const id = router.query;
 export default Recipe;

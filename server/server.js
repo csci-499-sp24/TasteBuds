@@ -116,6 +116,7 @@ const {
     WeightPerServing,
     CaloricBreakdown,
     Comments, 
+    Ratings,
 } = require("./tables/recipes.js")(sequelize, DataTypes);
 
 /*
@@ -128,6 +129,115 @@ Description: recipe_data.summary
 Ingredients: 
 Equipment: equipment_ids
 */
+
+// Adds a rating to the appropriate table.
+// example call: localhost/add_rating?firebase_user_id=123&recipe_id=13&rating=4
+app.get('/add_rating', async (req, res) => {
+    try {
+        let msg = "new rating"
+        const {firebase_user_id, recipe_id, rating} = req.query;
+        //console.log(firebase_user_id, recipe_id, rating)
+        // check if this rating already exists, since users should not make 2 ratings on the same recipe
+        const rating_exists = await Ratings.count({
+            where: {
+                firebase_user_id: firebase_user_id,
+                recipe_id: recipe_id
+            }
+        })
+        console.log(rating_exists)
+        if (rating_exists > 0) { // if duplicate exists, overwrite old one
+            console.log("THERE IS A RATING; OVERWRITING")
+            this_rating = await Ratings.findOne({
+                where: {
+                    firebase_user_id: firebase_user_id,
+                    recipe_id: recipe_id
+                }
+            })
+            this_rating.destroy()
+            msg = "overwrite"
+            // res.status(200).json({"response": 
+            // `Rating with user id ${firebase_user_id} and recipe id ${recipe_id} already exists`})
+            // return 0
+        }
+        //no duplicate, insert into table
+        new_rating = await Ratings.create({
+            firebase_user_id: firebase_user_id,
+            recipe_id: recipe_id,
+            rating: rating,
+        })
+        res.status(200).json({"response": 
+        `Successfully added a rating for user id ${firebase_user_id} and recipe id ${recipe_id} with rating value ${rating} (${msg})`})
+    } catch (error) {
+        console.error("Error adding rating:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+// Finds average rating of a recipe.
+// example call: localhost/get_avg_rating?recipe_id=13
+app.get('/get_avg_rating', async (req, res) => {
+    try {
+        const {recipe_id} = req.query;
+        const rating_exists = await Ratings.count({
+            where: {
+                recipe_id: recipe_id
+            }
+        })
+        console.log(rating_exists)
+        if (rating_exists == 0) { //no ratings for this recipe
+            res.status(200).json({"avg_rating": -1})
+            return 0
+        }
+        all_ratings = await Ratings.findAll({
+            recipe_id: recipe_id,
+        })
+        let total_rating = 0
+        let rating_count = 0
+        all_ratings.forEach((value) => {
+            total_rating += value.rating
+            rating_count += 1
+        })
+        res.status(200).json({"avg_rating": total_rating * 1.0 / rating_count})
+    } catch (error) {
+        console.error("Error getting avg rating:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
+
+// Finds all ratings for a given user.
+// example call: localhost/get_user_ratings?firebase_user_id=123
+
+// Removes a rating.
+// example call: localhost/remove_rating?firebase_user_id=123&recipe_id=13
+app.get('/remove_rating', async (req, res) => {
+    try {
+        const {firebase_user_id, recipe_id} = req.query;
+        //console.log(firebase_user_id, recipe_id, rating)
+        // check if this rating exists, since users should not remove nonexistent ratings
+        const rating_exists = await Ratings.count({
+            where: {
+                firebase_user_id: firebase_user_id,
+                recipe_id: recipe_id
+            }
+        })
+        if (rating_exists == 0) { // if no such rating exists
+            res.status(200).json({"response": 
+            `No rating with user id ${firebase_user_id} and recipe id ${recipe_id} found`})
+            return 0
+        }
+        //rating found, eliminate from table
+        this_rating = await Ratings.findOne({
+            firebase_user_id: firebase_user_id,
+            recipe_id: recipe_id,
+        })
+        this_rating.destroy()
+        res.status(200).json({"response": 
+        `Successfully removed a rating for user id ${firebase_user_id} and recipe id ${recipe_id}`})
+    } catch (error) {
+        console.error("Error removing rating:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+})
 
 // for some reason Express gets very worked up if this is above the block of text above
 // so I moved it down
@@ -203,7 +313,15 @@ app.get('/search_by_id', async (req, res) => {
         //console.log("printing the returned value to see what happens")
         //console.log(instruction_data.instruction_id)
         //console.log(JSON.parse(JSON.stringify(equipment_ids)))
-        res.status(200).json([recipe_data, recipe_ingrd_data, instruction_data, instr_length_data, weight_serving_id, calories_data]);
+        //res.status(200).json([recipe_data, recipe_ingrd_data, instruction_data, instr_length_data, weight_serving_id, calories_data]);
+        res.status(200).json({ //reduced usage of magic numjbers in the recipe data
+            recipe_data: recipe_data,
+            ingredients_data: recipe_ingrd_data,
+            instruction_data: instruction_data,
+            instruction_length: instr_length_data,
+            weight_serving_id: weight_serving_id,
+            calories: calories_data,
+        });
     } catch (error) {
         console.error("Error finding recipe by id:", error);
         res.status(500).json({ error: "Internal server error" });
