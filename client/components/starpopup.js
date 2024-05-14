@@ -93,6 +93,22 @@ function StarsPopup({parent_recipe_id}) {
       )
     }
   }
+  const avgRatingIs = () => {
+    if (avgRating > 0) {
+      return (
+        <ModalBody>
+          The recipe average rating is {avgRating}.
+        </ModalBody>
+      )
+    }
+    else {
+      return (
+        <ModalBody>
+          This recipe has no ratings yet.
+        </ModalBody>
+      )
+    }
+  }
 
   if (firebaseUserId == null) { //login before rating
     return (
@@ -129,9 +145,9 @@ function StarsPopup({parent_recipe_id}) {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Give Your Rating</ModalHeader>
-              <ModalBody>
-                The recipe average rating is {avgRating}.
-              </ModalBody>
+              {
+                avgRatingIs()
+              }
               {
                 yourRatingIs()
               }
