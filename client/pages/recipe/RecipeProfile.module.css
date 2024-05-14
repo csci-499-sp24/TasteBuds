@@ -2,7 +2,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh; /* Ensure the container takes up the full height of the viewport */
 }
 
 .backgroundImage{
@@ -10,7 +9,7 @@
     background-position: center;
     background-size: cover;
     height: 100vh;
-    transition: all .5s;
+    overflow-y: auto;
 }
 
 .ingredientContainer{

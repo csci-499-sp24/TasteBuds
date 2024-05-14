@@ -25,8 +25,8 @@ const DishTypeTab = ({ handleListboxChange, triggerFetch }) => {
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Enter') {
-        triggerFetch(); // Trigger fetch here
-        event.stopPropagation(); // Prevent event from bubbling up
+        triggerFetch(); 
+        event.stopPropagation();
       }
     };
 

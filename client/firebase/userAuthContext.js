@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  signOut,
 } from "firebase/auth";
 import { auth, firestore } from "./firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
@@ -63,7 +62,7 @@ const UserAuthContext = ({ children }) => {
 
   const signOut = async () => {
     try {
-      await signOut(auth);
+      await auth.signOut();
       setCurrentUser(null);
     } catch (error) {
       console.error("Error signing out:", error);
