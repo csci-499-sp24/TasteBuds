@@ -115,7 +115,8 @@ const Recipe = () => {
         */}
         {/* Display the ingredientCard component with ingredients data */}
         <div>
-          <CommentForm recipeId={id} />
+          {/* if the recipeId exists, displys */}
+          {recipe && <CommentForm recipeId={id} />}
         </div>
       </div>
     </div>
