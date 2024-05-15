@@ -1,4 +1,15 @@
 /* Container Styles */
+.bg{
+  background: url("https://www.mintahoe.com/wp-content/uploads/2017/02/freshfoodweb.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed; /* Set background attachment to fixed */
+  overflow-y: hidden;
+  width: 100%;
+  height: 110vh;
+  transition: all .5s;
+}
+
 .mainContainer {
   display: flex;
   flex-direction: column;

@@ -151,7 +151,7 @@ export default function UserProfile() {
 
   return (
     <div>
-      <section className='bg'>
+      <div className={styles.bg}>
         <div className={styles.mainContainer}>
           <Sidebar />
           <section className={styles.profileLayout}>
@@ -261,7 +261,7 @@ export default function UserProfile() {
             </div>
           )}
         </div>
-      </section>
+      </div>
     </div>
   );
 }
