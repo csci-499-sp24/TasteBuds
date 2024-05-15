@@ -202,7 +202,7 @@ export default function UserProfile() {
                     value={pantryInputValue}
                     onChange={(e) => setPantryInputValue(e.target.value)}
                     onKeyDown={(e) => handleKeyDown(e, pantryItems, setPantryItems, setPantryInputValue)}
-                    placeholder="Type pantry item and press 'Enter'"
+                    placeholder="Type pantry item"
                     className={styles.pantryInput}
                   />
                   {pantryInputValue && (
