@@ -5,6 +5,8 @@
   background-size: cover;
   height: 100%;
   overflow-y: auto;
+  width: 100%;
+  background-attachment: fixed; /* Set background attachment to fixed */
 }
 
 .search-wrapper {
