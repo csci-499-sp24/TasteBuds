@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Sidebar from "../components/sidebar";
-import { Image, Card, Divider} from "@nextui-org/react";
+import { Image, Card, Divider, Button} from "@nextui-org/react";
 
 function Homepage() {
   
@@ -66,7 +66,16 @@ function Homepage() {
               rate them and give your thoughts by commenting on the recipes here.
             </p>
             <Divider className="my-4" style={{ height: '4px', backgroundColor: '#FF5252' }} />
-            
+            <div style={{ 
+              fontSize: '18px', 
+              fontWeight: 'bold',
+              textAlign: 'center',
+              color: '#212121',
+              marginBottom: '20px', 
+              textShadow: 'none', 
+            }}>
+              What Are You Waiting For? Discover Here
+            </div>
           </Card>
         </div>
       </section>
