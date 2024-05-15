@@ -89,7 +89,7 @@ const RecipeBox = ({recipe}) => {
       </div>
       </CardBody>
       <Button onClick={viewRecipe}
-         className="bg-[#f57c00] text-[#212121] border-[#ff5252]" >View Recipe</Button>
+         className="bg-[#f57c00] text-white border-[#ff5252]" >View Recipe</Button>
     </Card>
   );
 }
