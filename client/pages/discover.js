@@ -1,7 +1,7 @@
-import { useState } from "react"; // React Hooks - for managing states of components
-import Link from "next/link";
+import React, { useState, useEffect } from 'react';
+import RecipeBox from '../components/RecipeBox';
+import Link from 'next/link';
 import Sidebar from "../components/sidebar";
-
 import {
   Card,
   CardHeader,
@@ -12,97 +12,110 @@ import {
 } from "@nextui-org/react";
 
 function Discover() {
-  const [searchResults, setSearchResults] = useState([
+  const [randomRecipe, setRandomRecipe] = useState([]);
+  /*Uncomment const [] = useState for timer */
+  // const [nextUpdateTimer, setNextUpdateTimer] = useState(5); 
+  /* Value set to 60 seconds for demo
+  const [nextUpdateTimer, setNextUpdateTimer] = useState(86400); // Initial 24 hours in seconds
+  */
+  const [loading, setLoading] = useState(false);
+
+  const fetchMultipleRecipes = async (count) => {
+    setLoading(true);
+    try {
+      const recipesArray = [];
+      for (let i = 0; i < count; i++)
+      {
+        const response = await fetch(process.env.NEXT_PUBLIC_SERVER_URL + '/getRandomRecipe');
+        if (!response.ok) 
+        {
+          throw new Error('Failed to fetch random recipe ${i + 1}');
+        }
+        const data = await response.json();
+        recipesArray.push(data);
+      }
+      //localStorage.setItem('randomRecipe', JSON.stringify(data));
+      //localStorage.setItem('lastFetchTime', Date.now().toString());
+      /*Uncomment setNextUpdateTimer for timer function */
+      //setNextUpdateTimer(5); // Reset the timer to 60 seconds
+      // setNextUpdateTimer(86400); // Reset the timer to 24 hours
+      setRandomRecipe(recipesArray);
+      setLoading(false); // Set loading state to false after fetching
+    } catch (error) 
     {
-      id: 1,
-      title: "Spaghetti Carbonara",
-      description: "A classic Italian pasta dish with a creamy egg sauce, pancetta, and Parmesan.",
-      image: "https://images.pexels.com/photos/376464/pexels-photo-376464.jpeg",
-    },
-    {
-      id: 2,
-      title: "Chicken Tikka Masala",
-      description: "Juicy grilled chicken pieces in a creamy tomato sauce.",
-      image: "https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id: 3,
-      title: "Beef Tacos",
-      description: "Tacos filled with seasoned ground beef, cheese, and lettuce.",
-      image: "https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-        id: 4,
-        title: "Beef Tacos",
-        description: "Tacos filled with seasoned ground beef, cheese, and lettuce.",
-        image: "https://images.pexels.com/photos/699953/pexels-photo-699953.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-        id: 5,
-        title: "Salmon",
-        description: "Tacos filled with seasoned ground beef, cheese, and lettuce.",
-        image: "https://images.pexels.com/photos/262959/pexels-photo-262959.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-        id: 6,
-        title: "Bread w/ Blueberries?",
-        description: "Tacos filled with seasoned ground beef, cheese, and lettuce.",
-        image: "https://images.pexels.com/photos/708488/pexels-photo-708488.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-        id: 7,
-        title: "Acai Bowl?",
-        description: "Tacos filled with seasoned ground beef, cheese, and lettuce.",
-        image: "https://images.pexels.com/photos/1092730/pexels-photo-1092730.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-        id: 8,
-        title: "Chocholate Slice",
-        description: "Tacos filled with seasoned ground beef, cheese, and lettuce.",
-        image: "https://images.pexels.com/photos/291528/pexels-photo-291528.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    
-    // Add more entries as needed
-  ]);
+      console.error(error);
+      setLoading(false); // If there is an error loading state set to false
+    }
+  };
+
+  // useEffect hook fetches a random recipe when component mounts
+  useEffect(() => {
+    fetchMultipleRecipes(4);
+  }, []);
+
+  // useEffect updates the countdown timer every second, remove comments to enable timer
+  /*
+  useEffect(() => {
+    const countdownTimer = setInterval(() => {
+      setNextUpdateTimer((prev) => {
+        if (prev === 0) {
+          fetchRandomRecipe();
+          return 5; // Reset the timer to 60 sec
+          // return 86400; // Reset the timer to 24 hours
+        } else {
+          return prev - 1; // constantly removes 1 sec
+        }
+      });
+    }, 1000);
+
+    // Cleanup function clea=rs timer when the component unmounts
+    return () => clearInterval(countdownTimer);
+  }, []);
+  */
+
+  // This func handles click event of getting a new recipe
+  const handleGetNewRecipe = () => {
+    fetchMultipleRecipes(4); // New recipe is fetched when button clicked
+  };
 
   
 
   return (
     <div>
-      <input type="checkbox" id="check" />
-      <label htmlFor="check">
-        <i className="fas fa-bars" id="btn"></i>
-        <i className="fas fa-times" id="cancel"></i>
-      </label>
-        {/* Sidebar component */}
-        <Sidebar />
-        
-      <div className = "bg">
-        <div id="div-center" className="search-wrapper">
-        <label htmlFor="search">Discovery</label>
-          <div className="scrollable-content">
-          <div className="posts-container max-w-[900px] gap-2 grid grid-cols-3 grid-rows-2 px-8">
-            {/* Map through your searchResults to render posts */}
-            {searchResults.map((result, index) => (
-              <Card key={index} className="post-card col-span-12 sm:col-span-4 h-[300px]">
-                <CardHeader className="absolute z-10 top-1 flex-col !items-start">
-                <p className="text-tiny text-white/60 uppercase font-bold">
-                    {result.description}
-                  </p>
-                  <h4 className="text-white font-medium text-large">
-                    {result.title}
-                  </h4>
-                </CardHeader>
-                <Image className="z-0 w-full h-full object-cover"src={result.image} alt="Post image" />
-                {/* Additional content */}
-              </Card>
-            ))}
-          </div>
-          </div>
-
-
-        </div>
+      <div>
+        <Sidebar/>
       </div>
+      <section className='bg-discover'>
+        <div id="div-center" className="head">
+          <span style={{color: '#F57C00', textShadow: '1px 1px 1px #757575'}}>Discover Recipes</span>
+          <div className="recipe-box-container" style={{ display: 'flex'}}>
+          {/* RecipeBox component*/}
+            {randomRecipe.map((recipe, index) => (
+              <div key={index} className="recipe-box-item">
+                <RecipeBox recipe={recipe} />
+              </div>
+            ))}
+          {/* Displays the ciuntdown, remove comment for timer */}
+          {/*
+          <div style={{fontWeight: "bolder", color: "white", textShadow: "black 2px 2px"}}>Next update in: {nextUpdateTimer} seconds</div>
+          */}
+          </div>
+          {/* Fetches a new recipe  after clicking on button*/}
+          <Button onClick={handleGetNewRecipe} loading={loading}
+          className={loading ? 'default' : 'bg-[#f57c00]  text-white border-[#ff5252]'} variant="solid" size="lg" >
+            {loading ? 'Fetching New Recipes...' : 'Get New Recipes'}
+          </Button>
+        </div>
+      </section>
+      <style jsx>{`
+      .bg-discover {
+        background: url('home.jpg') no-repeat;
+        background-position: center;
+        background-size: cover;
+        height: 100vh;
+        overflow-y: auto;
+      }        
+      `}</style>
     </div>
   );
 }

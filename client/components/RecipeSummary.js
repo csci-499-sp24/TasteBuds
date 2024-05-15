@@ -1,4 +1,4 @@
-import { Image, Card, Divider, Checkbox, Accordion, AccordionItem, AccordionButton, AccordionPanel} from "@nextui-org/react";
+import { Image, Card, Divider, Checkbox} from "@nextui-org/react";
 import StarsPopup from '@/components/starpopup';
 import IngredientCard from "@/components/IngredientCard";
 
@@ -39,7 +39,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
         {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
       </div>
       <Divider className="my-4" 
-      style={{ height: '4px', backgroundColor: '#f57c00' }} />
+      style={{ height: '4px', backgroundColor: '#FF5252' }} />
       <div style={{ 
         fontSize: '18px', 
         fontWeight: 'bold',

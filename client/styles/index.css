@@ -26,7 +26,6 @@ body {
   color: white;
   font-size: 2em;
   text-align: center;
-  font-weight: bolder;
   text-shadow: 2px 2px black;
   height: 100vh; /* Optional: This will make it take up the full height of the viewport */
 }
