@@ -223,7 +223,7 @@ function StarsPopup({parent_recipe_id}) {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={() => {updateRatings(); onClose();}}>
+                <Button className="bg-[#FF9800]  text-white" onPress={() => {updateRatings(); onClose();}}>
                   Submit
                 </Button>
               </ModalFooter>
