@@ -6,7 +6,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
 
   return (
     <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center',
-    border: '5px solid #FF5252', borderRadius: '10px'
+    border: '5px solid #FFE0B2', borderRadius: '10px'
     }}>
       <div style={{ 
         fontSize: '24px', 
@@ -17,7 +17,8 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
       }}>
         {recipe.title}
       </div>
-      <Divider className="my-4" />
+      <Divider className="my-4" 
+      style={{ height: '4px', backgroundColor: '#f57c00' }} />
       <div style={{ margin: 'auto', maxWidth: '700px' }}>
         <Image 
         src={recipe.image} 
@@ -36,7 +37,8 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
         <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
         {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
       </div>
-      <Divider className="my-4" />
+      <Divider className="my-4" 
+      style={{ height: '4px', backgroundColor: '#f57c00' }} />
       <div style={{ 
         fontSize: '18px', 
         fontWeight: 'bold',
@@ -49,16 +51,17 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <IngredientCard ingredients={ingredients}/>
       </div>
-      <Divider className="my-4" />
+      <Divider className="my-4" 
+      style={{ height: '4px', backgroundColor: '#f57c00' }} />
       <div style={{ 
         fontSize: '18px', 
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#212121'
+        color: '#212121',
+        marginBottom: '20px', // Adding bottom margin for spacing
       }}>
         Instructions
       </div>
-      <Divider className="my-4" />
       <div >
         {instructions.length > 0 ? (
           <ol style={{ textAlign: 'left' }}>
@@ -73,15 +76,17 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
           <p>No instructions available</p>
         )}
       </div>
+      <Divider className="my-4" 
+      style={{ height: '4px', backgroundColor: '#f57c00' }} />
       <div style={{ 
         fontSize: '18px', 
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#212121'
+        color: '#212121',
+        marginBottom: '20px', // Adding bottom margin for spacing
       }}>
         Tips
       </div>
-      <Divider className="my-4" />
       <div>
         {tips && tips.length > 0 ? (
           <ul>
@@ -96,6 +101,8 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
           <p>No tips available</p>
         )}
       </div>
+      <Divider className="my-4" 
+      style={{ height: '4px', backgroundColor: '#f57c00' }} />
       <div>
         <StarsPopup parent_recipe_id={id}/>
       </div>
