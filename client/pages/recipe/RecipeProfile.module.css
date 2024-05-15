@@ -6,12 +6,12 @@
 }
 
 .backgroundImage{
-    background: url("https://wallpapercave.com/wp/wp3138532.jpg") no-repeat;
-    background-position: center;
-    background-size: cover;
-    /* Adjust overflow */
-    overflow-y: hidden; /* Change to hidden to prevent scrollbar */
-    width: 100%;
+  background: url("https://wallpapercave.com/wp/wp3138532.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed; /* Set background attachment to fixed */
+  overflow-y: hidden;
+  width: 100%;
 }
 
 .ingredientContainer{

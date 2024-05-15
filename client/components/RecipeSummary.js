@@ -1,4 +1,4 @@
-import { Image, Card, Divider, Checkbox} from "@nextui-org/react";
+import { Image, Card, Divider, Checkbox, Accordion, AccordionItem, AccordionButton, AccordionPanel} from "@nextui-org/react";
 import StarsPopup from '@/components/starpopup';
 import IngredientCard from "@/components/IngredientCard";
 
@@ -87,6 +87,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
             {tips.map((tip, index) => (
               <li key={index}>
                 <p>{tip.tip}</p>
+                <Divider className="my-4" />
               </li>
             ))}
           </ul>
@@ -94,7 +95,6 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
           <p>No tips available</p>
         )}
       </div>
-      <Divider className="my-4" />
       <div>
         <StarsPopup parent_recipe_id={id}/>
       </div>
