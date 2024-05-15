@@ -62,7 +62,7 @@ function Homepage() {
               or whether you are on a certain diet, TasteBuds will suit your needs. 
             </p>
             <p style={{ marginBottom: '14px', textShadow: 'none', fontSize: '16px' }}>
-              Have a certain ingredient close to expiring? An ingredient you're excited to try out? 
+              Have a certain ingredient close to its expiration date? An ingredient you're excited to try out? 
             </p>
           </Card>
         </div>
