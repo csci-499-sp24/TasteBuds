@@ -95,8 +95,8 @@ export default function SavedRecipes() {
   }, [savedRecipes]);
 
   return (
-    <div>
-      <div className='bg-saved-recipe' style={{height: "100vh", marginTop: "0%", overflow: "scroll"}}>
+    <div style={{height: "100%"}}>
+      <div className='bg-saved-recipe' style={{height: "101.5vh", overflow: "scroll"}}>
       <div class="relative h-5 w-5 ...">
         <div class="absolute left-0 top-0 h-16 w-16 ...">
           <Sidebar />
