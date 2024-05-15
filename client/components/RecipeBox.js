@@ -64,7 +64,9 @@ const RecipeBox = ({recipe}) => {
   };
 
   return (
-    <Card className="recipe-card" style={{width: '350px', height: '250px',  margin: '10px' }}>
+    <Card className="recipe-card" style={{width: '350px', height: '250px',  margin: '10px', 
+    border: '3px solid #FFE0B2', borderRadius: '10px'
+    }}>
       <CardBody className="overflow-visible py-2 bg-white">
         <div style={{position: 'relative', width: '100%', height: '100%', overflow: 'hidden'}}>
           <div style={{position: 'absolute', top: 0, right: 10, zIndex: 1 }}>
