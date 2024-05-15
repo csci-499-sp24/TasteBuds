@@ -76,6 +76,9 @@ function Homepage() {
             }}>
               What Are You Waiting For? Discover Here
             </div>
+            <Link href="/discover">
+              <Button className="bg-[#FF9800]  text-white">Discover</Button>
+            </Link>
           </Card>
         </div>
       </section>
