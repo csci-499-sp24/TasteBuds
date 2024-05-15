@@ -43,6 +43,11 @@
   margin-bottom: 10px;
 }
 
+.input {
+  margin-bottom: 10px;
+  width: 100%;
+}
+
 /* Input Styles */
 .pantry-input, .fridge-input {
   color: black;
@@ -94,6 +99,10 @@
 
 .cancelButton {
   background-color: #dc3545;
+}
+
+.saveButton {
+  background-color: #025ec1;
 }
 
 .cancelButton:hover {
