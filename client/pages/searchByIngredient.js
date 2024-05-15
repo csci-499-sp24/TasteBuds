@@ -9,6 +9,8 @@ function SearchByIngredient() {
   const [isLoading, setIsLoading] = useState(false);
   const [ingredientList, setIngredientList] = useState([]);
   const [fetchedIngredients, setFetchedIngredients] = useState([]);
+  const [pantry, setPantry] = ([]);
+
 
   useEffect(() => {
     fetchIngredients();
@@ -105,37 +107,62 @@ function SearchByIngredient() {
   }
   */
 
+  const handlePantry = async () =>{
+    if(pantry){
+      const newList = [...ingredientList, pantry];
+      setIngredientList(newList);
+      console.log(newList);
+    } else{
+      alert("Pantry Empty!")
+    }
+  }
+
   return (
     <div>
       <Sidebar />
-      <div className = "bg">
+      <div className = "bg" style={{overflow: "hidden"}}>
         <div className="flex justify-center mx-atuo">
-          <div id="" className=" mt-20">
-            <label htmlFor="search">Search Recipes</label>
-            <Autocomplete
+          <div id="" className=" mt-20" style={{maxWidth: "100%"}}>
+            <label htmlFor="search">Search Recipes</label>            <Autocomplete
               label="Select an Ingredient"
               onSelectionChange={handleIngredientSelect}
             >
               {fetchedIngredients.map((ingredient) => (<AutocompleteItem key={ingredient.ingredient_id}>{ingredient.standard_name}</AutocompleteItem>))}
             </Autocomplete>
-            <div className="flex gap-4 h-[20px] mt-3">
+            <div className="flex gap-4 h-[20px] mt-3" style={{width: "100%", display: "flex", flexDirection: "row", flexWrap: "wrap", position: "relative"}}>
               {ingredientList &&
                 ingredientList.map((ingredient, index) => (
-                  <Chip key={index} onClose={() => handleRemoveIngredient(index)}>{ingredient.standard_name}</Chip>
+                  <Chip key={index} onClose={() => handleRemoveIngredient(index)} style={{position: "relative"}}>{ingredient.standard_name}</Chip>
                 ))}
             </div>
+            <div
+            onClick={handlePantry} 
+            style={{
+              padding: "8px 16px",
+              border: "none",
+              borderRadius: "20px",
+              color: "white",
+              marginTop: "6%",
+              textAlign: "center",
+              cursor: "pointer",
+              fontWeight: "bold",
+              backgroundColor: "#FF9800",
+              position: "relative"
+            }}>
+            Add Pantry Ingredients
+            </div>
             <Divider className="my-4" />
-            <div className="justify-center flex mx-atuo" id="">
+            <div className="justify-center flex mx-atuo" id="" style={{height: "100vh", overflow: "auto"}}>
               <div className="mx-atuo">
                 {searchResults.some(recipe => recipe.ingredients.length === ingredientList.length) && (
                   <div>
                     <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include all ingredients</div>
-                    <div style={{ maxHeight: '600px', overflowY: 'auto' }} className=" ">
-                      <div className="grid lg:grid-cols-3 gap-5 h-auto ">
+                    <div style={{maxWidth: "33.33vw", display: "flex"}} className=" ">
+                      <div className="grid lg:grid-cols-3 gap-5 h-auto " style={{display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center"}}>
                         {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                           recipe.ingredients.length === ingredientList.length && (
-                            <div key={recipe.id} className="col-span-1">
-                              <RecipeBox recipe={recipe.Recipe} />
+                            <div key={recipe.id} className="col-span-1" style={{maxWidth: "33vw"}}>
+                              <RecipeBox recipe={recipe.Recipe}/>
                             </div>
                           )
                         ))}
@@ -151,8 +178,8 @@ function SearchByIngredient() {
               {searchResults.some(recipe => recipe.ingredients.length < ingredientList.length && recipe.ingredients.length >= ingredientList.length / 2) && (
                 <div className="">
                   <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white">Recipes that include Most ingredients</div>
-                  <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="">
-                    <div className="grid lg:grid-cols-3 gap-5 h-auto ">
+                  <div style={{maxWidth: "33.33vw", display: "flex"}} className="">
+                    <div className="grid lg:grid-cols-3 gap-5 h-auto " style={{display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center"}}>
                       {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                         (recipe.ingredients.length < ingredientList.length && recipe.ingredients.length >= ingredientList.length / 2) && (
                           <div key={recipe.id} className="col-span-1">
@@ -168,12 +195,12 @@ function SearchByIngredient() {
                 {searchResults.some(recipe => recipe.ingredients.length < ingredientList.length / 2) && (
                   <div>
                     <div id="" className="bg-orange-200 rounded p-2 text-center font-bold text-lg border border-white ">Recipes that include Some ingredients</div>
-                    <div style={{ maxHeight: '600px', overflowY: 'auto' }} className="">
-                      <div className="grid lg:grid-cols-3 gap-5 h-auto ">
+                    <div style={{maxWidth: "33.33vw", display: "flex"}} className="">
+                      <div className="grid lg:grid-cols-3 gap-5 h-auto " style={{display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "center"}}>
                         {!isLoading && Array.isArray(searchResults) && searchResults.map(recipe => (
                           (recipe.ingredients.length < ingredientList.length / 2) && (
-                            <div key={recipe.id} className="col-span-1">
-                              <RecipeBox recipe={recipe.Recipe} />
+                            <div key={recipe.id} className="col-span-1" style={{maxWidth: "33vw"}}>
+                              <RecipeBox recipe={recipe.Recipe}/>
                             </div>
                           )
                         ))}
