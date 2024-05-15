@@ -141,10 +141,10 @@ function StarsPopup({parent_recipe_id}) {
             }
           }}
           classNames={{
-            backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-            base: "border-[#292f46] bg-[#19172c] text-[#a8b0d3]",
-            header: "border-b-[1px] border-[#292f46]",
-            footer: "border-t-[1px] border-[#292f46]",
+            backdrop: "blurred",
+            base: "border-[#F57C00] bg-[#FFFFFF] text-[#212121]",
+            header: "border-b-[2px] border-[#FFE0B2]",
+            footer: "border-t-[2px] border-[#FFE0B2]",
           }}
           >
             <ModalContent>
@@ -197,16 +197,16 @@ function StarsPopup({parent_recipe_id}) {
         }
       }}
       classNames={{
-        backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-        base: "border-[#292f46] bg-[#19172c] text-[#a8b0d3]",
-        header: "border-b-[1px] border-[#292f46]",
-        footer: "border-t-[1px] border-[#292f46]",
+        backdrop: "blurred",
+        base: "border-[#F57C00] bg-[#FFFFFF] text-[#212121]",
+        header: "border-b-[2px] border-[#FFE0B2]",
+        footer: "border-t-[2px] border-[#FFE0B2]",
       }}
       >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Give Your Rating</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-[#F57C00]">Give Your Rating</ModalHeader>
               {
                 avgRatingIs()
               }

@@ -2,11 +2,11 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from "react"; 
 import Sidebar from "../../components/sidebar"; 
 import ErrorPage from 'next/error';
-import IngredientCard from "../../components/IngredientCard";
-import {Image} from "@nextui-org/react";
+//import IngredientCard from "../../components/IngredientCard";
+//import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
 import CommentForm from '../../components/CommentForm';
-import StarsPopup from '@/components/starpopup';
+//import StarsPopup from '@/components/starpopup';
 import RecipeSummary from '../../components/RecipeSummary';
 //import { useAuth } from '../firebase/userAuthContext';
 //import { auth } from '../firebase/firebaseConfig';
