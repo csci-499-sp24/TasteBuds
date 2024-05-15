@@ -109,3 +109,12 @@ body {
   height: 100vh; /* Adjust based on your layout */
 }
 
+.logo{
+  background-image: url('../public/TasteBuds_transparent.png');
+  width:200px; /*width of your image*/
+  height:200px; /*height of your image*/
+  object-fit:contain;
+  position:absolute;
+  top: 1%;
+  left: 45%;
+}
