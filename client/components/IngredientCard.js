@@ -24,16 +24,16 @@ const IngredientCardItem = ({ ingredient }) => {
         <div style={{ position: 'relative', width: '100px', height: '100px' }}>
           <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
           <Image
-              src={
-                ingredient.Ingredient && ingredient.Ingredient.image && ingredient.Ingredient.image.startsWith('http')
-                  ? ingredient.Ingredient.image
-                  : `https://spoonacular.com/cdn/ingredients_100x100/${ingredient.Ingredient.image}`
-              }
-              alt={ingredient.Ingredient.standard_name}
-              width={150}
-              height={150}
-              objectFit={'cover'}
-            />
+            src={
+              ingredient && ingredient.Ingredient && ingredient.Ingredient.image && ingredient.Ingredient.image.startsWith('http')
+                ? ingredient.Ingredient.image
+                : `https://spoonacular.com/cdn/ingredients_100x100/${ingredient && ingredient.Ingredient && ingredient.Ingredient.image}`
+            }
+            alt={ingredient && ingredient.Ingredient && ingredient.Ingredient.standard_name}
+            width={150}
+            height={150}
+            objectFit={'cover'}
+          />
           </div>
           <h4 style={{
             position: 'absolute',
