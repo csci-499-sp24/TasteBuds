@@ -114,7 +114,9 @@ const Recipe = () => {
           )}
         */}
         {/* Display the ingredientCard component with ingredients data */}
-        <CommentForm recipeId={id} />
+        <div>
+          <CommentForm recipeId={id} />
+        </div>
       </div>
     </div>
   );
