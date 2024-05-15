@@ -62,8 +62,11 @@ function Homepage() {
             </p>
             <p style={{ marginBottom: '14px', textShadow: 'none', fontSize: '16px' }}>
               Have a certain ingredient close to its expiration date? An ingredient you&apos;re never able to use up? An ingredient you&apos;re excited to try out? 
-              TasteBuds got you covered. With our ingredient search, you&apos;ll be sure to hone down to recipes of your specific criteria.
+              TasteBuds got you covered. With our ingredient search, you&apos;ll be sure to hone down to recipes of your specific criteria. Just be sure to save your favorite recipes, 
+              rate them and give your thoughts by commenting on the recipes here.
             </p>
+            <Divider className="my-4" style={{ height: '4px', backgroundColor: '#FF5252' }} />
+            
           </Card>
         </div>
       </section>
