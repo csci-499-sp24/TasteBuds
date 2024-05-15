@@ -2,11 +2,12 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from "react"; 
 import Sidebar from "../../components/sidebar"; 
 import ErrorPage from 'next/error';
-import IngredientCard from "../../components/IngredientCard";
-import {Image} from "@nextui-org/react";
+//import IngredientCard from "../../components/IngredientCard";
+//import {Image} from "@nextui-org/react";
 import styles from './RecipeProfile.module.css'
 import CommentForm from '../../components/CommentForm';
-import StarsPopup from '@/components/starpopup';
+//import StarsPopup from '@/components/starpopup';
+import RecipeSummary from '../../components/RecipeSummary';
 //import { useAuth } from '../firebase/userAuthContext';
 //import { auth } from '../firebase/firebaseConfig';
 
@@ -14,6 +15,7 @@ const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
   const [ingredients, setIngredients] = useState([]); // ingredient data
   const [instructions, setInstructions] = useState([]); // instruction data
+  const [tips, setTips] = useState([]);
   const [loading, setLoading] = useState(true); // state tracks load or not
   const router = useRouter(); // Initialize useRouter hook to access router object
   const { id } = router.query; // Get the id from the router query
@@ -28,8 +30,10 @@ const Recipe = () => {
           const data = await response.json(); 
           console.log(data); // Logging data from api 
           setRecipe(data["recipe_data"]); // data of recipe in array 0
-          const ingredientsData = data["recipe_data"]?.Ingredients || []; // access ingredients array from data[0]
-          setIngredients(ingredientsData); // set ingredients in state
+          const tipsData = data["recipe_data"]?.Tips || []; 
+          setTips(tipsData);
+          setIngredients(data["ingredients_data"]); // set ingredients in state
+          //setIngredientsSpecs(data["ingredients_data"])
           setInstructions(data["instruction_data"]); // in the data instructions are array 1
           setLoading(false); 
         } else {
@@ -54,6 +58,22 @@ const Recipe = () => {
     return <ErrorPage statusCode={404} />; // When no data is fetched, render a 404 error page
   }
 
+  /*
+  const mergedIngredients = ingredientSpecs.map(spec => {
+    const matchingIngredient = ingredients.find(ingredient => ingredient.ingredient_id === spec.ingredient_id);
+    return {
+      ...spec,
+      standard_name: matchingIngredient ? matchingIngredient.standard_name : ''
+    };
+  });
+  */
+
+  // Filter merged ingredients based on ingredient_ids
+  {/*
+  const filteredIngredientSpecs = mergedIngredients.filter(spec => {
+    return ingredients.some(ingredient => ingredient.ingredient_id === spec.ingredient_id);
+  });
+*/}
   return (
     <div className = {styles.mainContainer}>
       <div className= {styles.backgroundImage}>
@@ -62,44 +82,42 @@ const Recipe = () => {
           <Sidebar />
         </div>
       </div>
-        <div className={styles.regularTextCenter}>{recipe.title}</div> 
-        <div style={{ margin: 'auto', maxWidth: '500px' }}> 
-          <Image src={recipe.image} alt={recipe.title} style={{ display: 'block', margin: 'auto' }} /> 
+        <div className={styles.recipeSummaryContainer}>
+          <RecipeSummary 
+          recipe={recipe} 
+          id={id} 
+          instructions={instructions} 
+          ingredients={ingredients}
+          tips={tips}
+          //ingredientSpecs={ingredientSpecs}
+          />
+        </div> 
+        
+          {/* Displaying ingredient data 
+        <div>
+          <ul>
+            {filteredIngredientSpecs.map((ingredient, index) => (
+              <li key={index}>
+                {ingredient.metric_amount} {ingredient.metric_unit} - {ingredient.standard_name} - {ingredient.specialized_name}
+              </li>
+            ))}
+          </ul>
         </div>
+        */}
+
         {/* {(firebaseUserId == null) => {
 
         }} */}
-        <div className="stars-container">
-          <StarsPopup parent_recipe_id={id}/>
-        </div>
-        <div className={styles.recipeSummary}>
-          <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
-          {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
-        </div>
         {/*
         {recipe.totalPrice !== undefined && (
             <p>Total Price: {recipe.totalPrice}</p> 
           )}
         */}
-        
-        <div className={styles.regularTextCenter}>Ingredients</div>
-        <div className = {styles.ingredientContainer} >
-          <IngredientCard ingredients={ingredients} />
-        </div>
         {/* Display the ingredientCard component with ingredients data */}
-        <div className={styles.regularTextCenter}>Instructions</div> {/* Recipe Instructions are rendered when the condition is met/available */}
-        <div className={styles.recipeSummary}>
-        {instructions.length > 0 ? (
-          <ol>
-            {instructions.map((instruction, index) => (
-              <li key={index}>{instruction.step}</li> // Map over instructions and render each one as a list item
-            ))}
-          </ol>
-        ) : (
-          <p>No instructions available</p> // Else this render when ther are no instructions
-        )}
+        <div>
+          {/* if the recipeId exists, displys */}
+          {recipe && <CommentForm recipeId={id} />}
         </div>
-        <CommentForm recipeId={id} />
       </div>
     </div>
   );

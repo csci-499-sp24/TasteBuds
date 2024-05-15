@@ -114,8 +114,39 @@ function StarsPopup({parent_recipe_id}) {
     return (
       (
         <>
-          <Button onPress={onOpen}>Rate</Button>
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+          <Button className="bg-[#FF9800] text-[#212121] border-[#ff5252]" onPress={onOpen}>Rate</Button>
+          <Modal backdrop="blur" 
+          isOpen={isOpen} 
+          onOpenChange={onOpenChange} 
+          isDismissable={false} 
+          isKeyboardDismissDisabled={true}
+          motionProps={{
+            variants: {
+              enter: {
+                y: 0,
+                opacity: 1,
+                transition: {
+                  duration: 0.3,
+                  ease: "easeOut",
+                },
+              },
+              exit: {
+                y: -20,
+                opacity: 0,
+                transition: {
+                  duration: 0.2,
+                  ease: "easeIn",
+                },
+              }
+            }
+          }}
+          classNames={{
+            backdrop: "blurred",
+            base: "border-[#F57C00] bg-[#FFFFFF] text-[#212121]",
+            header: "border-b-[2px] border-[#FFE0B2]",
+            footer: "border-t-[2px] border-[#FFE0B2]",
+          }}
+          >
             <ModalContent>
               {(onClose) => (
                 <>
@@ -139,12 +170,43 @@ function StarsPopup({parent_recipe_id}) {
 
   return (
     <>
-      <Button onPress={onOpen}>Rate</Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+      <Button className="bg-[#FF9800] text-white border-[#ff5252]" onPress={onOpen} size="lg">Rate this Recipe</Button>
+      <Modal backdrop="blur" 
+      isOpen={isOpen} 
+      onOpenChange={onOpenChange} 
+      isDismissable={false} 
+      isKeyboardDismissDisabled={true}
+      motionProps={{
+        variants: {
+          enter: {
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          },
+          exit: {
+            y: -20,
+            opacity: 0,
+            transition: {
+              duration: 0.2,
+              ease: "easeIn",
+            },
+          }
+        }
+      }}
+      classNames={{
+        backdrop: "blurred",
+        base: "border-[#F57C00] bg-[#FFFFFF] text-[#212121]",
+        header: "border-b-[2px] border-[#FFE0B2]",
+        footer: "border-t-[2px] border-[#FFE0B2]",
+      }}
+      >
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Give Your Rating</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 text-[#F57C00]">Give Your Rating</ModalHeader>
               {
                 avgRatingIs()
               }
@@ -161,7 +223,7 @@ function StarsPopup({parent_recipe_id}) {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={() => {updateRatings(); onClose();}}>
+                <Button className="bg-[#FF9800]  text-white" onPress={() => {updateRatings(); onClose();}}>
                   Submit
                 </Button>
               </ModalFooter>
