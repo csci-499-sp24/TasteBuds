@@ -73,7 +73,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
         )}
       </div>
       <div>
-        <StarsPopup/>
+        <StarsPopup parent_recipe_id={id}/>
       </div>
     </Card>
   );
