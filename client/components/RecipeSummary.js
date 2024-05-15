@@ -72,6 +72,9 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
           <p>No instructions available</p>
         )}
       </div>
+      <div>
+        <StarsPopup/>
+      </div>
     </Card>
   );
 };
