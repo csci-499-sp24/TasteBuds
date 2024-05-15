@@ -3,13 +3,22 @@ import Link from "next/link";
 import { Autocomplete, AutocompleteItem, Chip, Divider, Card, CardHeader, CardBody, CardFooter, Image, Button } from "@nextui-org/react";
 import RecipeBox from '../components/RecipeBox';
 import Sidebar from "../components/sidebar";
+import { useRouter } from 'next/router';
+import { useAuth } from '../firebase/userAuthContext';
+import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { auth } from '../firebase/firebaseConfig';
+
 
 function SearchByIngredient() {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [ingredientList, setIngredientList] = useState([]);
   const [fetchedIngredients, setFetchedIngredients] = useState([]);
-  const [pantry, setPantry] = ([]);
+  const [pantryItems, setPantryItems] = useState([]);
+  const [fridgeItems, setFridgeItems] = useState([]); 
+  const router = useRouter();
+  const { currentUser } = useAuth();
+  const [userId, setUserId] = useState("");
 
 
   useEffect(() => {
@@ -107,9 +116,41 @@ function SearchByIngredient() {
   }
   */
 
+  const fetchPantry = async ()=>{
+    if (!router.isReady) return;
+    const db = getFirestore();
+    const token = await auth.currentUser.getIdToken();
+    setUserId(currentUser.uid);
+    const userDocRef = doc(db, "users", currentUser.uid);
+
+    getDoc(userDocRef).then((docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const userData = docSnapshot.data();
+
+        const pantryArray = typeof userData.pantry === 'string' ? userData.pantry.split(',') : [];
+        setPantryItems(pantryArray);
+
+        const fridgeArray = typeof userData.fridge === 'string' ? userData.fridge.split(',') : [];
+        setFridgeItems(fridgeArray);
+      }
+    }).catch((error) => {
+      console.error('Detailed error:', error);
+      setError('An error occurred while fetching user data.');
+    });
+  }
+  
+  useEffect(() => {
+    if (!currentUser) {
+      return;
+    }
+
+    fetchPantry();
+
+  }, [currentUser]);  
+
   const handlePantry = async () =>{
-    if(pantry){
-      const newList = [...ingredientList, pantry];
+    if(pantryItems){
+      const newList = [...ingredientList, ...pantryItems];
       setIngredientList(newList);
       console.log(newList);
     } else{
