@@ -1,0 +1,23 @@
+.dropdown {
+  position: absolute;
+  background-color: white; 
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.dropdownItem {
+  padding: 10px;
+  cursor: pointer;
+  color: black;
+}
+
+.dropdownItem:hover {
+  background-color: #f0f0f0; 
+}
+
+
+  

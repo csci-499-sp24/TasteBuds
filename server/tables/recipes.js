@@ -319,6 +319,8 @@ const RecipeIngredients = sequelize.define('RecipeIngredients', {
 // Define the ER of Ingredients and Recipe (M:M)
 RecipeIngredients.belongsTo(Ingredients, { foreignKey: 'ingredient_id' });
 RecipeIngredients.belongsTo(Recipe, { foreignKey: 'recipe_id' });
+Recipe.hasMany(RecipeIngredients, { foreignKey: 'recipe_id' });
+Ingredients.hasMany(RecipeIngredients, { foreignKey: 'ingredient_id' });
 
 /* INSTRUTIONS, EQUIPMENT, INSTRUCTIONS-INGREDIENTS, and INSTRUCATION-LENGTH */
 const Instructions = sequelize.define('Instructions', {
@@ -567,6 +569,8 @@ RecipeIngredientsNutrients.belongsTo(Recipe, { foreignKey: 'recipe_id', targetKe
 RecipeIngredientsNutrients.belongsTo(Ingredients, { foreignKey: 'ingredient_id', targetKey: 'ingredient_id' });
 RecipeIngredientsNutrients.belongsTo(Nutrients, { foreignKey: 'nutrient_id', targetKey: 'nutrient_id' });
 
+// RecipeIngredientsNutrients.belongsTo(RecipeIngredients, {foreignKey: 'ingredient_id'})
+// RecipeIngredients.hasMany(RecipeIngredientsNutrients, {foriengKey: 'ingredient_id'})
 /* FLAVONOIDS */
 const Flavonoids = sequelize.define('Flavonoids', {
     flavonoid_id: {
@@ -761,7 +765,31 @@ const Comments = sequelize.define('Comments', {
 // Define the ER of Comments and Recipe (M:1)
 Comments.belongsTo(Recipe, { foreignKey: 'recipe_id' });
 Recipe.hasMany(Comments, { foreignKey: 'recipe_id' });
- 
+
+const Ratings = sequelize.define('Ratings', {
+    rating_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        allowNull: false,
+        autoIncrement: true,
+        //omitNull: true,
+        // https://stackoverflow.com/questions/15737949/how-does-autoincrement-work-in-nodejss-sequelize
+    },
+    firebase_user_id: {
+        type: DataTypes.STRING,
+    },
+    recipe_id: {
+        type: DataTypes.INTEGER,
+    },
+    rating: {
+        type: DataTypes.INTEGER,
+    }
+}, {
+    tableName: 'ratings',
+    timestamps: false,
+});
+
+Recipe.hasMany(Ratings, {foreignKey: 'recipe_id'})
 
 /* END OF MODELS*/
     return {
@@ -793,5 +821,6 @@ Recipe.hasMany(Comments, { foreignKey: 'recipe_id' });
         WeightPerServing,
         CaloricBreakdown,   
         Comments, 
+        Ratings
     }
 }

@@ -2,14 +2,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 .backgroundImage{
-    background: url("https://wallpapercave.com/wp/wp3138532.jpg") no-repeat;
-    background-position: center;
-    background-size: cover;
-    height: 100vh;
-    overflow-y: auto;
+  background: url("https://wallpapercave.com/wp/wp3138532.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed; /* Set background attachment to fixed */
+  overflow-y: hidden;
+  width: 100%;
 }
 
 .ingredientContainer{
@@ -29,4 +31,14 @@
 .regularTextCenter{
     text-align: center;
     background-color: white;
+}
+
+.recipeSummaryContainer {
+  position: relative;
+  width: 100%; /* Adjust width as needed */
+  max-width: 900px; /* Set maximum width */
+  height: auto; /* Adjust height as needed */
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 50px;
 }

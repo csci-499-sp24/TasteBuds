@@ -6,10 +6,14 @@
 }
 .sidebar {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 250px;
   height: 100%;
   left:-250px;
+  overflow-x: hidden;
   background: #161616;
+  padding-top: 0px;
   transition: all .5s ease;
   z-index: 1000;
 }
