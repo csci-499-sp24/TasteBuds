@@ -15,7 +15,7 @@ const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
   const [ingredients, setIngredients] = useState([]); // ingredient data
   const [instructions, setInstructions] = useState([]); // instruction data
-  //const [ingredientSpecs, setIngredientsSpecs] = useState([]);
+  const [tips, setTips] = useState([]);
   const [loading, setLoading] = useState(true); // state tracks load or not
   const router = useRouter(); // Initialize useRouter hook to access router object
   const { id } = router.query; // Get the id from the router query
@@ -30,7 +30,8 @@ const Recipe = () => {
           const data = await response.json(); 
           console.log(data); // Logging data from api 
           setRecipe(data["recipe_data"]); // data of recipe in array 0
-          //const ingredientsData = data["recipe_data"]?.Ingredients || []; // access ingredients array from data[0]
+          const tipsData = data["recipe_data"]?.Tips || []; 
+          setTips(tipsData);
           setIngredients(data["ingredients_data"]); // set ingredients in state
           //setIngredientsSpecs(data["ingredients_data"])
           setInstructions(data["instruction_data"]); // in the data instructions are array 1
@@ -87,6 +88,7 @@ const Recipe = () => {
           id={id} 
           instructions={instructions} 
           ingredients={ingredients}
+          tips={tips}
           //ingredientSpecs={ingredientSpecs}
           />
         </div> 

@@ -2,7 +2,7 @@ import { Image, Card, Divider, Checkbox} from "@nextui-org/react";
 import StarsPopup from '@/components/starpopup';
 import IngredientCard from "@/components/IngredientCard";
 
-const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
+const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
 
   return (
     <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center' }}>
@@ -72,6 +72,29 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
           <p>No instructions available</p>
         )}
       </div>
+      <div style={{ 
+        fontSize: '18px', 
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#212121'
+      }}>
+        Tips
+      </div>
+      <Divider className="my-4" />
+      <div>
+        {tips && tips.length > 0 ? (
+          <ul>
+            {tips.map((tip, index) => (
+              <li key={index}>
+                <p>{tip.tip}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No tips available</p>
+        )}
+      </div>
+      <Divider className="my-4" />
       <div>
         <StarsPopup parent_recipe_id={id}/>
       </div>

@@ -9,8 +9,6 @@
     background: url("https://wallpapercave.com/wp/wp3138532.jpg") no-repeat;
     background-position: center;
     background-size: cover;
-    /* Remove fixed height */
-    /* height: 100vh; */
     /* Adjust overflow */
     overflow-y: hidden; /* Change to hidden to prevent scrollbar */
     width: 100%;
