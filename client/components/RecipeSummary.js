@@ -6,7 +6,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
 
   return (
     <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center',
-    border: '5px solid #FFE0B2', borderRadius: '10px'
+    border: '7px solid #FFE0B2', borderRadius: '10px'
     }}>
       <div style={{ 
         fontSize: '24px', 
@@ -32,7 +32,8 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
          }}
         />
       </div>
-      <Divider className="my-4" />
+      <Divider className="my-4" 
+      style={{ height: '4px', backgroundColor: '#FF5252' }} />
       <div>
         <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
         {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
