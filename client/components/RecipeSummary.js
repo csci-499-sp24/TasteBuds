@@ -1,4 +1,4 @@
-import { Image, Card, Divider, Checkbox, Accordion, AccordionItem, AccordionButton, AccordionPanel} from "@nextui-org/react";
+import { Image, Card, Divider, Checkbox} from "@nextui-org/react";
 import StarsPopup from '@/components/starpopup';
 import IngredientCard from "@/components/IngredientCard";
 
