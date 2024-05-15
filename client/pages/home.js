@@ -20,11 +20,11 @@ function Homepage() {
             style={{ height: '4px', backgroundColor: '#FF5252' }} />
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Image
-                  src="https://th.bing.com/th/id/OIF.Mk8ebq5TyOIKuftVN4mhWw?rs=1&pid=ImgDetMain" // Replace with your company logo URL
+                  src="https://th.bing.com/th/id/OIF.Mk8ebq5TyOIKuftVN4mhWw?rs=1&pid=ImgDetMain" 
                   alt="TasteBuds Logo"
                   width={200}
                   height={200}
-                  style={{ borderRadius: '50%', marginBottom: '20px' }} // Make the logo rounded and add spacing
+                  style={{ borderRadius: '50%', marginBottom: '20px' }} 
               />
             </div>
             <Divider className="my-4" 
@@ -52,7 +52,7 @@ function Homepage() {
               fontWeight: 'bold',
               textAlign: 'center',
               color: '#212121',
-              marginBottom: '20px', // Adding bottom margin for spacing
+              marginBottom: '20px', 
               textShadow: 'none', 
             }}>
               What You'll Find Here
@@ -62,7 +62,8 @@ function Homepage() {
               or whether you are on a certain diet, TasteBuds will suit your needs. 
             </p>
             <p style={{ marginBottom: '14px', textShadow: 'none', fontSize: '16px' }}>
-              Have a certain ingredient close to its expiration date? An ingredient you're excited to try out? 
+              Have a certain ingredient close to its expiration date? An ingredient you're never able to use up? An ingredient you're excited to try out? 
+              TasteBuds got you covered. 
             </p>
           </Card>
         </div>
