@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import RecipeBox from '../components/RecipeBox';
 import Link from 'next/link';
 import Sidebar from "../components/sidebar";
-import { Image, Card, Divider, Checkbox} from "@nextui-org/react";
+import { Image, Card, Divider} from "@nextui-org/react";
 
 function Homepage() {
   
