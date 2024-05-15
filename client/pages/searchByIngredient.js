@@ -150,7 +150,9 @@ function SearchByIngredient() {
   const handlePantry = async () =>{
     if(pantryItems){
       const newList = [...ingredientList, ...pantryItems];
-      setIngredientList(newList);
+      // this adds the pantry items to the ingredient list
+      // to do: uncomment and change once ingredient id is being pushed to firebase
+      // setIngredientList(newList);
       console.log(newList);
     } else{
       alert("Pantry Empty!")
