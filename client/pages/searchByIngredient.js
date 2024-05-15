@@ -200,7 +200,7 @@ function SearchByIngredient() {
               backgroundColor: "#FF9800",
               position: "relative"
             }}>
-            Add Pantry Ingredients
+            Add Food Vault Ingredients
             </div>
             <Divider className="my-4" />
             <div className="justify-center flex mx-atuo" id="" style={{height: "100vh", overflow: "auto"}}>
