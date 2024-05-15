@@ -5,6 +5,7 @@ import Sidebar from "../../components/sidebar.js";
 import ProfilePicPreview from '../../components/ProfilePicPreview'; 
 import Dropdown from '../../components/Dropdown.js';  
 import styles from './UserProfile.module.css';
+import { Button } from "@nextui-org/react";
 
 export default function UserProfile() {
   const router = useRouter();
@@ -185,79 +186,46 @@ export default function UserProfile() {
                 </div>
               )}
             </div>
-            <div>
-              <div className={styles.pantryBox}>
-                <h2>My Pantry</h2>
-                <div className={styles.pantryTags}>
-                  {pantryItems.map((item, index) => (
-                    <div key={index} className={styles.pantryTag}>
-                      {item.name}
-                      <button onClick={() => removeItem(item, pantryItems, setPantryItems)} disabled={!editMode}>×</button>
-                    </div>
-                  ))}
-                </div>
-                {editMode && (
-                  <div>
-                    <input
-                      value={pantryInputValue}
-                      onChange={(e) => setPantryInputValue(e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(e, pantryItems, setPantryItems, setPantryInputValue)}
-                      placeholder="Type pantry item and press 'Enter'"
-                      className={styles.pantryInput}
-                    />
-                    {pantryInputValue && (
-                      <Dropdown
-                        suggestions={suggestions.filter((item) => item.name.toLowerCase().includes(pantryInputValue.toLowerCase()))}
-                        onSelect={(value) => {
-                          addItem(value, pantryItems, setPantryItems);
-                          setPantryInputValue('');
-                        }}
-                      />
-                    )}
+            <div className={styles.pantryBox}>
+              <h2>My Food Vault</h2>
+              <div className={styles.pantryTags}>
+                {pantryItems.map((item, index) => (
+                  <div key={index} className={styles.pantryTag}>
+                    {item.name}
+                    <button onClick={() => removeItem(item, pantryItems, setPantryItems)} disabled={!editMode}>×</button>
                   </div>
-                )}
+                ))}
               </div>
-              <div className={styles.fridgeBox}>
-                <h2>My Fridge</h2>
-                <div className={styles.fridgeTags}>
-                  {fridgeItems.map((item, index) => (
-                    <div key={index} className={styles.fridgeTag}>
-                      {item.name}
-                      <button onClick={() => removeItem(item, fridgeItems, setFridgeItems)} disabled={!editMode}>×</button>
-                    </div>
-                  ))}
-                </div>
-                {editMode && (
-                  <div>
-                    <input
-                      value={fridgeInputValue}
-                      onChange={(e) => setFridgeInputValue(e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(e, fridgeItems, setFridgeItems, setFridgeInputValue)}
-                      placeholder="Type fridge item and press 'Enter'"
-                      className={styles.pantryInput}
+              {editMode && (
+                <div>
+                  <input
+                    value={pantryInputValue}
+                    onChange={(e) => setPantryInputValue(e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(e, pantryItems, setPantryItems, setPantryInputValue)}
+                    placeholder="Type pantry item and press 'Enter'"
+                    className={styles.pantryInput}
+                  />
+                  {pantryInputValue && (
+                    <Dropdown
+                      suggestions={suggestions.filter((item) => item.name.toLowerCase().includes(pantryInputValue.toLowerCase()))}
+                      onSelect={(value) => {
+                        addItem(value, pantryItems, setPantryItems);
+                        setPantryInputValue('');
+                      }}
                     />
-                    {fridgeInputValue && (
-                      <Dropdown
-                        suggestions={suggestions.filter((item) => item.name.toLowerCase().includes(fridgeInputValue.toLowerCase()))}
-                        onSelect={(value) => {
-                          addItem(value, fridgeItems, setFridgeItems);
-                          setFridgeInputValue('');
-                        }}
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
+                  )}
+                </div>
+              )}
             </div>
           </section>
           {editMode ? (
             <div className={styles.buttonContainer}>
-              <button onClick={savePantryAndFridgeItems} className={styles.saveButton}>Save Changes</button>
-              <button onClick={cancelEdit} className={styles.cancelButton}>Cancel</button>
+              <Button color="primary" onClick={savePantryAndFridgeItems} className={styles.saveButton}>Save Changes</Button>
+              <Button color="secondary" onClick={cancelEdit} className={styles.cancelButton}>Cancel</Button>
             </div>
           ) : (
             <div className={styles.buttonContainer}>
-              <button onClick={() => setEditMode(true)} className={styles.editProfileButton}>Edit Profile</button>
+              <Button color="primary" onClick={() => setEditMode(true)} className={styles.editProfileButton}>Edit Profile</Button>
             </div>
           )}
         </div>
