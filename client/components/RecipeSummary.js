@@ -2,19 +2,7 @@ import { Image, Card, Divider, Checkbox} from "@nextui-org/react";
 import StarsPopup from '@/components/starpopup';
 import IngredientCard from "@/components/IngredientCard";
 
-const RecipeSummary = ({ recipe, id, instructions, ingredients, ingredientSpecs }) => {
-
-  const mergedIngredients = ingredientSpecs.map(spec => {
-    const matchingIngredient = ingredients.find(ingredient => ingredient.ingredient_id === spec.ingredient_id);
-    return {
-      ...spec,
-      standard_name: matchingIngredient ? matchingIngredient.standard_name : ''
-    };
-  });
-
-  const filteredIngredientSpecs = mergedIngredients.filter(spec => {
-    return ingredients.some(ingredient => ingredient.ingredient_id === spec.ingredient_id);
-  });
+const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
 
   return (
     <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center' }}>
@@ -58,20 +46,8 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, ingredientSpecs 
         Ingredients
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <IngredientCard ingredients={ingredients} ingredientSpecs={ingredientSpecs}/>
+        <IngredientCard ingredients={ingredients}/>
       </div>
-      <div style={{
-        fontSize: '18px', 
-        textAlign: 'left',
-      }}>
-        <ol>
-          {filteredIngredientSpecs.map((ingredient, index) => (
-            <li key={index}>
-              <Checkbox>{ingredient.metric_amount} {ingredient.metric_unit} - {ingredient.standard_name} - {ingredient.specialized_name}</Checkbox>
-            </li>
-          ))}
-        </ol>
-      </div>  
       <Divider className="my-4" />
       <div style={{ 
         fontSize: '18px', 

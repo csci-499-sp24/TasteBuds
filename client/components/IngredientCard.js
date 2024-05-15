@@ -1,21 +1,13 @@
 import React from 'react';
 import { Image, Card } from '@nextui-org/react';
 
-const IngredientCard = ({ ingredients, ingredients_data }) => {
-  const getIngredientData = (ingredient) => {
-    if (ingredients_data && ingredients_data.length > 0) {
-      return ingredients_data.find(data => data.ingredient_id === ingredient.ingredient_id);
-    } else {
-      return null;
-    }
-  };
-
+const IngredientCard = ({ ingredients }) => {
   return (
     <>
       <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
         {ingredients && ingredients.length > 0 ? (
           ingredients.map((ingredient, index) => (
-            <IngredientCardItem key={index} ingredient={ingredient} ingredientData={getIngredientData(ingredient)} />
+            <IngredientCardItem key={index} ingredient={ingredient} />
           ))
         ) : (
           <p>No ingredients available</p>
@@ -25,19 +17,19 @@ const IngredientCard = ({ ingredients, ingredients_data }) => {
   );
 };
 
-const IngredientCardItem = ({ ingredient, ingredientData }) => {
+const IngredientCardItem = ({ ingredient }) => {
   return (
-    <li style={{ width: '100px', height: '160px' }}>
+    <li style={{ width: '100px', height: '120px' }}>
       <Card>
         <div style={{ position: 'relative', width: '100px', height: '100px' }}>
           <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-            <Image
+          <Image
               src={
-                ingredient.image.startsWith('http')
-                  ? ingredient.image
-                  : `https://spoonacular.com/cdn/ingredients_100x100/${ingredient.image}`
+                ingredient.Ingredient && ingredient.Ingredient.image && ingredient.Ingredient.image.startsWith('http')
+                  ? ingredient.Ingredient.image
+                  : `https://spoonacular.com/cdn/ingredients_100x100/${ingredient.Ingredient.image}`
               }
-              alt={ingredient.standard_name}
+              alt={ingredient.Ingredient.standard_name}
               width={150}
               height={150}
               objectFit={'cover'}
@@ -55,17 +47,9 @@ const IngredientCardItem = ({ ingredient, ingredientData }) => {
             width: '100%',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
           }}>
-            {ingredient.standard_name}
+            {ingredient.Ingredient.standard_name} - {ingredient.us_amount} {ingredient.metric_unit}
           </h4>
         </div>
-        <h4>
-          {ingredientData && (
-            <div style={{ padding: '8px' }}>
-              <p>Metric Amount: {ingredientData.metric_amount} {ingredientData.metric_unit}</p>
-              {ingredientData.us_amount && <p>US Amount: {ingredientData.us_amount} {ingredientData.us_unit}</p>}
-            </div>
-          )}
-        </h4>
       </Card>
     </li>
   );
