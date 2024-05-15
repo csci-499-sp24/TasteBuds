@@ -1,43 +1,55 @@
+/* Container Styles */
 .mainContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
 }
 
 .profileLayout {
   display: flex;
-  flex-direction: row; 
-  align-items: flex-start; 
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 20px;
   margin-top: 20px;
   background-color: transparent;
 }
 
+/* Box Styles */
 .pantryBox, .fridgeBox {
-  width: calc(50% - 10px);
+  width: 100%;
 }
 
 .profileBox, .pantryBox, .fridgeBox {
-  flex: 1; 
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
   background-color: #ffffffa3;
   border-radius: 20px;
-  width: 100%; 
-  margin-bottom: 10px; 
+  width: 100%;
+  margin-bottom: 10px;
 }
 
+/* Profile Picture Styles */
 .profile-pic {
-  width: 150px; 
+  width: 150px;
   height: 150px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 10px; 
+  margin-bottom: 10px;
 }
 
+.input {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 2px 10px;
+}
+
+/* Input Styles */
 .pantry-input, .fridge-input {
   color: black;
   background-color: white;
@@ -46,60 +58,92 @@
   margin-top: 10px;
 }
 
+/* Tag Container Styles */
 .pantryTags, .fridgeTags {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   margin-top: 15px;
-  margin-bottom: 15px; 
-  background-color: #ffffff00;
+  margin-bottom: 15px;
+  background-color: transparent;
   border-radius: 20px;
 }
 
+/* Tag Styles */
 .pantryTag, .fridgeTag {
   display: flex;
   align-items: center;
-  background-color: #f0f0f0; 
-  border-radius: 20px; 
+  background-color: #f0f0f0;
+  border-radius: 20px;
   padding: 2px 10px;
 }
 
-.pantry-tag button, .fridge-tag button {
-  margin-left: 10px; 
-  color: #ff0000; 
+.pantryTag button, .fridgeTag button {
+  margin-left: 10px;
+  color: #ff0000;
 }
 
+/* Button Styles */
 .saveButton, .cancelButton, .editProfileButton {
   padding: 8px 16px;
-  margin-top: -150px;
   border: none;
   border-radius: 20px;
   cursor: pointer;
   font-weight: bold;
   color: #fff;
-  background-color: #007bff; 
-}
-
-.saveButton, .cancelButton{
-  margin-top: -110px;
+  margin: 10px;
 }
 
 .saveButton:hover, .cancelButton:hover, .editProfileButton:hover {
-  background-color: #0056b3; 
+  background-color: #0056b3;
 }
 
 .cancelButton {
   background-color: #dc3545;
 }
 
+.saveButton {
+  background-color: #025ec1;
+}
+
 .cancelButton:hover {
-  background-color: #bd2130; 
+  background-color: #bd2130;
 }
 
 .editProfileButton {
-  background-color: #28a745; 
+  background-color: #28a745;
 }
 
 .editProfileButton:hover {
-  background-color: #218838; 
+  background-color: #218838;
+}
+
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.suggestions {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  max-height: 150px;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.suggestionItem {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestionItem:hover {
+  background-color: #f0f0f0;
 }
