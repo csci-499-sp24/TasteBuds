@@ -19,7 +19,6 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
       <div style={{ margin: 'auto', maxWidth: '700px' }}>
         <Image 
         src={recipe.image} 
-        fallbackSrc="https://via.placeholder.com/300x200"
         alt={recipe.title}  
         width={900}
         style={{ 
