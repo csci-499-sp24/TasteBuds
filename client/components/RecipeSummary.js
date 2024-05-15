@@ -21,7 +21,12 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
         fallbackSrc="https://via.placeholder.com/300x200"
         alt={recipe.title}  
         width={900}
-        radius
+        style={{ 
+          borderRadius: '15px',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Shadow effect
+          objectFit: 'cover', // Maintain aspect ratio and cover container
+          border: '5px solid #FF5252',
+         }}
         />
       </div>
       <Divider className="my-4" />
