@@ -295,10 +295,18 @@ app.get('/search_by_id', async (req, res) => {
                 {
                     model: Equipment,
                 }, 
-                {
-                    model: Ingredients, 
-                    //attributes: ['ingredient_id', 'standard_name', 'image'],
-                },
+                // {
+                //     model: RecipeIngredients, 
+                //     //attributes: ['ingredient_id', 'standard_name', 'image'],
+                //     include: [
+                //         {
+                //             model: Ingredients,
+                //         },
+                //         // {
+                //         //     model: RecipeIngredientsNutrients,
+                //         // }
+                //     ]
+                // },
                 // {
                 //     model: Nutrients,
                 //     // too resource intensive
@@ -329,8 +337,14 @@ app.get('/search_by_id', async (req, res) => {
 
         //Sequelize complains that recipeIngredients is not associated with Recipe
         //hence the separate search
+        
         const recipe_ingrd_data = await RecipeIngredients.findAll({
-            where: {recipe_id: id}
+            where: {recipe_id: id},
+            include: [
+                {
+                    model: Ingredients,
+                },
+            ]
         })
         const instruction_data = await Instructions.findAll({
             where: {recipe_id: id}
