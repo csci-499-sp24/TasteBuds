@@ -165,7 +165,7 @@ function SearchByIngredient() {
       <div className = "bgi" style={{overflow: "hidden"}}>
         <div className="flex justify-center mx-atuo">
           <div id="" className=" mt-20" style={{maxWidth: "100%", marginTop: "5%"}}>
-            <label htmlFor="search">Search Recipes</label>            
+            <label htmlFor="search" style={{color: "#FF9800"}}>Search Recipes</label>            
             <Autocomplete
               label="Select an Ingredient"
               className="custom-autocomplete"
