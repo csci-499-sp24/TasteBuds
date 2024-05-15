@@ -115,7 +115,38 @@ function StarsPopup({parent_recipe_id}) {
       (
         <>
           <Button className="bg-[#f57c00] text-[#212121] border-[#ff5252]" onPress={onOpen}>Rate</Button>
-          <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+          <Modal backdrop="blur" 
+          isOpen={isOpen} 
+          onOpenChange={onOpenChange} 
+          isDismissable={false} 
+          isKeyboardDismissDisabled={true}
+          motionProps={{
+            variants: {
+              enter: {
+                y: 0,
+                opacity: 1,
+                transition: {
+                  duration: 0.3,
+                  ease: "easeOut",
+                },
+              },
+              exit: {
+                y: -20,
+                opacity: 0,
+                transition: {
+                  duration: 0.2,
+                  ease: "easeIn",
+                },
+              }
+            }
+          }}
+          classNames={{
+            backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+            base: "border-[#292f46] bg-[#19172c] text-[#a8b0d3]",
+            header: "border-b-[1px] border-[#292f46]",
+            footer: "border-t-[1px] border-[#292f46]",
+          }}
+          >
             <ModalContent>
               {(onClose) => (
                 <>
@@ -140,7 +171,38 @@ function StarsPopup({parent_recipe_id}) {
   return (
     <>
       <Button className="bg-[#f57c00] text-[#212121] border-[#ff5252]" onPress={onOpen}>Rate</Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+      <Modal backdrop="blur" 
+      isOpen={isOpen} 
+      onOpenChange={onOpenChange} 
+      isDismissable={false} 
+      isKeyboardDismissDisabled={true}
+      motionProps={{
+        variants: {
+          enter: {
+            y: 0,
+            opacity: 1,
+            transition: {
+              duration: 0.3,
+              ease: "easeOut",
+            },
+          },
+          exit: {
+            y: -20,
+            opacity: 0,
+            transition: {
+              duration: 0.2,
+              ease: "easeIn",
+            },
+          }
+        }
+      }}
+      classNames={{
+        backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+        base: "border-[#292f46] bg-[#19172c] text-[#a8b0d3]",
+        header: "border-b-[1px] border-[#292f46]",
+        footer: "border-t-[1px] border-[#292f46]",
+      }}
+      >
         <ModalContent>
           {(onClose) => (
             <>

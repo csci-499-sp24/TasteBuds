@@ -1,14 +1,16 @@
 import { Image, Card, Divider, Checkbox} from "@nextui-org/react";
 import StarsPopup from '@/components/starpopup';
+import IngredientCard from "@/components/IngredientCard";
 
-const RecipeSummary = ({ recipe, id, instructions }) => {
+const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
   return (
-    <Card shadow style={{ width: '900px', padding: '20px', textAlign: 'center' }}>
+    <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center' }}>
       <div style={{ 
         fontSize: '24px', 
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#f57c00'
+        color: '#f57c00',
+        borderRadius: '12px' // Added rounded corners
       }}>
         {recipe.title}
       </div>
@@ -31,6 +33,19 @@ const RecipeSummary = ({ recipe, id, instructions }) => {
         <p dangerouslySetInnerHTML={{ __html: recipe.summary }}></p>
         {/* Render the recipe summary, https://blog.logrocket.com/using-dangerouslysetinnerhtml-react-application/ */}
       </div>
+      <Divider className="my-4" />
+      <div style={{ 
+        fontSize: '18px', 
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: '#212121'
+      }}>
+        Ingredients
+      </div>
+      <Divider className="my-4" />
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <IngredientCard ingredients={ingredients} />
+      </div>  
       <Divider className="my-4" />
       <div style={{ 
         fontSize: '18px', 

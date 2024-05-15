@@ -64,7 +64,12 @@ const Recipe = () => {
         </div>
       </div>
         <div className={styles.recipeSummaryContainer}>
-          <RecipeSummary recipe={recipe} id={id} instructions={instructions} />
+          <RecipeSummary 
+          recipe={recipe} 
+          id={id} 
+          instructions={instructions} 
+          ingredients={ingredients}
+          />
         </div> 
         {/* {(firebaseUserId == null) => {
 
@@ -74,11 +79,6 @@ const Recipe = () => {
             <p>Total Price: {recipe.totalPrice}</p> 
           )}
         */}
-        
-        <div className={styles.regularTextCenter}>Ingredients</div>
-        <div className = {styles.ingredientContainer} >
-          <IngredientCard ingredients={ingredients} />
-        </div>
         {/* Display the ingredientCard component with ingredients data */}
         <CommentForm recipeId={id} />
       </div>
