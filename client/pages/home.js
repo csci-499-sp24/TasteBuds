@@ -14,7 +14,7 @@ function Homepage() {
       <section className='bg-home'>
         <div id="div-center" className="head">
         <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center', border: '7px solid #FFE0B2', borderRadius: '10px' }}>
-            <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#f57c00', marginBottom: '20px', textShadow: 'none' }}>TasteBuds</h1>
+          <h1 style={{ fontSize: '24px', fontWeight: 'bold', color: '#f57c00', marginBottom: '20px', textShadow: 'none' }}>TasteBuds</h1>
             <Divider className="my-4" 
             style={{ height: '4px', backgroundColor: '#FF5252' }} />
             <div style={{ display: 'flex', justifyContent: 'center' }}>
