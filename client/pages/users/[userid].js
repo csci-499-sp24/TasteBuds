@@ -31,7 +31,7 @@ export default function UserProfile() {
         throw new Error('Failed to fetch ingredients');
       }
       const data = await response.json();
-      setSuggestions(data.map(ingredient => ingredient.standard_name));
+      setSuggestions(data.map(ingredient => ({ name: ingredient.standard_name, id: ingredient.ingredient_id })));
     } catch (error) {
       console.error('Error fetching ingredients:', error);
       setError('Failed to fetch ingredients.');
@@ -46,15 +46,17 @@ export default function UserProfile() {
     getDoc(userDocRef).then((docSnapshot) => {
       if (docSnapshot.exists()) {
         const userData = docSnapshot.data();
+        console.log("User data from Firestore:", userData); // Debug log
+
         setUser(userData);
         setNewUsername(userData.username);
         setNewEmail(userData.email);
         setProfilePic(userData.profilePic || '/profpic.jpeg');
 
-        const pantryArray = typeof userData.pantry === 'string' ? userData.pantry.split(',') : [];
+        const pantryArray = parseJSON(userData.pantry);
         setPantryItems(pantryArray);
 
-        const fridgeArray = typeof userData.fridge === 'string' ? userData.fridge.split(',') : [];
+        const fridgeArray = parseJSON(userData.fridge);
         setFridgeItems(fridgeArray);
       }
     }).catch((error) => {
@@ -62,11 +64,20 @@ export default function UserProfile() {
       setError('An error occurred while fetching user data.');
     });
 
-    fetchIngredients(); 
+    fetchIngredients(); // Fetch ingredients on mount
   }, [router.isReady, userid]);
 
+  const parseJSON = (data) => {
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('Failed to parse JSON:', error); // Debug log
+      return [];
+    }
+  };
+
   const addItem = (value, items, setItems) => {
-    if (value && !items.includes(value)) {
+    if (value && !items.some(item => item.id === value.id)) {
       setItems([...items, value]);
     }
   };
@@ -74,9 +85,11 @@ export default function UserProfile() {
   const handleKeyDown = (event, items, setItems, setInputValue) => {
     if (['Enter', ','].includes(event.key)) {
       event.preventDefault();
-      const value = event.target.value.trim();
-      addItem(value, items, setItems);
-      setInputValue('');
+      const selectedItem = suggestions.find(item => item.name.toLowerCase() === event.target.value.trim().toLowerCase());
+      if (selectedItem) {
+        addItem(selectedItem, items, setItems);
+        setInputValue('');
+      }
     }
   };
 
@@ -84,24 +97,36 @@ export default function UserProfile() {
     const db = getFirestore();
     const userDocRef = doc(db, "users", userid);
 
-    const pantryString = pantryItems.join(',');
-    const fridgeString = fridgeItems.join(',');
+    const pantryString = JSON.stringify(pantryItems);
+    const fridgeString = JSON.stringify(fridgeItems);
 
-    updateDoc(userDocRef, {
-      username: newUsername,
-      email: newEmail,
-      profilePic: profilePic,
-      pantry: pantryString,
-      fridge: fridgeString
-    }).then(() => {
-      setUser({ ...user, username: newUsername, email: newEmail, profilePic: profilePic, pantry: pantryString, fridge: fridgeString });
+    try {
+      await updateDoc(userDocRef, {
+        username: newUsername,
+        email: newEmail,
+        profilePic: profilePic,
+        pantry: pantryString,
+        fridge: fridgeString
+      });
+      setUser({
+        ...user,
+        username: newUsername,
+        email: newEmail,
+        profilePic: profilePic,
+        pantry: pantryString,
+        fridge: fridgeString
+      });
       setEditMode(false);
-    }).catch(error => setError('Failed to update profile.'));
+      console.log('Pantry and fridge items saved successfully');
+    } catch (error) {
+      setError('Failed to update profile.');
+      console.error('Error saving pantry and fridge items:', error);
+    }
   };
 
   const removeItem = (item, items, setItems) => {
     if (editMode) {
-      setItems(items.filter((i) => i !== item));
+      setItems(items.filter((i) => i.id !== item.id));
     }
   };
 
@@ -110,9 +135,9 @@ export default function UserProfile() {
     setNewUsername(user.username);
     setNewEmail(user.email);
     setProfilePic(user.profilePic || '/profpic.jpeg');
-    const pantryArray = typeof user.pantry === 'string' ? user.pantry.split(',') : [];
+    const pantryArray = parseJSON(user.pantry);
     setPantryItems(pantryArray);
-    const fridgeArray = typeof user.fridge === 'string' ? user.fridge.split(',') : [];
+    const fridgeArray = parseJSON(user.fridge);
     setFridgeItems(fridgeArray);
   };
 
@@ -137,7 +162,7 @@ export default function UserProfile() {
                 setProfilePic={setProfilePic}
               />
               {editMode ? (
-                <div>
+                <div className={styles.inputContainer}>
                   <input
                     type="text"
                     value={newUsername}
@@ -166,7 +191,7 @@ export default function UserProfile() {
                 <div className={styles.pantryTags}>
                   {pantryItems.map((item, index) => (
                     <div key={index} className={styles.pantryTag}>
-                      {item}
+                      {item.name}
                       <button onClick={() => removeItem(item, pantryItems, setPantryItems)} disabled={!editMode}>×</button>
                     </div>
                   ))}
@@ -182,7 +207,7 @@ export default function UserProfile() {
                     />
                     {pantryInputValue && (
                       <Dropdown
-                        suggestions={suggestions.filter((item) => item.toLowerCase().includes(pantryInputValue.toLowerCase()))}
+                        suggestions={suggestions.filter((item) => item.name.toLowerCase().includes(pantryInputValue.toLowerCase()))}
                         onSelect={(value) => {
                           addItem(value, pantryItems, setPantryItems);
                           setPantryInputValue('');
@@ -197,7 +222,7 @@ export default function UserProfile() {
                 <div className={styles.fridgeTags}>
                   {fridgeItems.map((item, index) => (
                     <div key={index} className={styles.fridgeTag}>
-                      {item}
+                      {item.name}
                       <button onClick={() => removeItem(item, fridgeItems, setFridgeItems)} disabled={!editMode}>×</button>
                     </div>
                   ))}
@@ -213,7 +238,7 @@ export default function UserProfile() {
                     />
                     {fridgeInputValue && (
                       <Dropdown
-                        suggestions={suggestions.filter((item) => item.toLowerCase().includes(fridgeInputValue.toLowerCase()))}
+                        suggestions={suggestions.filter((item) => item.name.toLowerCase().includes(fridgeInputValue.toLowerCase()))}
                         onSelect={(value) => {
                           addItem(value, fridgeItems, setFridgeItems);
                           setFridgeInputValue('');

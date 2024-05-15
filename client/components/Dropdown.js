@@ -4,13 +4,13 @@ import styles from '../styles/Dropdown.module.css';
 const Dropdown = ({ suggestions, onSelect }) => {
   return (
     <div className={styles.dropdown}>
-      {suggestions.map((suggestion, index) => (
+      {suggestions.map((item) => (
         <div
-          key={index}
+          key={item.id}
           className={styles.dropdownItem}
-          onClick={() => onSelect(suggestion)}
+          onClick={() => onSelect(item)}
         >
-          {suggestion}
+          {item.name}
         </div>
       ))}
     </div>
