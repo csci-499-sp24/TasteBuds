@@ -74,10 +74,10 @@ function Homepage() {
               marginBottom: '20px', 
               textShadow: 'none', 
             }}>
-              What Are You Waiting For? Discover Here
+              What Are You Waiting For?
             </div>
             <Link href="/discover">
-              <Button className="bg-[#FF9800]  text-white">Discover</Button>
+              <Button className="bg-[#FF9800]  text-white" size="lg">Discover Here</Button>
             </Link>
           </Card>
         </div>

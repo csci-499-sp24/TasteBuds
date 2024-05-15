@@ -102,7 +102,7 @@ function Discover() {
           </div>
           {/* Fetches a new recipe  after clicking on button*/}
           <Button onClick={handleGetNewRecipe} loading={loading}
-          className={loading ? 'default' : 'bg-[#f57c00] text-[#212121] border-[#ff5252]'} variant="solid" size="lg" >
+          className={loading ? 'default' : 'bg-[#f57c00]  text-white border-[#ff5252]'} variant="solid" size="lg" >
             {loading ? 'Fetching New Recipes...' : 'Get New Recipes'}
           </Button>
         </div>
