@@ -15,6 +15,7 @@ const Recipe = () => {
   const [recipe, setRecipe] = useState(null); // recipe data 
   const [ingredients, setIngredients] = useState([]); // ingredient data
   const [instructions, setInstructions] = useState([]); // instruction data
+  const [ingredientSpecs, setIngredientsSpecs] = useState([]);
   const [loading, setLoading] = useState(true); // state tracks load or not
   const router = useRouter(); // Initialize useRouter hook to access router object
   const { id } = router.query; // Get the id from the router query
@@ -31,6 +32,7 @@ const Recipe = () => {
           setRecipe(data["recipe_data"]); // data of recipe in array 0
           const ingredientsData = data["recipe_data"]?.Ingredients || []; // access ingredients array from data[0]
           setIngredients(ingredientsData); // set ingredients in state
+          setIngredientsSpecs(data["ingredients_data"])
           setInstructions(data["instruction_data"]); // in the data instructions are array 1
           setLoading(false); 
         } else {
@@ -55,6 +57,22 @@ const Recipe = () => {
     return <ErrorPage statusCode={404} />; // When no data is fetched, render a 404 error page
   }
 
+  /*
+  const mergedIngredients = ingredientSpecs.map(spec => {
+    const matchingIngredient = ingredients.find(ingredient => ingredient.ingredient_id === spec.ingredient_id);
+    return {
+      ...spec,
+      standard_name: matchingIngredient ? matchingIngredient.standard_name : ''
+    };
+  });
+  */
+
+  // Filter merged ingredients based on ingredient_ids
+  {/*
+  const filteredIngredientSpecs = mergedIngredients.filter(spec => {
+    return ingredients.some(ingredient => ingredient.ingredient_id === spec.ingredient_id);
+  });
+  */}
   return (
     <div className = {styles.mainContainer}>
       <div className= {styles.backgroundImage}>
@@ -69,8 +87,22 @@ const Recipe = () => {
           id={id} 
           instructions={instructions} 
           ingredients={ingredients}
+          ingredientSpecs={ingredientSpecs}
           />
         </div> 
+        
+          {/* Displaying ingredient data 
+        <div>
+          <ul>
+            {filteredIngredientSpecs.map((ingredient, index) => (
+              <li key={index}>
+                {ingredient.metric_amount} {ingredient.metric_unit} - {ingredient.standard_name} - {ingredient.specialized_name}
+              </li>
+            ))}
+          </ul>
+        </div>
+        */}
+
         {/* {(firebaseUserId == null) => {
 
         }} */}

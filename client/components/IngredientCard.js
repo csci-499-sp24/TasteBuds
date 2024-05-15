@@ -1,13 +1,21 @@
 import React from 'react';
 import { Image, Card } from '@nextui-org/react';
 
-const IngredientCard = ({ ingredients }) => {
+const IngredientCard = ({ ingredients, ingredients_data }) => {
+  const getIngredientData = (ingredient) => {
+    if (ingredients_data && ingredients_data.length > 0) {
+      return ingredients_data.find(data => data.ingredient_id === ingredient.ingredient_id);
+    } else {
+      return null;
+    }
+  };
+
   return (
     <>
       <ul style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
         {ingredients && ingredients.length > 0 ? (
           ingredients.map((ingredient, index) => (
-            <IngredientCardItem key={index} ingredient={ingredient} />
+            <IngredientCardItem key={index} ingredient={ingredient} ingredientData={getIngredientData(ingredient)} />
           ))
         ) : (
           <p>No ingredients available</p>
@@ -17,9 +25,9 @@ const IngredientCard = ({ ingredients }) => {
   );
 };
 
-const IngredientCardItem = ({ ingredient }) => {
+const IngredientCardItem = ({ ingredient, ingredientData }) => {
   return (
-    <li style={{ width: '100px', height: '120px' }}>
+    <li style={{ width: '100px', height: '160px' }}>
       <Card>
         <div style={{ position: 'relative', width: '100px', height: '100px' }}>
           <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
@@ -50,6 +58,14 @@ const IngredientCardItem = ({ ingredient }) => {
             {ingredient.standard_name}
           </h4>
         </div>
+        <h4>
+          {ingredientData && (
+            <div style={{ padding: '8px' }}>
+              <p>Metric Amount: {ingredientData.metric_amount} {ingredientData.metric_unit}</p>
+              {ingredientData.us_amount && <p>US Amount: {ingredientData.us_amount} {ingredientData.us_unit}</p>}
+            </div>
+          )}
+        </h4>
       </Card>
     </li>
   );

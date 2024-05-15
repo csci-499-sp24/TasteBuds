@@ -2,7 +2,20 @@ import { Image, Card, Divider, Checkbox} from "@nextui-org/react";
 import StarsPopup from '@/components/starpopup';
 import IngredientCard from "@/components/IngredientCard";
 
-const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
+const RecipeSummary = ({ recipe, id, instructions, ingredients, ingredientSpecs }) => {
+
+  const mergedIngredients = ingredientSpecs.map(spec => {
+    const matchingIngredient = ingredients.find(ingredient => ingredient.ingredient_id === spec.ingredient_id);
+    return {
+      ...spec,
+      standard_name: matchingIngredient ? matchingIngredient.standard_name : ''
+    };
+  });
+
+  const filteredIngredientSpecs = mergedIngredients.filter(spec => {
+    return ingredients.some(ingredient => ingredient.ingredient_id === spec.ingredient_id);
+  });
+
   return (
     <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center' }}>
       <div style={{ 
@@ -25,13 +38,9 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
           borderRadius: '15px',
           boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Shadow effect
           objectFit: 'cover', // Maintain aspect ratio and cover container
-          border: '5px solid #FF5252',
+          border: '5px solid #BDBDBD',
          }}
         />
-      </div>
-      <Divider className="my-4" />
-      <div>
-        <StarsPopup parent_recipe_id={id} />
       </div>
       <Divider className="my-4" />
       <div>
@@ -43,13 +52,25 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
         fontSize: '18px', 
         fontWeight: 'bold',
         textAlign: 'center',
-        color: '#212121'
+        color: '#212121',
+        marginBottom: '20px', // Adding bottom margin for spacing
       }}>
         Ingredients
       </div>
-      <Divider className="my-4" />
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <IngredientCard ingredients={ingredients} />
+        <IngredientCard ingredients={ingredients} ingredientSpecs={ingredientSpecs}/>
+      </div>
+      <div style={{
+        fontSize: '18px', 
+        textAlign: 'left',
+      }}>
+        <ol>
+          {filteredIngredientSpecs.map((ingredient, index) => (
+            <li key={index}>
+              <Checkbox>{ingredient.metric_amount} {ingredient.metric_unit} - {ingredient.standard_name} - {ingredient.specialized_name}</Checkbox>
+            </li>
+          ))}
+        </ol>
       </div>  
       <Divider className="my-4" />
       <div style={{ 
@@ -61,7 +82,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients }) => {
         Instructions
       </div>
       <Divider className="my-4" />
-      <div>
+      <div >
         {instructions.length > 0 ? (
           <ol style={{ textAlign: 'left' }}>
             {instructions.map((instruction, index) => (
