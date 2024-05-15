@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { useRouter } from "next/router";
-import {Card, CardHeader, CardBody, Button} from "@nextui-org/react";
+import {Card, CardHeader, CardBody, Button } from "@nextui-org/react";
 import { useAuth } from "@/firebase/userAuthContext";
 import { auth } from '../firebase/firebaseConfig';
 import axios from "axios";
@@ -89,7 +89,7 @@ const RecipeBox = ({recipe}) => {
       </div>
       </CardBody>
       <Button onClick={viewRecipe}
-         className="bg-[#f57c00] text-white border-[#ff5252]" >View Recipe</Button>
+        className="bg-[#f57c00] text-white border-[#ff5252]" >View Recipe</Button>
     </Card>
   );
 }
