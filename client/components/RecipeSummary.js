@@ -18,7 +18,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
         {recipe.title}
       </div>
       <Divider className="my-4" 
-      style={{ height: '4px', backgroundColor: '#f57c00' }} />
+      style={{ height: '4px', backgroundColor: '#FF5252' }} />
       <div style={{ margin: 'auto', maxWidth: '700px' }}>
         <Image 
         src={recipe.image} 
@@ -52,7 +52,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
         <IngredientCard ingredients={ingredients}/>
       </div>
       <Divider className="my-4" 
-      style={{ height: '4px', backgroundColor: '#f57c00' }} />
+      style={{ height: '4px', backgroundColor: '#FF5252' }} />
       <div style={{ 
         fontSize: '18px', 
         fontWeight: 'bold',
@@ -77,7 +77,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
         )}
       </div>
       <Divider className="my-4" 
-      style={{ height: '4px', backgroundColor: '#f57c00' }} />
+      style={{ height: '4px', backgroundColor: '#FF5252' }} />
       <div style={{ 
         fontSize: '18px', 
         fontWeight: 'bold',
@@ -102,7 +102,7 @@ const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
         )}
       </div>
       <Divider className="my-4" 
-      style={{ height: '4px', backgroundColor: '#f57c00' }} />
+      style={{ height: '4px', backgroundColor: '#FF5252' }} />
       <div>
         <StarsPopup parent_recipe_id={id}/>
       </div>

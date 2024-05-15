@@ -170,7 +170,7 @@ function StarsPopup({parent_recipe_id}) {
 
   return (
     <>
-      <Button className="bg-[#FF9800] text-[#212121] border-[#ff5252]" onPress={onOpen} size="lg">Rate this Recipe</Button>
+      <Button className="bg-[#FF9800] text-white border-[#ff5252]" onPress={onOpen} size="lg">Rate this Recipe</Button>
       <Modal backdrop="blur" 
       isOpen={isOpen} 
       onOpenChange={onOpenChange} 

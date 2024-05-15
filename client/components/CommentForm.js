@@ -147,7 +147,7 @@ const CommentForm = ({ recipeId }) => {
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="Write a comment..." required ></textarea>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', borderTop: '1px solid #212121' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', borderTop: '4px solid #FF5252' }}>
                 <button type="submit" style={{ display: 'inline-flex', alignItems: 'center', padding: '12.5px 16px', fontSize: '12px', fontWeight: '500', textAlign: 'center', color: '#FFF', backgroundColor: '#FF9800', borderRadius: '8px', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', cursor: 'pointer' }}>
                     Post comment
                 </button>
