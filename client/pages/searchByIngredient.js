@@ -8,7 +8,6 @@ import { useAuth } from '../firebase/userAuthContext';
 import { getFirestore, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth } from '../firebase/firebaseConfig';
 
-
 function SearchByIngredient() {
   const [searchResults, setSearchResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -159,13 +158,15 @@ function SearchByIngredient() {
   }
 
   return (
-    <div>
+    <div style={{height: "100%"}}>
       <Sidebar />
-      <div className = "bg" style={{overflow: "hidden"}}>
+      <div className = "bgi" style={{overflow: "hidden"}}>
         <div className="flex justify-center mx-atuo">
-          <div id="" className=" mt-20" style={{maxWidth: "100%"}}>
-            <label htmlFor="search">Search Recipes</label>            <Autocomplete
+          <div id="" className=" mt-20" style={{maxWidth: "100%", marginTop: "5%"}}>
+            <label htmlFor="search">Search Recipes</label>            
+            <Autocomplete
               label="Select an Ingredient"
+              className="custom-autocomplete"
               onSelectionChange={handleIngredientSelect}
             >
               {fetchedIngredients.map((ingredient) => (<AutocompleteItem key={ingredient.ingredient_id}>{ingredient.standard_name}</AutocompleteItem>))}

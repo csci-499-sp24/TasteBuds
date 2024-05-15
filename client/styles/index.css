@@ -65,6 +65,14 @@ body {
   transition: all .5s;
 }
 
+.bgi{
+  background: url("../public/bgi.jpg") no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  transition: all .5s;
+}
+
 .sidebar{
   z-index: 100;
 }
