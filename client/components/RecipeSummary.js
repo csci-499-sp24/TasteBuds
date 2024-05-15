@@ -5,7 +5,9 @@ import IngredientCard from "@/components/IngredientCard";
 const RecipeSummary = ({ recipe, id, instructions, ingredients, tips }) => {
 
   return (
-    <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center' }}>
+    <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center',
+    border: '5px solid #FF5252', borderRadius: '10px'
+    }}>
       <div style={{ 
         fontSize: '24px', 
         fontWeight: 'bold',
