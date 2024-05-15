@@ -11,7 +11,6 @@ function Homepage() {
       <div>
         <Sidebar/>
       </div>
-      <div className ="logo" />
       <section className='bg-home'>
         <div id="div-center" className="head">
           <Card shadow style={{ width: '925px', padding: '20px', textAlign: 'center', border: '7px solid #FFE0B2', borderRadius: '10px' }}>
