@@ -126,15 +126,22 @@ function SearchByIngredient() {
       if (docSnapshot.exists()) {
         const userData = docSnapshot.data();
 
-        const pantryArray = typeof userData.pantry === 'string' ? userData.pantry.split(',') : [];
+        const pantryData = JSON.parse(userData.pantry);
+
+        const pantryArray = pantryData.map(item => {
+          return {
+              standard_name: item.name,
+              ingredient_id: item.id
+          };
+        });
+
         setPantryItems(pantryArray);
 
-        const fridgeArray = typeof userData.fridge === 'string' ? userData.fridge.split(',') : [];
+        const fridgeArray = typeof userData.fridge === 'string' ? userData.fridge.split('}') : [];
         setFridgeItems(fridgeArray);
       }
     }).catch((error) => {
       console.error('Detailed error:', error);
-      setError('An error occurred while fetching user data.');
     });
   }
   
@@ -152,7 +159,7 @@ function SearchByIngredient() {
       const newList = [...ingredientList, ...pantryItems];
       // this adds the pantry items to the ingredient list
       // to do: uncomment and change once ingredient id is being pushed to firebase
-      // setIngredientList(newList);
+      setIngredientList(newList);
       console.log(newList);
     } else{
       alert("Pantry Empty!")
